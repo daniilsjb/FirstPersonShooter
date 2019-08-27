@@ -19,14 +19,14 @@ bool EngineFPS::OnStart()
 	map.append(L"#$@#$@#$@#$@#$@#");
 	map.append(L"#..............#");
 	map.append(L"#......P.......#");
-	map.append(L"#...........T..#");
+	map.append(L"#...........M..#");
 	map.append(L"#..F...........#");
-	map.append(L"#..............#");
+	map.append(L"#...........M..#");
 	map.append(L"#..............#");
 	map.append(L"#...####H###...#");
 	map.append(L"#...$......$...#");
 	map.append(L"#...@......@...#");
-	map.append(L"#...$......$...#");
+	map.append(L"#...$...K..$...#");
 	map.append(L"#...@......@...#");
 	map.append(L"#...########...#");
 	map.append(L"#..............#");
@@ -53,7 +53,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	//Check if there is an item under player's feet
 	Item* item = GetItem(player->x, player->y);
 	if (item != nullptr)
-		item->OnUse();
+		item->OnUse(player);
 
 	//Since everything's been updated now, we may garbage collect marked objects
 	//We don't want to remove destroyed walls from the vector, so we just deallocate memory
@@ -224,6 +224,11 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 		}
 	}
 	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);
+
+	//Display player stats
+	wchar_t title[256];
+	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d", player->GetHealth(), player->GetMaxHealth());
+	SetConsoleTitle(title);
 
 	return true;
 }
@@ -431,6 +436,9 @@ void EngineFPS::LoadSprites()
 	load("gun", L"Sprites/gun.spr");
 	load("gun up", L"Sprites/gun_up.spr");
 	load("gun fire", L"Sprites/gun_fire.spr");
+	load("item gun", L"Sprites/item_gun.spr");
+	load("item medpack", L"Sprites/item_medpack.spr");
+	load("item medkit", L"Sprites/item_medkit.spr");
 }
 
 void EngineFPS::ParseMap()
@@ -453,7 +461,7 @@ void EngineFPS::ParseMap()
 				}
 				case '#':
 				{
-					Wall* wall = new Wall(this, sprites["stone wall"]);
+					Wall *wall = new Wall(this, sprites["stone wall"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -461,7 +469,7 @@ void EngineFPS::ParseMap()
 				}
 				case '$':
 				{
-					Wall* wall = new Wall(this, sprites["stone wall eagle"]);
+					Wall *wall = new Wall(this, sprites["stone wall eagle"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -469,7 +477,7 @@ void EngineFPS::ParseMap()
 				}
 				case '@':
 				{
-					Wall* wall = new Wall(this, sprites["stone wall flag"]);
+					Wall *wall = new Wall(this, sprites["stone wall flag"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -477,7 +485,7 @@ void EngineFPS::ParseMap()
 				}
 				case '?':
 				{
-					Wall* wall = new Door(this, sprites["stone wall flag"]);
+					Wall *wall = new Door(this, sprites["stone wall flag"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -485,15 +493,31 @@ void EngineFPS::ParseMap()
 				}
 				case 'H':
 				{
-					Wall* wall = new Door(this, sprites["metal door"]);
+					Wall *wall = new Door(this, sprites["metal door"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
 					break;
 				}
+				case 'M':
+				{
+					Item *item = new Medpack(this);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case 'K':
+				{
+					Item *item = new Medkit(this);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
 				case 'F':
 				{
-					Decoration* decor = new Decoration(this, sprites["flag"]);
+					Decoration *decor = new Decoration(this, sprites["flag"]);
 					decor->x = x + 0.5f;
 					decor->y = y + 0.5f;
 					decorations.push_back(decor);
@@ -501,7 +525,7 @@ void EngineFPS::ParseMap()
 				}
 				case 'J':
 				{
-					Decoration* decor = new Decoration(this, sprites["jug"]);
+					Decoration *decor = new Decoration(this, sprites["jug"]);
 					decor->x = x + 0.5f;
 					decor->y = y + 0.5f;
 					decorations.push_back(decor);
@@ -509,7 +533,7 @@ void EngineFPS::ParseMap()
 				}
 				case 'T':
 				{
-					Decoration* decor = new Decoration(this, sprites["tree"]);
+					Decoration *decor = new Decoration(this, sprites["tree"]);
 					decor->x = x + 0.5f;
 					decor->y = y + 0.5f;
 					decorations.push_back(decor);

@@ -7,6 +7,13 @@ struct Mob : DynamicObject
 	Mob(EngineFPS *engine);
 	virtual ~Mob();
 
-	float maxHealth;
-	float currentHealth;
+	int GetMaxHealth();
+	int GetHealth();
+
+	void Heal(int amount);
+	void Damage(int amount);
+
+protected:
+	int maxHealth;
+	int currentHealth;
 };

@@ -9,5 +9,23 @@ struct Item : GameObject
 
 	bool removed = false;
 
-	virtual void OnUse() = 0;
+	virtual void OnUse(Player *player) = 0;
+};
+
+struct Medpack : Item
+{
+	Medpack(EngineFPS *engine);
+
+	int healthBonus = 10;
+
+	void OnUse(Player *player) override;
+};
+
+struct Medkit : Item
+{
+	Medkit(EngineFPS *engine);
+
+	int healthBonus = 40;
+
+	void OnUse(Player *player) override;
 };
