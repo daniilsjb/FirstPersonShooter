@@ -140,13 +140,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleGameEngine.h" />
-    <ClInclude Include="FirstPersonShooter.h" />
+    <ClInclude Include="Decoration.h" />
+    <ClInclude Include="DynamicObject.h" />
+    <ClInclude Include="EngineFPS.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="Mob.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleGameEngine.cpp" />
-    <ClCompile Include="FirstPersonShooter.cpp" />
+    <ClCompile Include="Decoration.cpp" />
+    <ClCompile Include="DynamicObject.cpp" />
+    <ClCompile Include="EngineFPS.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Mob.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

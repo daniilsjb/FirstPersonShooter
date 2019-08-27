@@ -1,0 +1,55 @@
+#include "Player.h"
+
+Player::Player(EngineFPS *engine) : Mob(engine)
+{
+	speed = 5.0f;
+}
+
+void Player::OnUpdate(float elapsedTime)
+{
+	if (engine->GetKey('W').held)
+	{
+		x += cosf(angle) * speed * elapsedTime;
+		y += sinf(angle) * speed * elapsedTime;
+		if (engine->IsObstacle(x, y, this)) {
+			x -= cosf(angle) * speed * elapsedTime;
+			y -= sinf(angle) * speed * elapsedTime;
+		}
+	}
+
+	if (engine->GetKey('S').held)
+	{
+		x -= cosf(angle) * speed * elapsedTime;
+		y -= sinf(angle) * speed * elapsedTime;
+		if (engine->IsObstacle(x, y, this)) {
+			x += cosf(angle) * speed * elapsedTime;
+			y += sinf(angle) * speed * elapsedTime;
+		}
+	}
+
+	if (engine->GetKey('Q').held)
+	{
+		x += sinf(angle) * speed * elapsedTime;
+		y -= cosf(angle) * speed * elapsedTime;
+		if (engine->IsObstacle(x, y, this)) {
+			x -= sinf(angle) * speed * elapsedTime;
+			y += cosf(angle) * speed * elapsedTime;
+		}
+	}
+
+	if (engine->GetKey('E').held)
+	{
+		x -= sinf(angle) * speed * elapsedTime;
+		y += cosf(angle) * speed * elapsedTime;
+		if (engine->IsObstacle(x, y, this)) {
+			x += sinf(angle) * speed * elapsedTime;
+			y -= cosf(angle) * speed * elapsedTime;
+		}
+	}
+
+	if (engine->GetKey('A').held)
+		angle -= (speed * 0.75f) * elapsedTime;
+
+	if (engine->GetKey('D').held)
+		angle += (speed * 0.75f) * elapsedTime;
+}

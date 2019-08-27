@@ -1,24 +1,6 @@
 #include "GameObject.h"
-#include "FirstPersonShooter.h"
+#include "EngineFPS.h"
 
-GameObject::GameObject(FirstPersonShooter *engine) : engine(engine) {}
+GameObject::~GameObject() {}
 
-Guard::Guard(FirstPersonShooter *engine) : GameObject(engine)
-{
-	sprite = engine->sprites["guard front"];
-}
-
-void Guard::OnUpdate(float elapsedTime)
-{
-
-}
-
-void Guard::OnSpriteUpdate(float elapsedTime)
-{
-
-}
-
-void Guard::OnInteract()
-{
-	removed = true;
-}
+GameObject::GameObject(EngineFPS *engine) : engine(engine) {}

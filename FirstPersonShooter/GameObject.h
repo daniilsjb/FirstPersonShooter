@@ -1,34 +1,15 @@
 #pragma once
 
-class Sprite;
-class FirstPersonShooter;
+#include "EngineFPS.h"
 
 struct GameObject
 {
-	FirstPersonShooter *engine;
+	virtual ~GameObject();
+
+	EngineFPS *engine = nullptr;
 
 	float x, y;
-	Sprite *sprite = nullptr;
+	Sprite *texture = nullptr;
 
-	bool removed = false;
-
-	GameObject(FirstPersonShooter *engine);
-
-	virtual void OnUpdate(float elapsedTime) {};
-
-	virtual void OnSpriteUpdate(float elapsedTime) {};
-
-	virtual void OnInteract() {};
-};
-
-struct Guard : public GameObject
-{
-	Guard(FirstPersonShooter *engine);
-
-	void OnUpdate(float elapsedTime) override;
-
-	void OnSpriteUpdate(float elapsedTime) override;
-
-	void OnInteract() override;
-
+	GameObject(EngineFPS *engine);
 };

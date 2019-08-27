@@ -54,11 +54,12 @@ private:
 
 	static BOOL CloseHandler(DWORD evt);
 
-protected:
+public:
 	int GetScreenWidth();
 
 	int GetScreenHeight();
 
+protected:
 	short GetScreenCharacter(int i);
 
 	short GetScreenCharacter(int x, int y);
@@ -134,7 +135,7 @@ private:
 
 	void ReadInput();
 
-protected:
+public:
 	short GetMouseX();
 
 	short GetMouseY();
@@ -143,7 +144,7 @@ protected:
 
 	//////////////////////////////////////// AUDIO /////////////////////////////////////////////////
 
-private:
+protected:
 	class AudioClip
 	{
 	public:
