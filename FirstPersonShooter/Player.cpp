@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Wall.h"
 
 Player::Player(EngineFPS *engine) : Mob(engine)
 {
@@ -52,4 +53,17 @@ void Player::OnUpdate(float elapsedTime)
 
 	if (engine->GetKey('D').held)
 		angle += (speed * 0.75f) * elapsedTime;
+
+	if (engine->GetKey('I').released)
+	{
+		float rayX, rayY, distance;
+		if (engine->CastRay(x, y, angle, rayX, rayY, distance, true, false))
+		{
+			if (distance < 2.0f)
+			{
+				Wall* wall = engine->GetWall(rayX, rayY);
+				wall->OnInteract();
+			}
+		}
+	}
 }

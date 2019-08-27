@@ -23,13 +23,13 @@ bool EngineFPS::OnStart()
 	map.append(L"#..F...........#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
-	map.append(L"#.......$......#");
+	map.append(L"#...####H###...#");
+	map.append(L"#...$......$...#");
+	map.append(L"#...@......@...#");
+	map.append(L"#...$......$...#");
+	map.append(L"#...@......@...#");
+	map.append(L"#...########...#");
 	map.append(L"#..............#");
-	map.append(L"#..............#");
-	map.append(L"#...........T..#");
-	map.append(L"#..F...........#");
-	map.append(L"#..............#");
-	map.append(L"#........J.....#");
 	map.append(L"#..............#");
 	map.append(L"################");
 
@@ -420,6 +420,7 @@ void EngineFPS::LoadSprites()
 	load("stone wall", L"Sprites/stone_wall.spr");
 	load("stone wall eagle", L"Sprites/stone_wall_eagle.spr");
 	load("stone wall flag", L"Sprites/stone_wall_flag.spr");
+	load("metal door", L"Sprites/metal_door.spr");
 	load("flag", L"Sprites/flag.spr");
 	load("jug", L"Sprites/jug.spr");
 	load("tree", L"Sprites/tree.spr");
@@ -469,6 +470,22 @@ void EngineFPS::ParseMap()
 				case '@':
 				{
 					Wall* wall = new Wall(this, sprites["stone wall flag"]);
+					wall->x = x;
+					wall->y = y;
+					walls[mapWidth * (int)y + (int)x] = wall;
+					break;
+				}
+				case '?':
+				{
+					Wall* wall = new Door(this, sprites["stone wall flag"]);
+					wall->x = x;
+					wall->y = y;
+					walls[mapWidth * (int)y + (int)x] = wall;
+					break;
+				}
+				case 'H':
+				{
+					Wall* wall = new Door(this, sprites["metal door"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
