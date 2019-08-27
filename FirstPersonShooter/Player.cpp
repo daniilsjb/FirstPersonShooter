@@ -4,6 +4,8 @@
 Player::Player(EngineFPS *engine) : Mob(engine)
 {
 	speed = 5.0f;
+	maxHealth = 100;
+	currentHealth = 50;
 }
 
 void Player::OnUpdate(float elapsedTime)
