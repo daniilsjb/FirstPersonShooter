@@ -11,3 +11,10 @@ struct Wall : GameObject
 
 	virtual void OnInteract();
 };
+
+struct Door : Wall
+{
+	Door(EngineFPS *engine, Sprite* texture);
+
+	void OnInteract() override;
+};

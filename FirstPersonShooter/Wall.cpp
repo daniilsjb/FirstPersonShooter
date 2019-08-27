@@ -8,3 +8,10 @@ Wall::Wall(EngineFPS *engine, Sprite* texture) : GameObject(engine)
 Wall::~Wall() {}
 
 void Wall::OnInteract() {}
+
+Door::Door(EngineFPS *engine, Sprite* texture) : Wall(engine, texture) {}
+
+void Door::OnInteract()
+{
+	removed = true;
+}
