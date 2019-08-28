@@ -63,6 +63,7 @@ void Gun::Fire()
 	if (engine->CastRay(parent->x, parent->y, parent->angle, rayX, rayY, distance, false, true, parent))
 	{
 		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
-		other->OnHit(rand() % maxDmg + minDmg);
+		if (other->friendlyToPlayer != parent->friendlyToPlayer)
+			other->OnHit(rand() % maxDmg + minDmg);
 	}
 }

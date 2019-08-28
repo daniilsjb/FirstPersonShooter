@@ -5,6 +5,7 @@
 #include "Mob.h"
 #include "Item.h"
 #include "Player.h"
+#include "Enemy.h"
 
 bool EngineFPS::OnStart()
 {
@@ -20,16 +21,16 @@ bool EngineFPS::OnStart()
 	map.append(L"#$@#$@#$@#$@#$@#");
 	map.append(L"#..............#");
 	map.append(L"#......P.......#");
-	map.append(L"#...........M..#");
+	map.append(L"#..............#");
 	map.append(L"#..F...........#");
 	map.append(L"#......-....M..#");
 	map.append(L"#..............#");
-	map.append(L"#...####H###...#");
-	map.append(L"#...$......$...#");
-	map.append(L"#...@......@...#");
-	map.append(L"#...$...K..$...#");
-	map.append(L"#...@......@...#");
-	map.append(L"#...########...#");
+	map.append(L"#..............#");
+	map.append(L"#..............#");
+	map.append(L"#.......G......#");
+	map.append(L"#..............#");
+	map.append(L"#..............#");
+	map.append(L"#..............#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
 	map.append(L"################");
@@ -41,6 +42,8 @@ bool EngineFPS::OnStart()
 	weaponHeight = (int)(GetScreenHeight() * 0.5f);
 
 	depthBuffer = new float[GetScreenWidth() * GetScreenHeight()];
+
+	srand(time(0));
 
 	return true;
 }
@@ -468,16 +471,22 @@ void EngineFPS::LoadSprites()
 	load("stone wall eagle", L"Sprites/stone_wall_eagle.spr");
 	load("stone wall flag", L"Sprites/stone_wall_flag.spr");
 	load("metal door", L"Sprites/metal_door.spr");
+
 	load("flag", L"Sprites/flag.spr");
 	load("jug", L"Sprites/jug.spr");
 	load("tree", L"Sprites/tree.spr");
+
 	load("guard back", L"Sprites/guard_back.spr");
 	load("guard front", L"Sprites/guard_front.spr");
+	load("guard left", L"Sprites/guard_left.spr");
+	load("guard right", L"Sprites/guard_right.spr");
 	load("guard reload", L"Sprites/guard_reload.spr");
 	load("guard fire", L"Sprites/guard_fire.spr");
+
 	load("gun", L"Sprites/gun.spr");
 	load("gun up", L"Sprites/gun_up.spr");
 	load("gun fire", L"Sprites/gun_fire.spr");
+
 	load("item gun", L"Sprites/item_gun.spr");
 	load("item medpack", L"Sprites/item_medpack.spr");
 	load("item medkit", L"Sprites/item_medkit.spr");
@@ -565,6 +574,15 @@ void EngineFPS::ParseMap()
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+
+				case 'G':
+				{
+					DynamicObject* enemy = new Guard(this);
+					enemy->x = x + 0.5f;
+					enemy->y = y + 0.5f;
+					dynamicObjects.push_back(enemy);
 					break;
 				}
 
