@@ -12,20 +12,18 @@ struct Item : GameObject
 	virtual void OnUse(Player *player) = 0;
 };
 
-struct Medpack : Item
+struct GunItem : Item
 {
-	Medpack(EngineFPS *engine);
-
-	int healthBonus = 10;
+	GunItem(EngineFPS *engine);
 
 	void OnUse(Player *player) override;
 };
 
 struct Medkit : Item
 {
-	Medkit(EngineFPS *engine);
+	Medkit(EngineFPS *engine, int healthBonus, Sprite *spr);
 
-	int healthBonus = 40;
+	int healthBonus;
 
 	void OnUse(Player *player) override;
 };

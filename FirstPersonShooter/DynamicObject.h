@@ -14,4 +14,5 @@ struct DynamicObject : GameObject
 	float angle;
 
 	virtual void OnUpdate(float elapsedTime) = 0;
+	virtual void OnHit(int damage) = 0;
 };

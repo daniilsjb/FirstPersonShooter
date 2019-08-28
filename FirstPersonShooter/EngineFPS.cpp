@@ -2,6 +2,7 @@
 #include "Wall.h"
 #include "Decoration.h"
 #include "DynamicObject.h"
+#include "Mob.h"
 #include "Item.h"
 #include "Player.h"
 
@@ -21,7 +22,7 @@ bool EngineFPS::OnStart()
 	map.append(L"#......P.......#");
 	map.append(L"#...........M..#");
 	map.append(L"#..F...........#");
-	map.append(L"#...........M..#");
+	map.append(L"#......-....M..#");
 	map.append(L"#..............#");
 	map.append(L"#...####H###...#");
 	map.append(L"#...$......$...#");
@@ -49,7 +50,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	//Dynamic objects is where the entire game logic is stored; they must be updated first
 	for (auto &object : dynamicObjects)
 		object->OnUpdate(elapsedTime);
-		
+
 	//Check if there is an item under player's feet
 	Item* item = GetItem(player->x, player->y);
 	if (item != nullptr)
@@ -195,26 +196,29 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	}
 
 	//Draw the weapon in the bottom-middle of the screen
-	/*for (int x = 0; x < weaponWidth; x++)
+	if (player->weapon != nullptr)
 	{
-		for (int y = 0; y < weaponHeight; y++)
+		for (int x = 0; x < weaponWidth; x++)
 		{
-			float sampleX = (float)x / (float)weaponWidth;
-			float sampleY = (float)y / (float)weaponHeight;
-
-			short symbol = player->weaponSpr->SampleCharacter(sampleX, sampleY);
-			short color = player->weaponSpr->SampleColor(sampleX, sampleY);
-			
-			if (color != BG_DARK_PINK)
+			for (int y = 0; y < weaponHeight; y++)
 			{
-				int gunX = (int)((GetScreenWidth() * 0.5f) - (weaponWidth * 0.5f) + x);
-				int gunY = (int)(GetScreenHeight() - weaponHeight + y);
+				float sampleX = (float)x / (float)weaponWidth;
+				float sampleY = (float)y / (float)weaponHeight;
 
-				DrawPoint(gunX, gunY, symbol, color);
+				short symbol = player->weapon->currentSpr->SampleCharacter(sampleX, sampleY);
+				short color = player->weapon->currentSpr->SampleColor(sampleX, sampleY);
+
+				if (color != BG_DARK_PINK)
+				{
+					int gunX = (int)((GetScreenWidth() * 0.5f) - (weaponWidth * 0.5f) + x);
+					int gunY = (int)(GetScreenHeight() - weaponHeight + y);
+
+					DrawPoint(gunX, gunY, symbol, color);
+				}
 			}
 		}
-	}*/
-
+	}
+	
 	//Draw the map (for debug purposes mainly)
 	for (int i = 0; i < mapWidth; i++)
 	{
@@ -225,10 +229,22 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	}
 	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);
 
+	//Get player stats
+	int hp = player->GetHealth();
+	int maxhp = player->GetMaxHealth();
+
+	int ammo = 0;
+	int capacity = 0;
+	if (player->weapon != nullptr)
+	{
+		ammo = player->weapon->GetAmmo();
+		capacity = player->weapon->GetCapacity();
+	}
+
 	//Display player stats
 	wchar_t title[256];
-	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d", player->GetHealth(), player->GetMaxHealth());
-	SetConsoleTitle(title);
+	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d", hp, maxhp, ammo, capacity);
+	SetApplicationTitle(title);
 
 	return true;
 }
@@ -236,24 +252,39 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 bool EngineFPS::OnDestroy()
 {
 	for (auto &spr : sprites)
+	{
 		delete spr.second;
+		spr.second = nullptr;
+	}	
 
 	for (auto &object : dynamicObjects)
+	{
 		delete object;
-
+		object = nullptr;
+	}
+		
 	for (auto &wall : walls)
+	{
 		delete wall;
+		wall = nullptr;
+	}
 
 	for (auto &item : items)
+	{
 		delete item;
+		item = nullptr;
+	}
 
 	for (auto &decoration : decorations)
+	{
 		delete decoration;
+		decoration = nullptr;
+	}
 
 	return true;
 }
 
-bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects)
+bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored)
 {
 	float step = 0.01f;
 	float distanceSoFar = 0.0f;
@@ -275,20 +306,28 @@ bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY,
 		}
 		else
 		{
-			if (againstWalls && GetWall((float)rayX, (float)rayY) != nullptr)
+			if (againstWalls)
 			{
-				hitX = (float)rayX;
-				hitY = (float)rayY;
-				distance = distanceSoFar;
-				return true;
+				Wall *wall = GetWall((float)rayX, (float)rayY);
+				if (wall != nullptr && wall != ignored)
+				{
+					hitX = (float)rayX;
+					hitY = (float)rayY;
+					distance = distanceSoFar;
+					return true;
+				}
 			}
 
-			if (againstDynamicObjects && GetDynamicObject((float)rayX, (float)rayY) != nullptr)
+			if (againstDynamicObjects)
 			{
-				hitX = (float)rayX;
-				hitY = (float)rayY;
-				distance = distanceSoFar;
-				return true;
+				DynamicObject *object = GetDynamicObject((float)rayX, (float)rayY);
+				if (object != nullptr && object != ignored)
+				{
+					hitX = (float)rayX;
+					hitY = (float)rayY;
+					distance = distanceSoFar;
+					return true;
+				}
 			}
 		}
 	}
@@ -323,6 +362,9 @@ bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float
 
 void EngineFPS::DrawObject2D(Sprite* spr, float angle, float distance)
 {
+	//We should just make sure the sprite is actually there
+	if (spr == nullptr) return;
+
 	//Find object's dimensions based on the distance
 	float objectTop = ((float)GetScreenHeight() * 0.5f) - ((float)GetScreenHeight() / (float)distance);
 	float objectBottom = (float)GetScreenHeight() - objectTop;
@@ -459,6 +501,7 @@ void EngineFPS::ParseMap()
 					dynamicObjects.push_front(player);
 					break;
 				}
+
 				case '#':
 				{
 					Wall *wall = new Wall(this, sprites["stone wall"]);
@@ -499,9 +542,10 @@ void EngineFPS::ParseMap()
 					walls[mapWidth * (int)y + (int)x] = wall;
 					break;
 				}
+
 				case 'M':
 				{
-					Item *item = new Medpack(this);
+					Item *item = new Medkit(this, 10, sprites["item medpack"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
@@ -509,12 +553,21 @@ void EngineFPS::ParseMap()
 				}
 				case 'K':
 				{
-					Item *item = new Medkit(this);
+					Item *item = new Medkit(this, 40, sprites["item medkit"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
 					break;
 				}
+				case '-':
+				{
+					Item *item = new GunItem(this);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+
 				case 'F':
 				{
 					Decoration *decor = new Decoration(this, sprites["flag"]);

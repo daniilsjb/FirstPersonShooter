@@ -1,27 +1,29 @@
 #include "Item.h"
 #include "Player.h"
+#include "Weapon.h"
 
 Item::Item(EngineFPS *engine) : GameObject(engine) {}
 
 Item::~Item() {}
 
-Medpack::Medpack(EngineFPS *engine) : Item(engine)
+GunItem::GunItem(EngineFPS *engine) : Item(engine)
 {
-	texture = engine->sprites["item medpack"];
+	texture = engine->sprites["item gun"];
 }
 
-void Medpack::OnUse(Player *player)
+void GunItem::OnUse(Player *player)
 {
-	if (player->GetHealth() < player->GetMaxHealth())
-	{
-		player->Heal(healthBonus);
+	Weapon *gun = new Gun(engine, player);
+
+	if (!player->AddWeapon(gun))
+		delete gun;
+	else
 		removed = true;
-	}
 }
 
-Medkit::Medkit(EngineFPS *engine) : Item(engine)
+Medkit::Medkit(EngineFPS *engine, int healthBonus, Sprite *spr) : Item(engine), healthBonus(healthBonus)
 {
-	texture = engine->sprites["item medkit"];
+	texture = spr;
 }
 
 void Medkit::OnUse(Player *player)
