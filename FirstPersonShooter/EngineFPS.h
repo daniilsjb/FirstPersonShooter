@@ -3,6 +3,8 @@
 #include "ConsoleGameEngine.h"
 #include <map>
 
+#define WEAPON_COUNT 3
+
 struct GameObject;
 struct Wall;
 struct Item;
@@ -23,7 +25,7 @@ public:
 	std::vector<Item*> items;
 	std::list<Decoration*> decorations;
 
-	Player *player;
+	Player *player = nullptr;
 
 	int weaponWidth;
 	int weaponHeight;
@@ -34,7 +36,7 @@ public:
 	bool OnUpdate(float elapsedTime) override;
 	bool OnDestroy() override;
 
-	bool CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects);
+	bool CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored = nullptr);
 	bool ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance);
 
 	void DrawObject2D(Sprite* spr, float angle, float distance);

@@ -6,6 +6,34 @@ Player::Player(EngineFPS *engine) : Mob(engine)
 	speed = 5.0f;
 	maxHealth = 100;
 	currentHealth = 50;
+
+	friendlyToPlayer = true;
+
+	availableWeapons.resize(WEAPON_COUNT, nullptr);
+}
+
+Player::~Player()
+{
+	for (auto &w : availableWeapons)
+	{
+		delete w;
+		w = nullptr;
+	}
+	weapon = nullptr;
+}
+
+bool Player::AddWeapon(Weapon *weapon)
+{
+	if (availableWeapons[weapon->WEAPON_INDEX] == nullptr)
+	{
+		availableWeapons[weapon->WEAPON_INDEX] = weapon;
+
+		if (this->weapon == nullptr)
+			this->weapon = weapon;
+
+		return true;
+	}
+	return false;
 }
 
 void Player::OnUpdate(float elapsedTime)
@@ -68,4 +96,26 @@ void Player::OnUpdate(float elapsedTime)
 			}
 		}
 	}
+
+	for (int i = 1; i <= WEAPON_COUNT; i++)
+	{
+		if (engine->GetKey('0' + i).released)
+		{
+			weapon = availableWeapons[i - 1];
+		}
+	}
+
+	if (engine->GetKey(' ').released)
+	{
+		if (weapon != nullptr)
+			weapon->Fire();
+	}
+
+	if (weapon != nullptr)
+		weapon->OnUpdate(elapsedTime);
+}
+
+void Player::OnHit(int damage)
+{
+	Damage(damage);
 }

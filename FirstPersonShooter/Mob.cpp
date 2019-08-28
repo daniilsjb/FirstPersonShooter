@@ -1,8 +1,14 @@
 #include "Mob.h"
+#include "Weapon.h"
+#include <iostream>
 
 Mob::Mob(EngineFPS *engine) : DynamicObject(engine) {}
 
-Mob::~Mob() {}
+Mob::~Mob()
+{
+	delete weapon;
+	weapon = nullptr;
+}
 
 int Mob::GetMaxHealth()
 {
