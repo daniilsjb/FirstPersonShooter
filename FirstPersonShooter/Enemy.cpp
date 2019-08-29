@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Player.h"
 
 Enemy::Enemy(EngineFPS *engine) : Mob(engine)
 {
@@ -55,20 +56,146 @@ Guard::Guard(EngineFPS *engine) : Enemy(engine)
 {
 	directionSprites[BACK] = engine->sprites["guard back"];
 	directionSprites[RIGHT] = engine->sprites["guard right"];
-	directionSprites[LEFT] = engine->sprites["guard front"];
-	directionSprites[FRONT] = engine->sprites["guard left"];
+	directionSprites[FRONT] = engine->sprites["guard front"];
+	directionSprites[LEFT] = engine->sprites["guard left"];
+
+	reloadingSpr = engine->sprites["guard reload"];
+	shootingSpr = engine->sprites["guard fire"];
 
 	currentHealth = maxHealth = 50;
 
+	state = PATROL;
+
 	angle = 3.14159f;
+
+	speed = 1.0f;
+
+	weapon = new Gun(engine, this);
 }
 
 void Guard::OnUpdate(float elapsedTime)
 {
-	//SUPER AI
+	DynamicObject* player = engine->player;
 
-	//UPDATE LOOK SMILE
-	texture = ChooseDirectionSprite((DynamicObject*)engine->player);
+	bool playerVisible = false;
+
+	float objectAngle, distance;
+	if (engine->ObjectWithinFoV(x, y, angle, player->x, player->y, objectAngle, distance))
+	{
+		float rayX, rayY, rayDistance;
+		if (engine->CastRay(x, y, angle + objectAngle, rayX, rayY, rayDistance, true, true, this))
+		{
+			if (engine->GetDynamicObject(rayX, rayY) == player)
+			{
+				playerVisible = true;
+				playerDetected = true;
+			}
+		}
+	}
+
+	switch (state)
+	{
+		case PATROL:
+		{
+			if (playerDetected)
+				state = COMBAT;
+
+			texture = ChooseDirectionSprite(player);
+			break;
+		}
+		case COMBAT:
+		{
+			if (!playerVisible)
+			{
+				state = FOLLOW;
+				shootingDelayed = true;
+				shootingDelay = (float)(rand() / (float)(RAND_MAX / (1.0f - 0.25f))) + 0.25f;
+				delayTimer = 0.0f;
+				texture = ChooseDirectionSprite(player);
+				break;
+			}
+
+			angle += objectAngle;
+			if (weapon->Ready())
+			{
+				if (shootingDelayed)
+				{
+					delayTimer += elapsedTime;
+					if (delayTimer >= shootingDelay)
+					{
+						delayTimer = 0.0f;
+						shootingDelayed = false;
+					}
+					texture = reloadingSpr;
+				}
+				else
+				{
+					if (weapon->GetAmmo() > 0)
+					{
+						weapon->Fire();
+						shootingDelayed = true;
+						shootingDelay = (float)(rand() / (float)(RAND_MAX / (1.0f - 0.25f))) + 0.25f;
+						texture = shootingSpr;
+					}
+					else
+					{
+						texture = reloadingSpr;
+					}
+				}
+			}
+			break;
+		}
+		case FOLLOW:
+		{
+			if (playerVisible)
+			{
+				state = COMBAT;
+				angle += objectAngle;
+				texture = ChooseDirectionSprite(player);
+				break;
+			}
+
+			float moveX, moveY;
+			if (engine->FindMove(this, player, moveX, moveY))
+			{
+				x = (int)moveX + 0.5f;
+				y = (int)moveY + 0.5f;
+
+				angle += objectAngle;
+
+				/*float dirX = moveX - x;
+				float dirY = moveY - y;
+
+				float magInv = 1.0f / sqrt(dirX * dirX + dirY * dirY);
+				dirX *= magInv;
+				dirY *= magInv;
+
+				angle = atan2f(dirY, dirX);
+
+				float prevX = x;
+				float prevY = y;
+
+				x += dirX * speed * elapsedTime;
+				y += dirY * speed * elapsedTime;
+
+				if (dirX == 0.0f)
+					x = (int)x + 0.5f;
+
+				if (dirY == 0.0f)
+					y = (int)y + 0.5f;
+
+				if (engine->IsObstacle(x, y, this))
+				{
+					x = prevX;
+					y = prevY;
+				}*/
+			}
+			texture = ChooseDirectionSprite(player);
+			break;
+		}
+	}
+
+	weapon->OnUpdate(elapsedTime);
 }
 
 void Guard::OnHit(int damage)
@@ -76,4 +203,6 @@ void Guard::OnHit(int damage)
 	Damage(damage);
 	if (currentHealth <= 0)
 		removed = true;
+
+	playerDetected = true;
 }

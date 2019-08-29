@@ -19,6 +19,8 @@ struct Weapon
 	void OnUpdate(float elapsedTime);
 	virtual void Fire() = 0;
 
+	bool Ready();
+
 	int GetAmmo();
 	int GetCapacity();
 

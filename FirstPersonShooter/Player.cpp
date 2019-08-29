@@ -27,9 +27,7 @@ bool Player::AddWeapon(Weapon *weapon)
 	if (availableWeapons[weapon->WEAPON_INDEX] == nullptr)
 	{
 		availableWeapons[weapon->WEAPON_INDEX] = weapon;
-
-		if (this->weapon == nullptr)
-			this->weapon = weapon;
+		this->weapon = weapon;
 
 		return true;
 	}
@@ -79,10 +77,10 @@ void Player::OnUpdate(float elapsedTime)
 	}
 
 	if (engine->GetKey('A').held)
-		angle -= (speed * 0.75f) * elapsedTime;
+		angle -= (speed * 0.45f) * elapsedTime;
 
 	if (engine->GetKey('D').held)
-		angle += (speed * 0.75f) * elapsedTime;
+		angle += (speed * 0.45f) * elapsedTime;
 
 	if (engine->GetKey('I').released)
 	{

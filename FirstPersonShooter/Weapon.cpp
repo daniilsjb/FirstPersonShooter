@@ -22,6 +22,11 @@ void Weapon::OnUpdate(float elapsedTime)
 		currentSpr = sprIdle;
 }
 
+bool Weapon::Ready()
+{
+	return !shooting;
+}
+
 int Weapon::GetAmmo()
 {
 	return ammo;
@@ -60,10 +65,10 @@ void Gun::Fire()
 	ammo--;
 
 	float rayX, rayY, distance;
-	if (engine->CastRay(parent->x, parent->y, parent->angle, rayX, rayY, distance, false, true, parent))
+	if (engine->CastRay(parent->x, parent->y, parent->angle, rayX, rayY, distance, true, true, parent))
 	{
 		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
-		if (other->friendlyToPlayer != parent->friendlyToPlayer)
+		if (other != nullptr && other->friendlyToPlayer != parent->friendlyToPlayer)
 			other->OnHit(rand() % maxDmg + minDmg);
 	}
 }
