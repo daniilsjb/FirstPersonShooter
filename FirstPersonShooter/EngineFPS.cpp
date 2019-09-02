@@ -23,11 +23,11 @@ bool EngineFPS::OnStart()
 	map.append(L"#......P.......#");
 	map.append(L"#..............#");
 	map.append(L"#..F...........#");
-	map.append(L"#......-....M..#");
+	map.append(L"#......-._..M..#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
 	map.append(L"#.....####.....#");
-	map.append(L"#.......G......#");
+	map.append(L"#......GG......#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
@@ -599,16 +599,19 @@ void EngineFPS::LoadSprites()
 		sprites[spriteName] = spr;
 	};
 
+	//Textures
 	load("brick wall", L"Sprites/brick_wall.spr");
 	load("stone wall", L"Sprites/stone_wall.spr");
 	load("stone wall eagle", L"Sprites/stone_wall_eagle.spr");
 	load("stone wall flag", L"Sprites/stone_wall_flag.spr");
 	load("metal door", L"Sprites/metal_door.spr");
 
+	//Decorations
 	load("flag", L"Sprites/flag.spr");
 	load("jug", L"Sprites/jug.spr");
 	load("tree", L"Sprites/tree.spr");
 
+	//Enemies
 	load("guard back", L"Sprites/guard_back.spr");
 	load("guard front", L"Sprites/guard_front.spr");
 	load("guard left", L"Sprites/guard_left.spr");
@@ -616,11 +619,15 @@ void EngineFPS::LoadSprites()
 	load("guard reload", L"Sprites/guard_reload.spr");
 	load("guard fire", L"Sprites/guard_fire.spr");
 
-	load("gun", L"Sprites/gun.spr");
-	load("gun up", L"Sprites/gun_up.spr");
-	load("gun fire", L"Sprites/gun_fire.spr");
+	//Weapons
+	load("gun", L"Sprites/weapon_gun.spr");
+	load("gun fire", L"Sprites/weapon_gun_fire.spr");
+	load("machine gun", L"Sprites/weapon_machine_gun.spr");
+	load("machine gun fire", L"Sprites/weapon_machine_gun_fire.spr");
 
+	//Items
 	load("item gun", L"Sprites/item_gun.spr");
+	load("item machine gun", L"Sprites/item_machine_gun.spr");
 	load("item medpack", L"Sprites/item_medpack.spr");
 	load("item medkit", L"Sprites/item_medkit.spr");
 }
@@ -703,7 +710,15 @@ void EngineFPS::ParseMap()
 				}
 				case '-':
 				{
-					Item *item = new GunItem(this);
+					Item *item = new WeaponItem(this, new Gun(this, player), sprites["item gun"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case '_':
+				{
+					Item *item = new WeaponItem(this, new MachineGun(this, player), sprites["item machine gun"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;

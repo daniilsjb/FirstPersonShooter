@@ -34,6 +34,20 @@ bool Player::AddWeapon(Weapon *weapon)
 	return false;
 }
 
+bool Player::AddAmmoFromWeapon(Weapon *weapon)
+{
+	Weapon *available = availableWeapons[weapon->WEAPON_INDEX];
+	if (available != nullptr)
+	{
+		if (available->GetAmmo() < available->GetCapacity())
+		{
+			available->AddAmmo(weapon->GetAmmo());
+			return true;
+		}
+	}
+	return false;
+}
+
 void Player::OnUpdate(float elapsedTime)
 {
 	if (engine->GetKey('W').held)

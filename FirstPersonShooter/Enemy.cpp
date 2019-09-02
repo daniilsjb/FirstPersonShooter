@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Player.h"
+#include "Item.h"
 
 Enemy::Enemy(EngineFPS *engine) : Mob(engine)
 {
@@ -68,9 +69,9 @@ Guard::Guard(EngineFPS *engine) : Enemy(engine)
 
 	angle = 3.14159f;
 
-	speed = 1.0f;
+	speed = 1.5f;
 
-	weapon = new Gun(engine, this);
+	weapon = new MachineGun(engine, this);
 }
 
 void Guard::OnUpdate(float elapsedTime)
@@ -158,19 +159,14 @@ void Guard::OnUpdate(float elapsedTime)
 			float moveX, moveY;
 			if (engine->FindMove(this, player, moveX, moveY))
 			{
-				x = (int)moveX + 0.5f;
-				y = (int)moveY + 0.5f;
-
 				angle += objectAngle;
 
-				/*float dirX = moveX - x;
-				float dirY = moveY - y;
+				float dirX = (moveX + 0.5f) - x;
+				float dirY = (moveY + 0.5f) - y;
 
 				float magInv = 1.0f / sqrt(dirX * dirX + dirY * dirY);
 				dirX *= magInv;
 				dirY *= magInv;
-
-				angle = atan2f(dirY, dirX);
 
 				float prevX = x;
 				float prevY = y;
@@ -178,17 +174,11 @@ void Guard::OnUpdate(float elapsedTime)
 				x += dirX * speed * elapsedTime;
 				y += dirY * speed * elapsedTime;
 
-				if (dirX == 0.0f)
-					x = (int)x + 0.5f;
-
-				if (dirY == 0.0f)
-					y = (int)y + 0.5f;
-
 				if (engine->IsObstacle(x, y, this))
 				{
 					x = prevX;
 					y = prevY;
-				}*/
+				}
 			}
 			texture = ChooseDirectionSprite(player);
 			break;
@@ -202,7 +192,13 @@ void Guard::OnHit(int damage)
 {
 	Damage(damage);
 	if (currentHealth <= 0)
+	{
 		removed = true;
+		Item *wpn = new WeaponItem(engine, new MachineGun(engine, engine->player), engine->sprites["item machine gun"]);
+		wpn->x = x + 0.5f;
+		wpn->y = y + 0.5f;
+		engine->items[engine->GetMapWidth() * (int)y + (int)x] = wpn;
+	}
 
 	playerDetected = true;
 }

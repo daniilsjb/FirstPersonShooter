@@ -72,3 +72,35 @@ void Gun::Fire()
 			other->OnHit(rand() % maxDmg + minDmg);
 	}
 }
+
+MachineGun::MachineGun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 1)
+{
+	sprIdle = engine->sprites["machine gun"];
+	sprFire = engine->sprites["machine gun fire"];
+
+	currentSpr = sprIdle;
+
+	ammo = capacity = 200;
+
+	minDmg = 1;
+	maxDmg = 2;
+
+	cooldown = 0.01f;
+}
+
+void MachineGun::Fire()
+{
+	if (shooting || ammo <= 0) return;
+
+	shooting = true;
+	ammo--;
+
+	float rayX, rayY, distance;
+	if (engine->CastRay(parent->x, parent->y, parent->angle, rayX, rayY, distance, true, true, parent))
+	{
+		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
+		if (other != nullptr && other->friendlyToPlayer != parent->friendlyToPlayer)
+			other->OnHit(rand() % maxDmg + minDmg);
+	}
+
+}

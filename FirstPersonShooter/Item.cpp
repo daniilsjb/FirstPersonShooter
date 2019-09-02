@@ -6,17 +6,21 @@ Item::Item(EngineFPS *engine) : GameObject(engine) {}
 
 Item::~Item() {}
 
-GunItem::GunItem(EngineFPS *engine) : Item(engine)
+WeaponItem::WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr) : Item(engine), weapon(weapon)
 {
-	texture = engine->sprites["item gun"];
+	texture = spr;
 }
 
-void GunItem::OnUse(Player *player)
+void WeaponItem::OnUse(Player *player)
 {
-	Weapon *gun = new Gun(engine, player);
-
-	if (!player->AddWeapon(gun))
-		delete gun;
+	if (!player->AddWeapon(weapon))
+	{
+		if (player->AddAmmoFromWeapon(weapon))
+		{
+			removed = true;
+			delete weapon;
+		}
+	}
 	else
 		removed = true;
 }

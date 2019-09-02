@@ -47,3 +47,10 @@ struct Gun : Weapon
 
 	void Fire() override;
 };
+
+struct MachineGun : Weapon
+{
+	MachineGun(EngineFPS *engine, Mob *parent);
+
+	void Fire() override;
+};
