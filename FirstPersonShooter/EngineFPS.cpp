@@ -5,6 +5,7 @@
 #include "Mob.h"
 #include "Item.h"
 #include "Player.h"
+#include "Enemy.h"
 
 bool EngineFPS::OnStart()
 {
@@ -20,16 +21,16 @@ bool EngineFPS::OnStart()
 	map.append(L"#$@#$@#$@#$@#$@#");
 	map.append(L"#..............#");
 	map.append(L"#......P.......#");
-	map.append(L"#...........M..#");
-	map.append(L"#..F...........#");
-	map.append(L"#......-....M..#");
 	map.append(L"#..............#");
-	map.append(L"#...####H###...#");
-	map.append(L"#...$......$...#");
-	map.append(L"#...@......@...#");
-	map.append(L"#...$...K..$...#");
-	map.append(L"#...@......@...#");
-	map.append(L"#...########...#");
+	map.append(L"#..F...........#");
+	map.append(L"#......-._..M..#");
+	map.append(L"#..............#");
+	map.append(L"#..............#");
+	map.append(L"#.....####.....#");
+	map.append(L"#......GG......#");
+	map.append(L"#..............#");
+	map.append(L"#..............#");
+	map.append(L"#..............#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
 	map.append(L"################");
@@ -41,6 +42,8 @@ bool EngineFPS::OnStart()
 	weaponHeight = (int)(GetScreenHeight() * 0.5f);
 
 	depthBuffer = new float[GetScreenWidth() * GetScreenHeight()];
+
+	srand(time(0));
 
 	return true;
 }
@@ -220,11 +223,20 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	}
 	
 	//Draw the map (for debug purposes mainly)
-	for (int i = 0; i < mapWidth; i++)
+	for (float i = 0.0f; i < mapWidth; i++)
 	{
-		for (int j = 0; j < mapHeight; j++)
+		for (float j = 0.0f; j < mapHeight; j++)
 		{
-			DrawPoint(i, j, map[mapWidth * j + i], FG_GRAY);
+			if (GetWall(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_YELLOW);
+			else if (GetDynamicObject(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_RED);
+			else if (GetItem(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_PINK);
+			else if (GetDecoration(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_CYAN);
+			else
+				DrawPoint((int)i, (int)j, ' ', BG_BLACK);
 		}
 	}
 	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);
@@ -360,6 +372,130 @@ bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float
 	return (withinFoV && distance >= 0.5f && distance < depth);
 }
 
+bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object)
+{
+	for (int x = 0; x < 4; x++)
+	{
+		float rayOffset = (float)x / 4;
+		float rayAngle = (eye->angle - FoV * 0.5f) + rayOffset * FoV;
+
+		float rayX, rayY;
+		float distance;
+
+		if (CastRay(eye->x, eye->y, rayAngle, rayX, rayY, distance, false, true, eye))
+		{
+			if (GetDynamicObject(rayX, rayY) == object)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float &y)
+{
+	//If start and finish are in same place, then there is no further move to make
+	if (ObjectsCollide(start->x, start->y, finish->x, finish->y))
+	{
+		x = start->x;
+		y = start->y;
+		return true;
+	}
+
+	struct Node
+	{
+		int x, y;
+		bool obstacle;
+		float heuristic = FLT_MAX;
+		std::vector<Node*> neighbors;
+	};
+
+	Node *graph = new Node[GetMapWidth() * GetMapHeight()];
+
+	for (int i = 0; i < GetMapWidth(); i++)
+	{
+		for (int j = 0; j < GetMapHeight(); j++)
+		{
+			Node *node = &graph[GetMapWidth() * j + i];
+
+			node->x = i;
+			node->y = j;
+
+			if (ObjectsCollide((float)i, (float)j, start->x, start->y) || ObjectsCollide((float)i, (float)j, finish->x, finish->y))
+				node->obstacle = false;
+			else
+				node->obstacle = IsObstacle((float)i, (float)j);
+
+			if (i + 1 < GetMapWidth())
+				node->neighbors.push_back(&graph[GetMapWidth() * j + (i + 1)]);
+
+			if (j - 1 >= 0)
+				node->neighbors.push_back(&graph[GetMapWidth() * (j - 1) + i]);
+
+			if (i - 1 >= 0)
+				node->neighbors.push_back(&graph[GetMapWidth() * j + (i - 1)]);
+
+			if (j + 1 < GetMapHeight())
+				node->neighbors.push_back(&graph[GetMapWidth() * (j + 1) + i]);
+		}
+	}
+
+	std::list<Node*> frontier;
+	std::map<Node*, Node*> cameFrom;
+
+	Node *nodeStart = &graph[GetMapWidth() * (int)start->y + (int)start->x];
+	Node *nodeFinish = &graph[GetMapWidth() * (int)finish->y + (int)finish->x];
+
+	frontier.push_back(nodeStart);
+	cameFrom[nodeStart] = nullptr;
+
+	while (!frontier.empty())
+	{
+		Node *nodeCurrent = frontier.front();
+		frontier.pop_front();
+
+		if (nodeCurrent == nodeFinish)
+			break;
+
+		for (auto &neighbor : nodeCurrent->neighbors)
+		{
+			if (!neighbor->obstacle && cameFrom.find(neighbor) == cameFrom.end())
+			{
+				neighbor->heuristic = fabs(nodeFinish->x - neighbor->x) + fabs(nodeFinish->y - neighbor->y);
+				frontier.push_back(neighbor);
+				cameFrom[neighbor] = nodeCurrent;
+			}
+		}
+
+		frontier.sort([](const Node* a, const Node* b) { return a->heuristic < b->heuristic; });
+	}
+
+	std::vector<Node*> path;
+
+	if (cameFrom[nodeFinish] != nullptr)
+	{
+		Node *nodeCurrent = nodeFinish;
+		while (nodeCurrent != nodeStart)
+		{
+			path.push_back(nodeCurrent);
+			nodeCurrent = cameFrom[nodeCurrent];
+		}
+
+	}
+	else
+	{
+		delete[] graph;
+		return false;
+	}
+
+	x = (float)path.back()->x;
+	y = (float)path.back()->y;
+
+	delete[] graph;
+
+	return true;
+}
+
 void EngineFPS::DrawObject2D(Sprite* spr, float angle, float distance)
 {
 	//We should just make sure the sprite is actually there
@@ -463,22 +599,35 @@ void EngineFPS::LoadSprites()
 		sprites[spriteName] = spr;
 	};
 
+	//Textures
 	load("brick wall", L"Sprites/brick_wall.spr");
 	load("stone wall", L"Sprites/stone_wall.spr");
 	load("stone wall eagle", L"Sprites/stone_wall_eagle.spr");
 	load("stone wall flag", L"Sprites/stone_wall_flag.spr");
 	load("metal door", L"Sprites/metal_door.spr");
+
+	//Decorations
 	load("flag", L"Sprites/flag.spr");
 	load("jug", L"Sprites/jug.spr");
 	load("tree", L"Sprites/tree.spr");
+
+	//Enemies
 	load("guard back", L"Sprites/guard_back.spr");
 	load("guard front", L"Sprites/guard_front.spr");
+	load("guard left", L"Sprites/guard_left.spr");
+	load("guard right", L"Sprites/guard_right.spr");
 	load("guard reload", L"Sprites/guard_reload.spr");
 	load("guard fire", L"Sprites/guard_fire.spr");
-	load("gun", L"Sprites/gun.spr");
-	load("gun up", L"Sprites/gun_up.spr");
-	load("gun fire", L"Sprites/gun_fire.spr");
+
+	//Weapons
+	load("gun", L"Sprites/weapon_gun.spr");
+	load("gun fire", L"Sprites/weapon_gun_fire.spr");
+	load("machine gun", L"Sprites/weapon_machine_gun.spr");
+	load("machine gun fire", L"Sprites/weapon_machine_gun_fire.spr");
+
+	//Items
 	load("item gun", L"Sprites/item_gun.spr");
+	load("item machine gun", L"Sprites/item_machine_gun.spr");
 	load("item medpack", L"Sprites/item_medpack.spr");
 	load("item medkit", L"Sprites/item_medkit.spr");
 }
@@ -561,10 +710,27 @@ void EngineFPS::ParseMap()
 				}
 				case '-':
 				{
-					Item *item = new GunItem(this);
+					Item *item = new WeaponItem(this, new Gun(this, player), sprites["item gun"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case '_':
+				{
+					Item *item = new WeaponItem(this, new MachineGun(this, player), sprites["item machine gun"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+
+				case 'G':
+				{
+					DynamicObject* enemy = new Guard(this);
+					enemy->x = x + 0.5f;
+					enemy->y = y + 0.5f;
+					dynamicObjects.push_back(enemy);
 					break;
 				}
 

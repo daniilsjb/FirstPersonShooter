@@ -10,6 +10,7 @@ struct Player : Mob
 	~Player();
 
 	bool AddWeapon(Weapon *weapon);
+	bool AddAmmoFromWeapon(Weapon *weapon);
 
 	void OnUpdate(float elapsedTime) override;
 	void OnHit(int damage) override;

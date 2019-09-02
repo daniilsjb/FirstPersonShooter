@@ -19,6 +19,8 @@ struct Weapon
 	void OnUpdate(float elapsedTime);
 	virtual void Fire() = 0;
 
+	bool Ready();
+
 	int GetAmmo();
 	int GetCapacity();
 
@@ -42,6 +44,13 @@ protected:
 struct Gun : Weapon
 {
 	Gun(EngineFPS *engine, Mob *parent);
+
+	void Fire() override;
+};
+
+struct MachineGun : Weapon
+{
+	MachineGun(EngineFPS *engine, Mob *parent);
 
 	void Fire() override;
 };

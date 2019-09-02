@@ -27,11 +27,23 @@ bool Player::AddWeapon(Weapon *weapon)
 	if (availableWeapons[weapon->WEAPON_INDEX] == nullptr)
 	{
 		availableWeapons[weapon->WEAPON_INDEX] = weapon;
-
-		if (this->weapon == nullptr)
-			this->weapon = weapon;
+		this->weapon = weapon;
 
 		return true;
+	}
+	return false;
+}
+
+bool Player::AddAmmoFromWeapon(Weapon *weapon)
+{
+	Weapon *available = availableWeapons[weapon->WEAPON_INDEX];
+	if (available != nullptr)
+	{
+		if (available->GetAmmo() < available->GetCapacity())
+		{
+			available->AddAmmo(weapon->GetAmmo());
+			return true;
+		}
 	}
 	return false;
 }
@@ -79,10 +91,10 @@ void Player::OnUpdate(float elapsedTime)
 	}
 
 	if (engine->GetKey('A').held)
-		angle -= (speed * 0.75f) * elapsedTime;
+		angle -= (speed * 0.45f) * elapsedTime;
 
 	if (engine->GetKey('D').held)
-		angle += (speed * 0.75f) * elapsedTime;
+		angle += (speed * 0.45f) * elapsedTime;
 
 	if (engine->GetKey('I').released)
 	{

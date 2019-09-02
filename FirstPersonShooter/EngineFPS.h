@@ -39,6 +39,9 @@ public:
 	bool CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored = nullptr);
 	bool ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance);
 
+	bool DynamicObjectVisible(DynamicObject *eye, DynamicObject *object);
+	bool FindMove(GameObject *start, GameObject *finish, float &x, float &y);
+
 	void DrawObject2D(Sprite* spr, float angle, float distance);
 
 	bool IsObstacle(float x, float y, GameObject* ignored = nullptr);

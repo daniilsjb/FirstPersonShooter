@@ -2,6 +2,8 @@
 
 #include "GameObject.h"
 
+struct Weapon;
+
 struct Item : GameObject
 {
 	Item(EngineFPS *engine);
@@ -12,9 +14,11 @@ struct Item : GameObject
 	virtual void OnUse(Player *player) = 0;
 };
 
-struct GunItem : Item
+struct WeaponItem : Item
 {
-	GunItem(EngineFPS *engine);
+	WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr);
+
+	Weapon *weapon;
 
 	void OnUse(Player *player) override;
 };
