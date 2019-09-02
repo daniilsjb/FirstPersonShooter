@@ -11,6 +11,7 @@ bool EngineFPS::OnStart()
 {
 	SetApplicationTitle(L"First Person Shooter");
 
+	LoadAudio();
 	LoadSprites();
 
 	//Walls and Items, by their nature, are static. We want to be able to access them based on some arbitrary map coordinates,
@@ -26,9 +27,9 @@ bool EngineFPS::OnStart()
 	map.append(L"#......-._..M..#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
-	map.append(L"#.....####.....#");
-	map.append(L"#......GG......#");
+	map.append(L"#############H##");
 	map.append(L"#..............#");
+	map.append(L"#...GG.........#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
@@ -44,6 +45,9 @@ bool EngineFPS::OnStart()
 	depthBuffer = new float[GetScreenWidth() * GetScreenHeight()];
 
 	srand(time(0));
+
+	StartAudio();
+	PlayAudioClip(audio["Get Them Before They Get You"], true);
 
 	return true;
 }
@@ -591,6 +595,33 @@ bool EngineFPS::ObjectsCollide(float x0, float y0, float x1, float y1)
 	return ((int)x0 == (int)x1 && (int)y0 == (int)y1);
 }
 
+void EngineFPS::LoadAudio()
+{
+	auto load = [&](std::string audioName, std::wstring fileName)
+	{
+		audio[audioName] = LoadAudioClip(fileName);
+	};
+
+	//OST
+	load("Get Them Before They Get You", L"Audio/OST/Get Them Before They Get You.wav");
+
+	//SFX
+	load("Health", L"Audio/SFX/Health.wav");
+	load("Pistol", L"Audio/SFX/Pistol.wav");
+	load("Machine Gun", L"Audio/SFX/Machine Gun.wav");
+	load("Ammo", L"Audio/SFX/Ammo.wav");
+	load("Door", L"Audio/SFX/Door.wav");
+	load("Achtung", L"Audio/SFX/Achtung.wav");
+	load("Enemy Pain", L"Audio/SFX/Enemy Pain.wav");
+	load("Enemy Death 1", L"Audio/SFX/Death 1.wav");
+	load("Enemy Death 2", L"Audio/SFX/Death 2.wav");
+	load("Player Pain 1", L"Audio/SFX/Player Pain 1.wav");
+	load("Player Pain 2", L"Audio/SFX/Player Pain 2.wav");
+	load("Player Death", L"Audio/SFX/Player Dies.wav");
+	load("Pickup", L"Audio/SFX/Pickup.wav");
+	load("Secret Entrance", L"Audio/SFX/Secret Entrance.wav");
+}
+
 void EngineFPS::LoadSprites()
 {
 	auto load = [&](std::string spriteName, std::wstring fileName)
@@ -773,12 +804,12 @@ int EngineFPS::GetMapHeight()
 	return mapHeight;
 }
 
-int main()
+Sprite* EngineFPS::GetSprite(std::string spriteName)
 {
-	EngineFPS game;
-	if (game.ConstructScreen(320, 240, 4, 4))
-		game.Start();
+	return sprites[spriteName];
+}
 
-	return 0;
-
+void EngineFPS::PlayAudio(std::string audioName, bool loop)
+{
+	PlayAudioClip(audio[audioName], loop);
 }

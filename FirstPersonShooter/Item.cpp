@@ -17,12 +17,16 @@ void WeaponItem::OnUse(Player *player)
 	{
 		if (player->AddAmmoFromWeapon(weapon))
 		{
+			engine->PlayAudio("Ammo");
 			removed = true;
 			delete weapon;
 		}
 	}
 	else
+	{
+		engine->PlayAudio("Ammo");
 		removed = true;
+	}	
 }
 
 Medkit::Medkit(EngineFPS *engine, int healthBonus, Sprite *spr) : Item(engine), healthBonus(healthBonus)
@@ -34,6 +38,7 @@ void Medkit::OnUse(Player *player)
 {
 	if (player->GetHealth() < player->GetMaxHealth())
 	{
+		engine->PlayAudio("Health");
 		player->Heal(healthBonus);
 		removed = true;
 	}

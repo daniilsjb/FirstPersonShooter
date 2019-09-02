@@ -159,6 +159,7 @@
     <ClCompile Include="EngineFPS.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mob.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Wall.cpp" />
