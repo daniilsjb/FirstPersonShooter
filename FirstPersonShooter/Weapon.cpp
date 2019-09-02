@@ -44,8 +44,8 @@ void Weapon::AddAmmo(int amount)
 
 Gun::Gun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 0)
 {
-	sprIdle = engine->sprites["gun"];
-	sprFire = engine->sprites["gun fire"];
+	sprIdle = engine->GetSprite("gun");
+	sprFire = engine->GetSprite("gun fire");
 
 	currentSpr = sprIdle;
 
@@ -70,13 +70,15 @@ void Gun::Fire()
 		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
 		if (other != nullptr && other->friendlyToPlayer != parent->friendlyToPlayer)
 			other->OnHit(rand() % maxDmg + minDmg);
+
+		engine->PlayAudio("Pistol");
 	}
 }
 
 MachineGun::MachineGun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 1)
 {
-	sprIdle = engine->sprites["machine gun"];
-	sprFire = engine->sprites["machine gun fire"];
+	sprIdle = engine->GetSprite("machine gun");
+	sprFire = engine->GetSprite("machine gun fire");
 
 	currentSpr = sprIdle;
 
@@ -101,6 +103,8 @@ void MachineGun::Fire()
 		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
 		if (other != nullptr && other->friendlyToPlayer != parent->friendlyToPlayer)
 			other->OnHit(rand() % maxDmg + minDmg);
+
+		engine->PlayAudio("Machine Gun");
 	}
 
 }

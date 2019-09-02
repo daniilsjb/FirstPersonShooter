@@ -130,4 +130,10 @@ void Player::OnUpdate(float elapsedTime)
 void Player::OnHit(int damage)
 {
 	Damage(damage);
+
+	if (rand() % 5 == 0)
+		engine->PlayAudio("Player Pain 1");
+
+	if (currentHealth <= 0)
+		engine->PlayAudio("Player Death");
 }

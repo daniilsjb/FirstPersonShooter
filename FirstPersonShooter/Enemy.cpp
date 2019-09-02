@@ -55,13 +55,13 @@ Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject)
 
 Guard::Guard(EngineFPS *engine) : Enemy(engine)
 {
-	directionSprites[BACK] = engine->sprites["guard back"];
-	directionSprites[RIGHT] = engine->sprites["guard right"];
-	directionSprites[FRONT] = engine->sprites["guard front"];
-	directionSprites[LEFT] = engine->sprites["guard left"];
+	directionSprites[BACK] = engine->GetSprite("guard back");
+	directionSprites[RIGHT] = engine->GetSprite("guard right");
+	directionSprites[FRONT] = engine->GetSprite("guard front");
+	directionSprites[LEFT] = engine->GetSprite("guard left");
 
-	reloadingSpr = engine->sprites["guard reload"];
-	shootingSpr = engine->sprites["guard fire"];
+	reloadingSpr = engine->GetSprite("guard reload");
+	shootingSpr = engine->GetSprite("guard fire");
 
 	currentHealth = maxHealth = 50;
 
@@ -99,7 +99,10 @@ void Guard::OnUpdate(float elapsedTime)
 		case PATROL:
 		{
 			if (playerDetected)
+			{
 				state = COMBAT;
+				engine->PlayAudio("Achtung");
+			}
 
 			texture = ChooseDirectionSprite(player);
 			break;
@@ -194,11 +197,16 @@ void Guard::OnHit(int damage)
 	if (currentHealth <= 0)
 	{
 		removed = true;
-		Item *wpn = new WeaponItem(engine, new MachineGun(engine, engine->player), engine->sprites["item machine gun"]);
+		Item *wpn = new WeaponItem(engine, new MachineGun(engine, engine->player), engine->GetSprite("item machine gun"));
 		wpn->x = x + 0.5f;
 		wpn->y = y + 0.5f;
 		engine->items[engine->GetMapWidth() * (int)y + (int)x] = wpn;
+
+		engine->PlayAudio("Enemy Death 1");
 	}
 
 	playerDetected = true;
+
+	if (rand() % 5 == 0)
+		engine->PlayAudio("Enemy Pain");
 }
