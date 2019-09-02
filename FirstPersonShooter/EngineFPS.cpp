@@ -22,18 +22,18 @@ bool EngineFPS::OnStart()
 
 	map.append(L"#$@#$@#$@#$@#$@#");
 	map.append(L"#..............#");
-	map.append(L"#......P.......#");
+	map.append(L"#..C...P....R..#");
 	map.append(L"#..............#");
 	map.append(L"#..F...........#");
 	map.append(L"#......-._..M..#");
-	map.append(L"#..............#");
-	map.append(L"#..............#");
+	map.append(L"#.L............#");
+	map.append(L"#...U.....S....#");
 	map.append(L"#############H##");
 	map.append(L"#..............#");
 	map.append(L"#...GG.........#");
 	map.append(L"#..............#");
 	map.append(L"#..............#");
-	map.append(L"#..............#");
+	map.append(L"#...%.^...L....#");
 	map.append(L"#..............#");
 	map.append(L"################");
 
@@ -259,9 +259,11 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 		capacity = player->weapon->GetCapacity();
 	}
 
+	int score = player->GetScore();
+
 	//Display player stats
 	wchar_t title[256];
-	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d", hp, maxhp, ammo, capacity);
+	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d - Score: %d", hp, maxhp, ammo, capacity, score);
 	SetApplicationTitle(title);
 
 	return true;
@@ -601,6 +603,7 @@ void EngineFPS::LoadSprites()
 	load("Flag", L"Sprites/Flag.spr");
 	load("Jug", L"Sprites/Jug.spr");
 	load("Tree", L"Sprites/Tree.spr");
+	load("Lamp", L"Sprites/Lamp.spr");
 
 	//Enemies
 	load("Guard Back", L"Sprites/Guard Back.spr");
@@ -619,8 +622,14 @@ void EngineFPS::LoadSprites()
 	//Items
 	load("Item Pistol", L"Sprites/Item Pistol.spr");
 	load("Item Machine Gun", L"Sprites/Item Machine Gun.spr");
+	load("Item Pistol Ammo", L"Sprites/Item Pistol Ammo.spr");
+	load("Item Machine Gun Ammo", L"Sprites/Item Machine Gun Ammo.spr");
 	load("Item Medpack", L"Sprites/Item Medpack.spr");
 	load("Item Medkit", L"Sprites/Item Medkit.spr");
+	load("Item Chest", L"Sprites/Item Chest.spr");
+	load("Item Cross", L"Sprites/Item Cross.spr");
+	load("Item Crown", L"Sprites/Item Crown.spr");
+	load("Item Cup", L"Sprites/Item Cup.spr");
 }
 
 void EngineFPS::ParseMap()
@@ -715,6 +724,54 @@ void EngineFPS::ParseMap()
 					items[mapWidth * (int)y + (int)x] = item;
 					break;
 				}
+				case '%':
+				{
+					Item *item = new AmmoItem(this, 0, 5, sprites["Item Pistol Ammo"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case '^':
+				{
+					Item *item = new AmmoItem(this, 1, 50, sprites["Item Machine Gun Ammo"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case 'S':
+				{
+					Item *item = new ScoreItem(this, 10, sprites["Item Cross"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case 'C':
+				{
+					Item *item = new ScoreItem(this, 35, sprites["Item Chest"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case 'R':
+				{
+					Item *item = new ScoreItem(this, 60, sprites["Item Crown"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
+				case 'U':
+				{
+					Item *item = new ScoreItem(this, 5, sprites["Item Cup"]);
+					item->x = x + 0.5f;
+					item->y = y + 0.5f;
+					items[mapWidth * (int)y + (int)x] = item;
+					break;
+				}
 
 				case 'G':
 				{
@@ -744,6 +801,14 @@ void EngineFPS::ParseMap()
 				case 'T':
 				{
 					Decoration *decor = new Decoration(this, sprites["Tree"]);
+					decor->x = x + 0.5f;
+					decor->y = y + 0.5f;
+					decorations.push_back(decor);
+					break;
+				}
+				case 'L':
+				{
+					Decoration *decor = new Decoration(this, sprites["Lamp"]);
 					decor->x = x + 0.5f;
 					decor->y = y + 0.5f;
 					decorations.push_back(decor);

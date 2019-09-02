@@ -34,6 +34,33 @@ void WeaponItem::OnUse(Player *player)
 	}	
 }
 
+AmmoItem::AmmoItem(EngineFPS *engine, int weaponIndex, int amount, Sprite *spr) : Item(engine), weaponIndex(weaponIndex), amount(amount)
+{
+	texture = spr;
+}
+
+void AmmoItem::OnUse(Player *player)
+{
+	if (player->weapon->GetAmmo() < player->weapon->GetCapacity())
+	{
+		player->weapon->AddAmmo(amount);
+		removed = true;
+		engine->PlayAudio("Ammo");
+	}
+}
+
+ScoreItem::ScoreItem(EngineFPS *engine, int worth, Sprite *spr) : Item(engine), worth(worth)
+{
+	texture = spr;
+}
+
+void ScoreItem::OnUse(Player *player)
+{
+	player->AddScore(worth);
+	removed = true;
+	engine->PlayAudio("Pickup");
+}
+
 Medkit::Medkit(EngineFPS *engine, int healthBonus, Sprite *spr) : Item(engine), healthBonus(healthBonus)
 {
 	texture = spr;

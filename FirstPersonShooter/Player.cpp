@@ -137,3 +137,13 @@ void Player::OnHit(int damage)
 	if (currentHealth <= 0)
 		engine->PlayAudio("Player Death");
 }
+
+void Player::AddScore(int amount)
+{
+	score += amount;
+}
+
+int Player::GetScore() const
+{
+	return score;
+}

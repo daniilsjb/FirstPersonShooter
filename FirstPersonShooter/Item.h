@@ -29,6 +29,29 @@ protected:
 	Weapon *weapon;
 };
 
+class AmmoItem : public Item
+{
+public:
+	AmmoItem(EngineFPS *engine, int weaponIndex, int amount, Sprite *spr);
+
+	void OnUse(Player *player) override;
+
+protected:
+	int weaponIndex;
+	int amount;
+};
+
+class ScoreItem : public Item
+{
+public:
+	ScoreItem(EngineFPS *engine, int worth, Sprite *spr);
+
+	void OnUse(Player *player) override;
+
+protected:
+	int worth;
+};
+
 class Medkit : public Item
 {
 public:

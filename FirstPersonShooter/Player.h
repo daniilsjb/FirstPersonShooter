@@ -16,6 +16,11 @@ public:
 	void OnUpdate(float elapsedTime) override;
 	void OnHit(int damage) override;
 
+	void AddScore(int amount);
+	int GetScore() const;
+
 private:
 	std::vector<Weapon*> availableWeapons;
+
+	int score = 0;
 };
