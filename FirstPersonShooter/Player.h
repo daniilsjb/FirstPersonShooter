@@ -2,10 +2,11 @@
 
 #include "Mob.h"
 
-struct Weapon;
+class Weapon;
 
-struct Player : Mob
+class Player : public Mob
 {
+public:
 	Player(EngineFPS *engine);
 	~Player();
 

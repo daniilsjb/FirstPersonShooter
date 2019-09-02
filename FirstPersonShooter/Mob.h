@@ -3,8 +3,9 @@
 #include "DynamicObject.h"
 #include "Weapon.h"
 
-struct Mob : DynamicObject
+class Mob : public DynamicObject
 {
+public:
 	Mob(EngineFPS *engine);
 	virtual ~Mob();
 

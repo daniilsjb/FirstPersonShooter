@@ -2,10 +2,11 @@
 
 #include "GameObject.h"
 
-struct Weapon;
+class Weapon;
 
-struct Item : GameObject
+class Item : public GameObject
 {
+public:
 	Item(EngineFPS *engine);
 	virtual ~Item();
 
@@ -14,8 +15,9 @@ struct Item : GameObject
 	virtual void OnUse(Player *player) = 0;
 };
 
-struct WeaponItem : Item
+class WeaponItem : public Item
 {
+public:
 	WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr);
 
 	Weapon *weapon;
@@ -23,8 +25,9 @@ struct WeaponItem : Item
 	void OnUse(Player *player) override;
 };
 
-struct Medkit : Item
+class Medkit : public Item
 {
+public:
 	Medkit(EngineFPS *engine, int healthBonus, Sprite *spr);
 
 	int healthBonus;

@@ -2,8 +2,9 @@
 
 #include "EngineFPS.h"
 
-struct GameObject
+class GameObject
 {
+public:
 	virtual ~GameObject();
 
 	EngineFPS *engine = nullptr;

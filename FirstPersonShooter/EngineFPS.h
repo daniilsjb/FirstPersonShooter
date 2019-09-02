@@ -5,12 +5,12 @@
 
 #define WEAPON_COUNT 3
 
-struct GameObject;
-struct Wall;
-struct Item;
-struct Decoration;
-struct DynamicObject;
-struct Player;
+class GameObject;
+class Wall;
+class Item;
+class Decoration;
+class DynamicObject;
+class Player;
 
 class EngineFPS : public ConsoleGameEngine
 {

@@ -2,8 +2,9 @@
 
 #include "Mob.h"
 
-struct Enemy : Mob
+class Enemy : public Mob
 {
+public:
 	Enemy(EngineFPS *engine);
 
 protected:

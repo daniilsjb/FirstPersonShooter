@@ -2,8 +2,9 @@
 
 #include "GameObject.h"
 
-struct Wall : GameObject
+class Wall : public GameObject
 {
+public:
 	Wall(EngineFPS *engine, Sprite* texture);
 	virtual ~Wall();
 
@@ -12,8 +13,9 @@ struct Wall : GameObject
 	virtual void OnInteract();
 };
 
-struct Door : Wall
+class Door : public Wall
 {
+public:
 	Door(EngineFPS *engine, Sprite* texture);
 
 	void OnInteract() override;

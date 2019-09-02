@@ -2,8 +2,9 @@
 
 #include "GameObject.h"
 
-struct DynamicObject : GameObject
+class DynamicObject : public GameObject
 {
+public:
 	DynamicObject(EngineFPS *engine);
 	virtual ~DynamicObject();
 

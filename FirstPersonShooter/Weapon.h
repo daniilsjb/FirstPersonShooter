@@ -2,10 +2,11 @@
 
 class EngineFPS;
 class Sprite;
-struct Mob;
+class Mob;
 
-struct Weapon
+class Weapon
 {
+public:
 	EngineFPS *engine = nullptr;
 	Mob *parent = nullptr;
 

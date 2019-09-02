@@ -2,8 +2,9 @@
 
 #include "GameObject.h"
 
-struct Decoration : GameObject
+class Decoration : public GameObject
 {
+public:
 	Decoration(EngineFPS *engine, Sprite *texture);
 	virtual ~Decoration();
 };
