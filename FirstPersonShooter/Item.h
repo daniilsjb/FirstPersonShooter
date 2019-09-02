@@ -10,9 +10,12 @@ public:
 	Item(EngineFPS *engine);
 	virtual ~Item();
 
-	bool removed = false;
+	bool IsRemoved() const;
 
 	virtual void OnUse(Player *player) = 0;
+
+protected:
+	bool removed = false;
 };
 
 class WeaponItem : public Item
@@ -20,9 +23,10 @@ class WeaponItem : public Item
 public:
 	WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr);
 
-	Weapon *weapon;
-
 	void OnUse(Player *player) override;
+
+protected:
+	Weapon *weapon;
 };
 
 class Medkit : public Item
@@ -30,7 +34,8 @@ class Medkit : public Item
 public:
 	Medkit(EngineFPS *engine, int healthBonus, Sprite *spr);
 
-	int healthBonus;
-
 	void OnUse(Player *player) override;
+
+protected:
+	int healthBonus;
 };

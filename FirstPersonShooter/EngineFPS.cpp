@@ -67,7 +67,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	//We don't want to remove destroyed walls from the vector, so we just deallocate memory
 	for (auto &wall : walls)
 	{
-		if (wall != nullptr && wall->removed)
+		if (wall != nullptr && wall->IsRemoved())
 		{
 			delete wall;
 			wall = nullptr;
@@ -77,7 +77,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	//Same applies to item
 	for (auto &item : items)
 	{
-		if (item != nullptr && item->removed)
+		if (item != nullptr && item->IsRemoved())
 		{
 			delete item;
 			item = nullptr;
@@ -87,9 +87,10 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	//Dynamic objects, however, are not that easy to control, so we want to just remove it from the list completely
 	dynamicObjects.remove_if([](const DynamicObject* object)
 	{
-		if (object->removed)
+		if (object->IsRemoved())
 			delete object;
-		return object->removed;
+
+		return object->IsRemoved();
 	});
 
 	//Reset depth buffer
@@ -101,7 +102,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	{
 		//Calculate ray angle depending on the column we're filling in
 		float rayOffset = (float)x / (float)GetScreenWidth();
-		float rayAngle = (player->angle - FoV * 0.5f) + rayOffset * FoV;
+		float rayAngle = (player->GetAngle() - FoV * 0.5f) + rayOffset * FoV;
 
 		float rayX, rayY;
 		float distance;
@@ -176,7 +177,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	for (auto &decoration : decorations)
 	{
 		float objectAngle, distance;
-		if (ObjectWithinFoV(player->x, player->y, player->angle, decoration->x, decoration->y, objectAngle, distance))
+		if (ObjectWithinFoV(player->x, player->y, player->GetAngle(), decoration->x, decoration->y, objectAngle, distance))
 		{
 			DrawObject2D(decoration->texture, objectAngle, distance);
 		}
@@ -186,7 +187,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	for (auto &item : items)
 	{
 		float objectAngle, distance;
-		if (item != nullptr && ObjectWithinFoV(player->x, player->y, player->angle, item->x, item->y, objectAngle, distance))
+		if (item != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), item->x, item->y, objectAngle, distance))
 		{
 			DrawObject2D(item->texture, objectAngle, distance);
 		}
@@ -196,7 +197,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	for (auto &object : dynamicObjects)
 	{
 		float objectAngle, distance;
-		if (object->texture != nullptr && ObjectWithinFoV(player->x, player->y, player->angle, object->x, object->y, objectAngle, distance))
+		if (object->texture != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), object->x, object->y, objectAngle, distance))
 		{
 			DrawObject2D(object->texture, objectAngle, distance);
 		}
@@ -300,6 +301,77 @@ bool EngineFPS::OnDestroy()
 	return true;
 }
 
+int EngineFPS::GetMapWidth()
+{
+	return mapWidth;
+}
+
+int EngineFPS::GetMapHeight()
+{
+	return mapHeight;
+}
+
+
+Wall* EngineFPS::GetWall(float x, float y)
+{
+	return walls[mapWidth * (int)y + (int)x];
+}
+
+Item* EngineFPS::GetItem(float x, float y)
+{
+	return items[mapWidth * (int)y + (int)x];
+}
+
+Decoration* EngineFPS::GetDecoration(float x, float y)
+{
+	for (auto &decor : decorations)
+	{
+		if (ObjectsCollide(decor->x, decor->y, x, y))
+			return decor;
+	}
+	return nullptr;
+}
+
+DynamicObject* EngineFPS::GetDynamicObject(float x, float y)
+{
+	for (auto &object : dynamicObjects)
+	{
+		if (ObjectsCollide(object->x, object->y, x, y))
+			return object;
+	}
+	return nullptr;
+}
+
+Sprite* EngineFPS::GetSprite(std::string spriteName)
+{
+	return sprites[spriteName];
+}
+
+void EngineFPS::PlayAudio(std::string audioName, bool loop)
+{
+	PlayAudioClip(audio[audioName], loop);
+}
+
+bool EngineFPS::IsObstacle(float x, float y, GameObject* ignored)
+{
+	Wall *wall = GetWall(x, y);
+	bool isWall = false;
+	if (wall != nullptr && wall != ignored)
+		isWall = true;
+
+	DynamicObject *object = GetDynamicObject(x, y);
+	bool isObject = false;
+	if (object != nullptr && object != ignored)
+		isObject = true;
+
+	return isWall || isObject;
+}
+
+bool EngineFPS::ObjectsCollide(float x0, float y0, float x1, float y1)
+{
+	return ((int)x0 == (int)x1 && (int)y0 == (int)y1);
+}
+
 bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored)
 {
 	float step = 0.01f;
@@ -381,7 +453,7 @@ bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object)
 	for (int x = 0; x < 4; x++)
 	{
 		float rayOffset = (float)x / 4;
-		float rayAngle = (eye->angle - FoV * 0.5f) + rayOffset * FoV;
+		float rayAngle = (eye->GetAngle() - FoV * 0.5f) + rayOffset * FoV;
 
 		float rayX, rayY;
 		float distance;
@@ -465,7 +537,7 @@ bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float 
 		{
 			if (!neighbor->obstacle && cameFrom.find(neighbor) == cameFrom.end())
 			{
-				neighbor->heuristic = fabs(nodeFinish->x - neighbor->x) + fabs(nodeFinish->y - neighbor->y);
+				neighbor->heuristic = (float)(fabs(nodeFinish->x - neighbor->x) + fabs(nodeFinish->y - neighbor->y));
 				frontier.push_back(neighbor);
 				cameFrom[neighbor] = nodeCurrent;
 			}
@@ -543,56 +615,6 @@ void EngineFPS::DrawObject2D(Sprite* spr, float angle, float distance)
 			}
 		}
 	}
-}
-
-bool EngineFPS::IsObstacle(float x, float y, GameObject* ignored)
-{
-	Wall *wall = GetWall(x, y);
-	bool isWall = false;
-	if (wall != nullptr && wall != ignored)
-		isWall = true;	
-
-	DynamicObject *object = GetDynamicObject(x, y);
-	bool isObject = false;
-	if (object != nullptr && object != ignored)
-		isObject = true;
-
-	return isWall || isObject;
-}
-
-Wall* EngineFPS::GetWall(float x, float y)
-{
-	return walls[mapWidth * (int)y + (int)x];
-}
-
-Item* EngineFPS::GetItem(float x, float y)
-{
-	return items[mapWidth * (int)y + (int)x];
-}
-
-Decoration* EngineFPS::GetDecoration(float x, float y)
-{
-	for (auto &decor : decorations)
-	{
-		if (ObjectsCollide(decor->x, decor->y, x, y))
-			return decor;
-	}
-	return nullptr;
-}
-
-DynamicObject* EngineFPS::GetDynamicObject(float x, float y)
-{
-	for (auto &object : dynamicObjects)
-	{
-		if (ObjectsCollide(object->x, object->y, x, y))
-			return object;
-	}
-	return nullptr;
-}
-
-bool EngineFPS::ObjectsCollide(float x0, float y0, float x1, float y1)
-{
-	return ((int)x0 == (int)x1 && (int)y0 == (int)y1);
 }
 
 void EngineFPS::LoadAudio()
@@ -792,24 +814,4 @@ void EngineFPS::ParseMap()
 			}
 		}
 	}
-}
-
-int EngineFPS::GetMapWidth()
-{
-	return mapWidth;
-}
-
-int EngineFPS::GetMapHeight()
-{
-	return mapHeight;
-}
-
-Sprite* EngineFPS::GetSprite(std::string spriteName)
-{
-	return sprites[spriteName];
-}
-
-void EngineFPS::PlayAudio(std::string audioName, bool loop)
-{
-	PlayAudioClip(audio[audioName], loop);
 }

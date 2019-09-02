@@ -8,9 +8,12 @@ public:
 	Wall(EngineFPS *engine, Sprite* texture);
 	virtual ~Wall();
 
-	bool removed = false;
-
+	bool IsRemoved() const;
+	
 	virtual void OnInteract();
+
+protected:
+	bool removed = false;
 };
 
 class Door : public Wall

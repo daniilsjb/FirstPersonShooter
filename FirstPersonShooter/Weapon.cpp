@@ -22,17 +22,17 @@ void Weapon::OnUpdate(float elapsedTime)
 		currentSpr = sprIdle;
 }
 
-bool Weapon::Ready()
+bool Weapon::Ready() const
 {
 	return !shooting;
 }
 
-int Weapon::GetAmmo()
+int Weapon::GetAmmo() const
 {
 	return ammo;
 }
 
-int Weapon::GetCapacity()
+int Weapon::GetCapacity() const
 {
 	return capacity;
 }
@@ -65,10 +65,10 @@ void Gun::Fire()
 	ammo--;
 
 	float rayX, rayY, distance;
-	if (engine->CastRay(parent->x, parent->y, parent->angle, rayX, rayY, distance, true, true, parent))
+	if (engine->CastRay(parent->x, parent->y, parent->GetAngle(), rayX, rayY, distance, true, true, parent))
 	{
 		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
-		if (other != nullptr && other->friendlyToPlayer != parent->friendlyToPlayer)
+		if (other != nullptr && other->IsFriendly() != parent->IsFriendly())
 			other->OnHit(rand() % maxDmg + minDmg);
 
 		engine->PlayAudio("Pistol");
@@ -98,10 +98,10 @@ void MachineGun::Fire()
 	ammo--;
 
 	float rayX, rayY, distance;
-	if (engine->CastRay(parent->x, parent->y, parent->angle, rayX, rayY, distance, true, true, parent))
+	if (engine->CastRay(parent->x, parent->y, parent->GetAngle(), rayX, rayY, distance, true, true, parent))
 	{
 		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
-		if (other != nullptr && other->friendlyToPlayer != parent->friendlyToPlayer)
+		if (other != nullptr && other->IsFriendly() != parent->IsFriendly())
 			other->OnHit(rand() % maxDmg + minDmg);
 
 		engine->PlayAudio("Machine Gun");

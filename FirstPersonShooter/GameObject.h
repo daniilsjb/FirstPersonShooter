@@ -5,12 +5,12 @@
 class GameObject
 {
 public:
+	GameObject(EngineFPS *engine);
 	virtual ~GameObject();
-
-	EngineFPS *engine = nullptr;
 
 	float x, y;
 	Sprite *texture = nullptr;
 
-	GameObject(EngineFPS *engine);
+protected:
+	EngineFPS *engine = nullptr;
 };

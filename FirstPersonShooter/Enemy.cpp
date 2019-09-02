@@ -14,8 +14,8 @@ Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject)
 	float eyeY = sinf(angle);
 
 	//Find direction vector of the relative object
-	float objEyeX = cosf(relativeObject->angle);
-	float objEyeY = sinf(relativeObject->angle);
+	float objEyeX = cosf(relativeObject->GetAngle());
+	float objEyeY = sinf(relativeObject->GetAngle());
 
 	//Both vectors are normalized, dot product is a value between -1 to 1 that indicates the similarity between their directions
 	float dot = (eyeX * objEyeX) + (eyeY * objEyeY);
@@ -53,28 +53,7 @@ Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject)
 		return directionSprites[BACK];
 }
 
-Guard::Guard(EngineFPS *engine) : Enemy(engine)
-{
-	directionSprites[BACK] = engine->GetSprite("guard back");
-	directionSprites[RIGHT] = engine->GetSprite("guard right");
-	directionSprites[FRONT] = engine->GetSprite("guard front");
-	directionSprites[LEFT] = engine->GetSprite("guard left");
-
-	reloadingSpr = engine->GetSprite("guard reload");
-	shootingSpr = engine->GetSprite("guard fire");
-
-	currentHealth = maxHealth = 50;
-
-	state = PATROL;
-
-	angle = 3.14159f;
-
-	speed = 1.5f;
-
-	weapon = new MachineGun(engine, this);
-}
-
-void Guard::OnUpdate(float elapsedTime)
+void Enemy::OnUpdate(float elapsedTime)
 {
 	DynamicObject* player = engine->player;
 
@@ -191,8 +170,31 @@ void Guard::OnUpdate(float elapsedTime)
 	weapon->OnUpdate(elapsedTime);
 }
 
+Guard::Guard(EngineFPS *engine) : Enemy(engine)
+{
+	directionSprites[BACK] = engine->GetSprite("guard back");
+	directionSprites[RIGHT] = engine->GetSprite("guard right");
+	directionSprites[FRONT] = engine->GetSprite("guard front");
+	directionSprites[LEFT] = engine->GetSprite("guard left");
+
+	reloadingSpr = engine->GetSprite("guard reload");
+	shootingSpr = engine->GetSprite("guard fire");
+
+	currentHealth = maxHealth = 50;
+
+	state = PATROL;
+
+	angle = 3.14159f;
+
+	speed = 1.5f;
+
+	weapon = new MachineGun(engine, this);
+}
+
 void Guard::OnHit(int damage)
 {
+	playerDetected = true;
+
 	Damage(damage);
 	if (currentHealth <= 0)
 	{
@@ -204,8 +206,6 @@ void Guard::OnHit(int damage)
 
 		engine->PlayAudio("Enemy Death 1");
 	}
-
-	playerDetected = true;
 
 	if (rand() % 5 == 0)
 		engine->PlayAudio("Enemy Pain");

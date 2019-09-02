@@ -6,6 +6,11 @@ Item::Item(EngineFPS *engine) : GameObject(engine) {}
 
 Item::~Item() {}
 
+bool Item::IsRemoved() const
+{
+	return removed;
+}
+
 WeaponItem::WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr) : Item(engine), weapon(weapon)
 {
 	texture = spr;

@@ -7,25 +7,28 @@ class Mob;
 class Weapon
 {
 public:
-	EngineFPS *engine = nullptr;
-	Mob *parent = nullptr;
-
 	Weapon(EngineFPS *engine, Mob *parent, short index);
 	virtual ~Weapon();
 
-	Sprite *currentSpr = nullptr;
+	Mob *parent = nullptr;
 
 	const short WEAPON_INDEX;
 
 	void OnUpdate(float elapsedTime);
 	virtual void Fire() = 0;
 
-	bool Ready();
+	bool Ready() const;
 
-	int GetAmmo();
-	int GetCapacity();
+	int GetAmmo() const;
+	int GetCapacity() const;
 
 	void AddAmmo(int amount);
+
+	Sprite *currentSpr = nullptr;
+
+protected:
+	EngineFPS *engine = nullptr;
+
 
 protected:
 	Sprite *sprIdle = nullptr;
