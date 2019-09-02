@@ -44,8 +44,8 @@ void Weapon::AddAmmo(int amount)
 
 Gun::Gun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 0)
 {
-	sprIdle = engine->GetSprite("gun");
-	sprFire = engine->GetSprite("gun fire");
+	sprIdle = engine->GetSprite("Pistol");
+	sprFire = engine->GetSprite("Pistol Fire");
 
 	currentSpr = sprIdle;
 
@@ -77,8 +77,8 @@ void Gun::Fire()
 
 MachineGun::MachineGun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 1)
 {
-	sprIdle = engine->GetSprite("machine gun");
-	sprFire = engine->GetSprite("machine gun fire");
+	sprIdle = engine->GetSprite("Machine Gun");
+	sprFire = engine->GetSprite("Machine Gun Fire");
 
 	currentSpr = sprIdle;
 

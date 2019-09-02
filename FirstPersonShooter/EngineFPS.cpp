@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Node.h"
 
 bool EngineFPS::OnStart()
 {
@@ -470,23 +471,8 @@ bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object)
 
 bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float &y)
 {
-	//If start and finish are in same place, then there is no further move to make
-	if (ObjectsCollide(start->x, start->y, finish->x, finish->y))
-	{
-		x = start->x;
-		y = start->y;
-		return true;
-	}
-
-	struct Node
-	{
-		int x, y;
-		bool obstacle;
-		float heuristic = FLT_MAX;
-		std::vector<Node*> neighbors;
-	};
-
-	Node *graph = new Node[GetMapWidth() * GetMapHeight()];
+	//Build the graph
+	Node *graph = new Node[mapWidth * mapHeight];
 
 	for (int i = 0; i < GetMapWidth(); i++)
 	{
@@ -516,60 +502,12 @@ bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float 
 		}
 	}
 
-	std::list<Node*> frontier;
-	std::map<Node*, Node*> cameFrom;
-
-	Node *nodeStart = &graph[GetMapWidth() * (int)start->y + (int)start->x];
-	Node *nodeFinish = &graph[GetMapWidth() * (int)finish->y + (int)finish->x];
-
-	frontier.push_back(nodeStart);
-	cameFrom[nodeStart] = nullptr;
-
-	while (!frontier.empty())
-	{
-		Node *nodeCurrent = frontier.front();
-		frontier.pop_front();
-
-		if (nodeCurrent == nodeFinish)
-			break;
-
-		for (auto &neighbor : nodeCurrent->neighbors)
-		{
-			if (!neighbor->obstacle && cameFrom.find(neighbor) == cameFrom.end())
-			{
-				neighbor->heuristic = (float)(fabs(nodeFinish->x - neighbor->x) + fabs(nodeFinish->y - neighbor->y));
-				frontier.push_back(neighbor);
-				cameFrom[neighbor] = nodeCurrent;
-			}
-		}
-
-		frontier.sort([](const Node* a, const Node* b) { return a->heuristic < b->heuristic; });
-	}
-
-	std::vector<Node*> path;
-
-	if (cameFrom[nodeFinish] != nullptr)
-	{
-		Node *nodeCurrent = nodeFinish;
-		while (nodeCurrent != nodeStart)
-		{
-			path.push_back(nodeCurrent);
-			nodeCurrent = cameFrom[nodeCurrent];
-		}
-
-	}
-	else
-	{
-		delete[] graph;
-		return false;
-	}
-
-	x = (float)path.back()->x;
-	y = (float)path.back()->y;
+	//Pass the graph to the pathfinder
+	bool result = pathfinder.FindMove(graph, mapWidth, mapHeight, start, finish, x, y);
 
 	delete[] graph;
 
-	return true;
+	return result;
 }
 
 void EngineFPS::DrawObject2D(Sprite* spr, float angle, float distance)
@@ -653,36 +591,36 @@ void EngineFPS::LoadSprites()
 	};
 
 	//Textures
-	load("brick wall", L"Sprites/brick_wall.spr");
-	load("stone wall", L"Sprites/stone_wall.spr");
-	load("stone wall eagle", L"Sprites/stone_wall_eagle.spr");
-	load("stone wall flag", L"Sprites/stone_wall_flag.spr");
-	load("metal door", L"Sprites/metal_door.spr");
+	load("Brick Wall", L"Sprites/Brick Wall.spr");
+	load("Stone Wall", L"Sprites/Stone Wall.spr");
+	load("Stone Wall Eagle", L"Sprites/Stone Wall Eagle.spr");
+	load("Stone Wall Flag", L"Sprites/Stone Wall Flag.spr");
+	load("Metal Door", L"Sprites/Metal Door.spr");
 
 	//Decorations
-	load("flag", L"Sprites/flag.spr");
-	load("jug", L"Sprites/jug.spr");
-	load("tree", L"Sprites/tree.spr");
+	load("Flag", L"Sprites/Flag.spr");
+	load("Jug", L"Sprites/Jug.spr");
+	load("Tree", L"Sprites/Tree.spr");
 
 	//Enemies
-	load("guard back", L"Sprites/guard_back.spr");
-	load("guard front", L"Sprites/guard_front.spr");
-	load("guard left", L"Sprites/guard_left.spr");
-	load("guard right", L"Sprites/guard_right.spr");
-	load("guard reload", L"Sprites/guard_reload.spr");
-	load("guard fire", L"Sprites/guard_fire.spr");
+	load("Guard Back", L"Sprites/Guard Back.spr");
+	load("Guard Front", L"Sprites/Guard Front.spr");
+	load("Guard Left", L"Sprites/Guard Left.spr");
+	load("Guard Right", L"Sprites/Guard Right.spr");
+	load("Guard Reload", L"Sprites/Guard Reload.spr");
+	load("Guard Fire", L"Sprites/Guard Fire.spr");
 
 	//Weapons
-	load("gun", L"Sprites/weapon_gun.spr");
-	load("gun fire", L"Sprites/weapon_gun_fire.spr");
-	load("machine gun", L"Sprites/weapon_machine_gun.spr");
-	load("machine gun fire", L"Sprites/weapon_machine_gun_fire.spr");
+	load("Pistol", L"Sprites/Weapon Pistol.spr");
+	load("Pistol Fire", L"Sprites/Weapon Pistol Fire.spr");
+	load("Machine Gun", L"Sprites/Weapon Machine Gun.spr");
+	load("Machine Gun Fire", L"Sprites/Weapon Machine Gun Fire.spr");
 
 	//Items
-	load("item gun", L"Sprites/item_gun.spr");
-	load("item machine gun", L"Sprites/item_machine_gun.spr");
-	load("item medpack", L"Sprites/item_medpack.spr");
-	load("item medkit", L"Sprites/item_medkit.spr");
+	load("Item Pistol", L"Sprites/Item Pistol.spr");
+	load("Item Machine Gun", L"Sprites/Item Machine Gun.spr");
+	load("Item Medpack", L"Sprites/Item Medpack.spr");
+	load("Item Medkit", L"Sprites/Item Medkit.spr");
 }
 
 void EngineFPS::ParseMap()
@@ -706,7 +644,7 @@ void EngineFPS::ParseMap()
 
 				case '#':
 				{
-					Wall *wall = new Wall(this, sprites["stone wall"]);
+					Wall *wall = new Wall(this, sprites["Stone Wall"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -714,7 +652,7 @@ void EngineFPS::ParseMap()
 				}
 				case '$':
 				{
-					Wall *wall = new Wall(this, sprites["stone wall eagle"]);
+					Wall *wall = new Wall(this, sprites["Stone Wall Eagle"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -722,7 +660,7 @@ void EngineFPS::ParseMap()
 				}
 				case '@':
 				{
-					Wall *wall = new Wall(this, sprites["stone wall flag"]);
+					Wall *wall = new Wall(this, sprites["Stone Wall Flag"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -730,7 +668,7 @@ void EngineFPS::ParseMap()
 				}
 				case '?':
 				{
-					Wall *wall = new Door(this, sprites["stone wall flag"]);
+					Wall *wall = new Door(this, sprites["Stone Wall Flag"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -738,7 +676,7 @@ void EngineFPS::ParseMap()
 				}
 				case 'H':
 				{
-					Wall *wall = new Door(this, sprites["metal door"]);
+					Wall *wall = new Door(this, sprites["Metal Door"]);
 					wall->x = x;
 					wall->y = y;
 					walls[mapWidth * (int)y + (int)x] = wall;
@@ -747,7 +685,7 @@ void EngineFPS::ParseMap()
 
 				case 'M':
 				{
-					Item *item = new Medkit(this, 10, sprites["item medpack"]);
+					Item *item = new Medkit(this, 10, sprites["Item Medpack"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
@@ -755,7 +693,7 @@ void EngineFPS::ParseMap()
 				}
 				case 'K':
 				{
-					Item *item = new Medkit(this, 40, sprites["item medkit"]);
+					Item *item = new Medkit(this, 40, sprites["Item Medkit"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
@@ -763,7 +701,7 @@ void EngineFPS::ParseMap()
 				}
 				case '-':
 				{
-					Item *item = new WeaponItem(this, new Gun(this, player), sprites["item gun"]);
+					Item *item = new WeaponItem(this, new Gun(this, player), sprites["Item Pistol"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
@@ -771,7 +709,7 @@ void EngineFPS::ParseMap()
 				}
 				case '_':
 				{
-					Item *item = new WeaponItem(this, new MachineGun(this, player), sprites["item machine gun"]);
+					Item *item = new WeaponItem(this, new MachineGun(this, player), sprites["Item Machine Gun"]);
 					item->x = x + 0.5f;
 					item->y = y + 0.5f;
 					items[mapWidth * (int)y + (int)x] = item;
@@ -789,7 +727,7 @@ void EngineFPS::ParseMap()
 
 				case 'F':
 				{
-					Decoration *decor = new Decoration(this, sprites["flag"]);
+					Decoration *decor = new Decoration(this, sprites["Flag"]);
 					decor->x = x + 0.5f;
 					decor->y = y + 0.5f;
 					decorations.push_back(decor);
@@ -797,7 +735,7 @@ void EngineFPS::ParseMap()
 				}
 				case 'J':
 				{
-					Decoration *decor = new Decoration(this, sprites["jug"]);
+					Decoration *decor = new Decoration(this, sprites["Jug"]);
 					decor->x = x + 0.5f;
 					decor->y = y + 0.5f;
 					decorations.push_back(decor);
@@ -805,7 +743,7 @@ void EngineFPS::ParseMap()
 				}
 				case 'T':
 				{
-					Decoration *decor = new Decoration(this, sprites["tree"]);
+					Decoration *decor = new Decoration(this, sprites["Tree"]);
 					decor->x = x + 0.5f;
 					decor->y = y + 0.5f;
 					decorations.push_back(decor);

@@ -172,13 +172,13 @@ void Enemy::OnUpdate(float elapsedTime)
 
 Guard::Guard(EngineFPS *engine) : Enemy(engine)
 {
-	directionSprites[BACK] = engine->GetSprite("guard back");
-	directionSprites[RIGHT] = engine->GetSprite("guard right");
-	directionSprites[FRONT] = engine->GetSprite("guard front");
-	directionSprites[LEFT] = engine->GetSprite("guard left");
+	directionSprites[BACK] = engine->GetSprite("Guard Back");
+	directionSprites[RIGHT] = engine->GetSprite("Guard Right");
+	directionSprites[FRONT] = engine->GetSprite("Guard Front");
+	directionSprites[LEFT] = engine->GetSprite("Guard Left");
 
-	reloadingSpr = engine->GetSprite("guard reload");
-	shootingSpr = engine->GetSprite("guard fire");
+	reloadingSpr = engine->GetSprite("Guard Reload");
+	shootingSpr = engine->GetSprite("Guard Fire");
 
 	currentHealth = maxHealth = 50;
 
@@ -199,7 +199,7 @@ void Guard::OnHit(int damage)
 	if (currentHealth <= 0)
 	{
 		removed = true;
-		Item *wpn = new WeaponItem(engine, new MachineGun(engine, engine->player), engine->GetSprite("item machine gun"));
+		Item *wpn = new WeaponItem(engine, new MachineGun(engine, engine->player), engine->GetSprite("Item Machine Gun"));
 		wpn->x = x + 0.5f;
 		wpn->y = y + 0.5f;
 		engine->items[engine->GetMapWidth() * (int)y + (int)x] = wpn;

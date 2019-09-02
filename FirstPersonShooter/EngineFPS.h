@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ConsoleGameEngine.h"
+#include "Pathfinder.h"
+
 #include <map>
 
 constexpr int WEAPON_COUNT = 2;
@@ -16,6 +18,11 @@ class EngineFPS : public ConsoleGameEngine
 {
 public:
 	Player *player = nullptr;
+
+	std::list<DynamicObject*> dynamicObjects;
+	std::vector<Wall*> walls;
+	std::vector<Item*> items;
+	std::list<Decoration*> decorations;
 
 	bool OnStart() override;
 	bool OnUpdate(float elapsedTime) override;
@@ -43,6 +50,8 @@ public:
 	void PlayAudio(std::string audioName, bool loop = false);
 
 private:
+	Pathfinder pathfinder;
+
 	float FoV = 3.14159f / 4.0f;
 	float depth = 20.0f;
 
@@ -50,11 +59,6 @@ private:
 
 	int weaponWidth;
 	int weaponHeight;
-
-	std::list<DynamicObject*> dynamicObjects;
-	std::vector<Wall*> walls;
-	std::vector<Item*> items;
-	std::list<Decoration*> decorations;
 
 	int mapWidth = 16;
 	int mapHeight = 16;

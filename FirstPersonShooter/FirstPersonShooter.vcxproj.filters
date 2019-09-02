@@ -19,6 +19,12 @@
     <Filter Include="Source Files\GameObjects">
       <UniqueIdentifier>{0677c2ef-a89a-4cf2-a01c-b93e71e171ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Pathfinding">
+      <UniqueIdentifier>{fae68f43-6857-4b18-97f5-28fddca03634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pathfinding">
+      <UniqueIdentifier>{6e5472da-1a68-49ec-85b6-1e0add2adc8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleGameEngine.h">
@@ -53,6 +59,12 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinder.h">
+      <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinder.cpp">
+      <Filter>Source Files\Pathfinding</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
