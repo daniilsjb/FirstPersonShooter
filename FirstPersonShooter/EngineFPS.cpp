@@ -1,6 +1,9 @@
 #include "EngineFPS.h"
 #include "Node.h"
+
 #include "Weapon.h"
+#include "Pistol.h"
+#include "MachineGun.h"
 
 #include "GameObject.h"
 

@@ -150,9 +150,11 @@
     <ClInclude Include="Guard.h" />
     <ClInclude Include="HealthItem.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="MachineGun.h" />
     <ClInclude Include="Mob.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Pathfinder.h" />
+    <ClInclude Include="Pistol.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScoreItem.h" />
     <ClInclude Include="Wall.h" />
@@ -171,9 +173,11 @@
     <ClCompile Include="Guard.cpp" />
     <ClCompile Include="HealthItem.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="MachineGun.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mob.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
+    <ClCompile Include="Pistol.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScoreItem.cpp" />
     <ClCompile Include="Wall.cpp" />

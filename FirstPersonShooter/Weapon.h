@@ -45,19 +45,3 @@ protected:
 	float cooldown;
 	float timer = 0.0f;
 };
-
-class Pistol : public Weapon
-{
-public:
-	Pistol(EngineFPS *engine, Mob *parent);
-
-	void Fire() override;
-};
-
-class MachineGun : public Weapon
-{
-public:
-	MachineGun(EngineFPS *engine, Mob *parent);
-
-	void Fire() override;
-};
