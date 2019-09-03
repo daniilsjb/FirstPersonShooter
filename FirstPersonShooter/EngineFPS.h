@@ -23,12 +23,12 @@ public:
 	bool OnUpdate(float elapsedTime) override;
 	bool OnDestroy() override;
 
-	bool CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored = nullptr);
-	bool ObjectsCollide(float x0, float y0, float x1, float y1);
-	bool IsObstacle(float x, float y, GameObject* ignored = nullptr);
+	bool CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored = nullptr) const;
+	bool ObjectsCollide(float x0, float y0, float x1, float y1) const;
+	bool IsObstacle(float x, float y, GameObject* ignored = nullptr) const;
 
-	bool ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance);
-	bool DynamicObjectVisible(DynamicObject *eye, DynamicObject *object);
+	bool ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance) const;
+	bool DynamicObjectVisible(DynamicObject *eye, DynamicObject *object) const;
 
 	bool FindMove(GameObject *start, GameObject *finish, float &x, float &y);
 	void DrawObject2D(Sprite* spr, float angle, float distance);
@@ -40,15 +40,15 @@ public:
 	void AddDecoration(int x, int y, wchar_t type);
 	void AddDynamicObject(int x, int y, wchar_t type);
 
-	Wall* GetWall(float x, float y);
-	Item* GetItem(float x, float y);
-	Decoration* GetDecoration(float x, float y);
-	DynamicObject* GetDynamicObject(float x, float y);
+	Wall* GetWall(float x, float y) const;
+	Item* GetItem(float x, float y) const;
+	Decoration* GetDecoration(float x, float y) const;
+	DynamicObject* GetDynamicObject(float x, float y) const;
 
-	int GetMapWidth();
-	int GetMapHeight();
+	int GetMapWidth() const;
+	int GetMapHeight() const;
 
-	Sprite* GetSprite(std::string spriteName);
+	Sprite* GetSprite(std::string spriteName) const;
 	void PlayAudio(std::string audioName, bool loop = false);
 
 private:

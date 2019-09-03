@@ -4,10 +4,10 @@
 
 Enemy::Enemy(EngineFPS *engine) : Mob(engine)
 {
-	directionSprites.resize(DIRECTIONS_COUNT, nullptr);
+	directionSprites.resize(DIRECTION_COUNT, nullptr);
 }
 
-Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject)
+Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject) const
 {
 	//Find direction vector of the enemy
 	float eyeX = cosf(angle);

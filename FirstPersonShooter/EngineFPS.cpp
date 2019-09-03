@@ -349,12 +349,12 @@ bool EngineFPS::OnDestroy()
 	return true;
 }
 
-int EngineFPS::GetMapWidth()
+int EngineFPS::GetMapWidth() const
 {
 	return mapWidth;
 }
 
-int EngineFPS::GetMapHeight()
+int EngineFPS::GetMapHeight() const
 {
 	return mapHeight;
 }
@@ -593,17 +593,17 @@ void EngineFPS::AddDynamicObject(int x, int y, wchar_t type)
 	}
 }
 
-Wall* EngineFPS::GetWall(float x, float y)
+Wall* EngineFPS::GetWall(float x, float y) const
 {
 	return walls[mapWidth * (int)y + (int)x];
 }
 
-Item* EngineFPS::GetItem(float x, float y)
+Item* EngineFPS::GetItem(float x, float y) const
 {
 	return items[mapWidth * (int)y + (int)x];
 }
 
-Decoration* EngineFPS::GetDecoration(float x, float y)
+Decoration* EngineFPS::GetDecoration(float x, float y) const
 {
 	for (auto &decor : decorations)
 	{
@@ -613,7 +613,7 @@ Decoration* EngineFPS::GetDecoration(float x, float y)
 	return nullptr;
 }
 
-DynamicObject* EngineFPS::GetDynamicObject(float x, float y)
+DynamicObject* EngineFPS::GetDynamicObject(float x, float y) const
 {
 	for (auto &object : dynamicObjects)
 	{
@@ -623,9 +623,9 @@ DynamicObject* EngineFPS::GetDynamicObject(float x, float y)
 	return nullptr;
 }
 
-Sprite* EngineFPS::GetSprite(std::string spriteName)
+Sprite* EngineFPS::GetSprite(std::string spriteName) const
 {
-	return sprites[spriteName];
+	return sprites.at(spriteName);
 }
 
 void EngineFPS::PlayAudio(std::string audioName, bool loop)
@@ -633,7 +633,7 @@ void EngineFPS::PlayAudio(std::string audioName, bool loop)
 	PlayAudioClip(audio[audioName], loop);
 }
 
-bool EngineFPS::IsObstacle(float x, float y, GameObject* ignored)
+bool EngineFPS::IsObstacle(float x, float y, GameObject* ignored) const
 {
 	Wall *wall = GetWall(x, y);
 	bool isWall = false;
@@ -648,12 +648,12 @@ bool EngineFPS::IsObstacle(float x, float y, GameObject* ignored)
 	return isWall || isObject;
 }
 
-bool EngineFPS::ObjectsCollide(float x0, float y0, float x1, float y1)
+bool EngineFPS::ObjectsCollide(float x0, float y0, float x1, float y1) const
 {
 	return ((int)x0 == (int)x1 && (int)y0 == (int)y1);
 }
 
-bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored)
+bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored) const
 {
 	float step = 0.01f;
 	float distanceSoFar = 0.0f;
@@ -704,7 +704,7 @@ bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY,
 	return false;
 }
 
-bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance)
+bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance) const
 {
 	//Find direction and distance from one object to the other
 	float objDirX = x1 - x0;
@@ -729,7 +729,7 @@ bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float
 	return (withinFoV && distance >= 0.5f && distance < depth);
 }
 
-bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object)
+bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object) const
 {
 	for (int x = 0; x < 4; x++)
 	{

@@ -14,8 +14,7 @@ protected:
 
 	bool playerDetected = false;
 
-	const short DIRECTIONS_COUNT = 4;
-	enum DIRECTION { BACK = 0, RIGHT, FRONT, LEFT };
+	enum DIRECTION { BACK = 0, RIGHT, FRONT, LEFT, DIRECTION_COUNT };
 
 	bool shootingDelayed = true;
 	float shootingDelay = 0.0f;
@@ -25,7 +24,7 @@ protected:
 	Sprite *reloadingSpr;
 	Sprite *shootingSpr;
 
-	Sprite* ChooseDirectionSprite(DynamicObject* relativeObject);
+	Sprite* ChooseDirectionSprite(DynamicObject* relativeObject) const;
 };
 
 struct Guard : public Enemy
