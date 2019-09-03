@@ -19,8 +19,8 @@ public:
 	void AddScore(int amount);
 	int GetScore() const;
 
-private:
 	std::vector<Weapon*> availableWeapons;
 
+private:
 	int score = 0;
 };

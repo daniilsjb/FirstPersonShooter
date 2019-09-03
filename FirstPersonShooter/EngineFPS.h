@@ -60,8 +60,8 @@ private:
 	int weaponWidth;
 	int weaponHeight;
 
-	int mapWidth = 16;
-	int mapHeight = 16;
+	int mapWidth = 48;
+	int mapHeight = 48;
 
 	std::wstring map;
 
@@ -69,6 +69,8 @@ private:
 
 	std::map<std::string, Sprite*> sprites;
 	std::map<std::string, int> audio;
+
+	float gameOverTimer = 0.0f;
 
 	void LoadAudio();
 	void LoadSprites();

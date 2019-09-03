@@ -41,11 +41,15 @@ AmmoItem::AmmoItem(EngineFPS *engine, int weaponIndex, int amount, Sprite *spr) 
 
 void AmmoItem::OnUse(Player *player)
 {
-	if (player->weapon->GetAmmo() < player->weapon->GetCapacity())
+	Weapon *playerWeapon = player->availableWeapons[weaponIndex];
+	if (playerWeapon != nullptr)
 	{
-		player->weapon->AddAmmo(amount);
-		removed = true;
-		engine->PlayAudio("Ammo");
+		if (playerWeapon->GetAmmo() < playerWeapon->GetCapacity())
+		{
+			playerWeapon->AddAmmo(amount);
+			removed = true;
+			engine->PlayAudio("Ammo");
+		}
 	}
 }
 

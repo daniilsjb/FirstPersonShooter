@@ -20,22 +20,54 @@ bool EngineFPS::OnStart()
 	walls.resize(mapWidth * mapHeight, nullptr);
 	items.resize(mapWidth * mapHeight, nullptr);
 
-	map.append(L"#$@#$@#$@#$@#$@#");
-	map.append(L"#..............#");
-	map.append(L"#..C...P....R..#");
-	map.append(L"#..............#");
-	map.append(L"#..F...........#");
-	map.append(L"#......-._..M..#");
-	map.append(L"#.L............#");
-	map.append(L"#...U.....S....#");
-	map.append(L"#############H##");
-	map.append(L"#..............#");
-	map.append(L"#...GG.........#");
-	map.append(L"#..............#");
-	map.append(L"#..............#");
-	map.append(L"#...%.^...L....#");
-	map.append(L"#..............#");
-	map.append(L"################");
+	map.append(L"##########@#############$#####$####@#####$######");
+	map.append(L"#...-.#......#.......#....................F...T#");
+	map.append(L"#..P..H......#....U..#.J...#..L..#....J........#");
+	map.append(L"#F....#......H..SL...$.....#..G..#..........K..#");
+	map.append(L"###$#@#......#.......#.....##@##$#..L.....L....#");
+	map.append(L"#............###@#####......................M..#");
+	map.append(L"#.F......L...#.S..M..#.T...L......G..G......M..#");
+	map.append(L"#............H...L...#.........................#");
+	map.append(L"###$###......#..U....$.....L....####$###$##H##@#");
+	map.append(L"#.CCC.#..L...###$##@##..........#....#.........#");
+	map.append(L"#.RUU.#......#.......#.....G....#....#..M...M..#");
+	map.append(L"#.USS.#......H..GL.R.#..........#....#.........#");
+	map.append(L"###?###..L...#.......#...##@##########.F.......#");
+	map.append(L"#............#########...#.M.....K...#.....G...#");
+	map.append(L"#.U......G...........#...#...%%..^^..#.........#");
+	map.append(L"#...$....L..L.GL..L..H...#...........#.........#");
+	map.append(L"#....................#...#@#####?###@#......L..#");
+	map.append(L"###@####$#####@#######.........................#");
+	map.append(L"#...........................L....L..........L..#");
+	map.append(L"#..F...................................G.......#");
+	map.append(L"#............###@#####$#####$#####@####@###....#");
+	map.append(L"#...#........#............................#....#");
+	map.append(L"#...#.G..L...$............................#....#");
+	map.append(L"#...#........#............................#....#");
+	map.append(L"#...@###$#####......###@####@####$###.....#....#");
+	map.append(L"#...#...............#...............#.....#....#");
+	map.append(L"#...$...............#..T......G...T.###@###....#");
+	map.append(L"#...######@######@###..........................#");
+	map.append(L"#..............................................#");
+	map.append(L"#................G.............................#");
+	map.append(L"#######H###@####H##$#####H#########$##.........#");
+	map.append(L"#..........#.S.....U.#........#......#....L...F#");
+	map.append(L"#.S..L..G..#.G..L....#...L....#...L..#.........#");
+	map.append(L"#.U.......M#.......U.#.K....M.#.G....#........F#");
+	map.append(L"######?##$######@########$#####......#....L....#");
+	map.append(L"#..........#.G.......F.......F.......#........F#");
+	map.append(L"#..M.UU..M.#.........................#.........#");
+	map.append(L"#%..RSSR..%#........K....K...........#....L...F#");
+	map.append(L"######@#####...................................#");
+	map.append(L"#.............................................F#");
+	map.append(L"#....................###?###..............L....#");
+	map.append(L"######?####....G.....#S...S#......G...........F#");
+	map.append(L"#%.R...U..#..........#..MM.#...................#");
+	map.append(L"#..UU.L.U.#..........#######......G.......L...F#");
+	map.append(L"###?###..^#...G................................#");
+	map.append(L"#RUUUC#.KC#...................................F#");
+	map.append(L"#RSSSC#M..#........F.............F.F.F.F.F.F.FJ#");
+	map.append(L"############@####$####@####$####################");
 
 	ParseMap();
 
@@ -55,6 +87,15 @@ bool EngineFPS::OnStart()
 
 bool EngineFPS::OnUpdate(float elapsedTime)
 {
+	if (player->GetHealth() <= 0)
+	{
+		gameOverTimer += elapsedTime;
+		if (gameOverTimer >= 3.0f)
+			return false;
+
+		return true;
+	}
+
 	//Dynamic objects is where the entire game logic is stored; they must be updated first
 	for (auto &object : dynamicObjects)
 		object->OnUpdate(elapsedTime);
@@ -229,7 +270,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	}
 	
 	//Draw the map (for debug purposes mainly)
-	for (float i = 0.0f; i < mapWidth; i++)
+	/*for (float i = 0.0f; i < mapWidth; i++)
 	{
 		for (float j = 0.0f; j < mapHeight; j++)
 		{
@@ -245,7 +286,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 				DrawPoint((int)i, (int)j, ' ', BG_BLACK);
 		}
 	}
-	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);
+	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);*/
 
 	//Get player stats
 	int hp = player->GetHealth();
