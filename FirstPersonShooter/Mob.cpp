@@ -1,6 +1,6 @@
 #include "Mob.h"
+#include "EngineFPS.h"
 #include "Weapon.h"
-#include <iostream>
 
 Mob::Mob(EngineFPS *engine) : DynamicObject(engine) {}
 

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "DynamicObject.h"
-#include "Weapon.h"
+
+class Weapon;
 
 class Mob : public DynamicObject
 {

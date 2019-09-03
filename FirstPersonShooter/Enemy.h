@@ -2,6 +2,8 @@
 
 #include "Mob.h"
 
+#include <vector>
+
 class Enemy : public Mob
 {
 public:
@@ -25,12 +27,4 @@ protected:
 	Sprite *shootingSpr;
 
 	Sprite* ChooseDirectionSprite(DynamicObject* relativeObject) const;
-};
-
-struct Guard : public Enemy
-{
-public:
-	Guard(EngineFPS *engine);
-
-	void OnHit(int damage) override;
 };

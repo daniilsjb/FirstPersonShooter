@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "EngineFPS.h"
+#include "Weapon.h"
 #include "Wall.h"
 
 Player::Player(EngineFPS *engine) : Mob(engine)
@@ -118,8 +120,7 @@ void Player::OnUpdate(float elapsedTime)
 		{
 			if (distance < 2.0f)
 			{
-				Wall* wall = engine->GetWall(rayX, rayY);
-				wall->OnInteract();
+				engine->GetWall(rayX, rayY)->OnInteract();
 			}
 		}
 	}

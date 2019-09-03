@@ -25,6 +25,36 @@
     <Filter Include="Header Files\Pathfinding">
       <UniqueIdentifier>{6e5472da-1a68-49ec-85b6-1e0add2adc8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObjects\Walls">
+      <UniqueIdentifier>{84ca2aae-e08b-4d33-b17f-21e3e16f8def}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Walls">
+      <UniqueIdentifier>{f865b9ca-d9f2-4199-83e3-90cca4f53066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Items">
+      <UniqueIdentifier>{ecd4bf7c-e434-4638-8b9c-3177a6f0bd43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Items">
+      <UniqueIdentifier>{3b6aa170-ca1a-46c3-8cb8-38585a968e1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\DynamicObjects">
+      <UniqueIdentifier>{f06067fd-e0cf-4171-b84d-f9c244632573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\DynamicObjects\Enemies">
+      <UniqueIdentifier>{536ce601-463e-4331-ad7e-81089c8b3248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\DynamicObjects">
+      <UniqueIdentifier>{81175772-0bde-4293-9ec3-fa6e62143572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\DynamicObjects\Enemies">
+      <UniqueIdentifier>{cb504505-f8d0-4644-be40-91c9fd202c80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Decorations">
+      <UniqueIdentifier>{09caaaed-7b6d-4c5f-8347-b9e5221e5a66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Decorations">
+      <UniqueIdentifier>{cfb4d1e6-5ec3-49c0-a5a4-265dbc235330}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleGameEngine.h">
@@ -33,38 +63,56 @@
     <ClInclude Include="EngineFPS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Decoration.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicObject.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Mob.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Weapon.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
     <ClInclude Include="Pathfinder.h">
       <Filter>Header Files\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Header Files\GameObjects\Walls</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Header Files\GameObjects\Walls</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponItem.h">
+      <Filter>Header Files\GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="AmmoItem.h">
+      <Filter>Header Files\GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreItem.h">
+      <Filter>Header Files\GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthItem.h">
+      <Filter>Header Files\GameObjects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicObject.h">
+      <Filter>Header Files\GameObjects\DynamicObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Mob.h">
+      <Filter>Header Files\GameObjects\DynamicObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\GameObjects\DynamicObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\GameObjects\DynamicObjects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Guard.h">
+      <Filter>Header Files\GameObjects\DynamicObjects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Decoration.h">
+      <Filter>Header Files\GameObjects\Decorations</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,38 +122,56 @@
     <ClCompile Include="ConsoleGameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Decoration.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicObject.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Mob.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pathfinder.cpp">
       <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Source Files\GameObjects\Walls</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files\GameObjects\Walls</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files\GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponItem.cpp">
+      <Filter>Source Files\GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="AmmoItem.cpp">
+      <Filter>Source Files\GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreItem.cpp">
+      <Filter>Source Files\GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthItem.cpp">
+      <Filter>Source Files\GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicObject.cpp">
+      <Filter>Source Files\GameObjects\DynamicObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\GameObjects\DynamicObjects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Mob.cpp">
+      <Filter>Source Files\GameObjects\DynamicObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\GameObjects\DynamicObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Guard.cpp">
+      <Filter>Source Files\GameObjects\DynamicObjects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Decoration.cpp">
+      <Filter>Source Files\GameObjects\Decorations</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

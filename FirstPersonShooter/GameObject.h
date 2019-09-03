@@ -1,6 +1,7 @@
 #pragma once
 
-#include "EngineFPS.h"
+class EngineFPS;
+class Sprite;
 
 class GameObject
 {

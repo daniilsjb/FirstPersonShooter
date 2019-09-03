@@ -1,4 +1,5 @@
 #include "DynamicObject.h"
+#include "EngineFPS.h"
 
 DynamicObject::DynamicObject(EngineFPS *engine) : GameObject(engine) {}
 

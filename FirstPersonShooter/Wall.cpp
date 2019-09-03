@@ -1,4 +1,5 @@
 #include "Wall.h"
+#include "EngineFPS.h"
 
 Wall::Wall(EngineFPS *engine, Sprite* texture) : GameObject(engine)
 {
@@ -13,11 +14,3 @@ bool Wall::IsRemoved() const
 }
 
 void Wall::OnInteract() {}
-
-Door::Door(EngineFPS *engine, Sprite* texture) : Wall(engine, texture) {}
-
-void Door::OnInteract()
-{
-	engine->PlayAudio("Door");
-	removed = true;
-}

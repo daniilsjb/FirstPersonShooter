@@ -139,34 +139,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AmmoItem.h" />
     <ClInclude Include="ConsoleGameEngine.h" />
     <ClInclude Include="Decoration.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="DynamicObject.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EngineFPS.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Guard.h" />
+    <ClInclude Include="HealthItem.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Mob.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="ScoreItem.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WeaponItem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AmmoItem.cpp" />
     <ClCompile Include="ConsoleGameEngine.cpp" />
     <ClCompile Include="Decoration.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="DynamicObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EngineFPS.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Guard.cpp" />
+    <ClCompile Include="HealthItem.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mob.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ScoreItem.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WeaponItem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

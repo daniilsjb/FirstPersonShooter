@@ -2,7 +2,7 @@
 
 #include "Mob.h"
 
-class Weapon;
+#include <vector>
 
 class Player : public Mob
 {

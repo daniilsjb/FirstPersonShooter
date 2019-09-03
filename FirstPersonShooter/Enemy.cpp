@@ -1,6 +1,8 @@
 #include "Enemy.h"
+#include "EngineFPS.h"
 #include "Player.h"
 #include "Item.h"
+#include "Weapon.h"
 
 Enemy::Enemy(EngineFPS *engine) : Mob(engine)
 {
@@ -59,18 +61,11 @@ void Enemy::OnUpdate(float elapsedTime)
 
 	bool playerVisible = false;
 
-	float objectAngle, distance;
-	if (engine->ObjectWithinFoV(x, y, angle, player->x, player->y, objectAngle, distance))
+	float objectAngle, objectDistance;
+	if (engine->DynamicObjectVisible(this, engine->player, objectAngle, objectDistance))
 	{
-		float rayX, rayY, rayDistance;
-		if (engine->CastRay(x, y, angle + objectAngle, rayX, rayY, rayDistance, true, true, this))
-		{
-			if (engine->GetDynamicObject(rayX, rayY) == player)
-			{
-				playerVisible = true;
-				playerDetected = true;
-			}
-		}
+		playerVisible = true;
+		playerDetected = true;
 	}
 
 	switch (state)
@@ -168,41 +163,4 @@ void Enemy::OnUpdate(float elapsedTime)
 	}
 
 	weapon->OnUpdate(elapsedTime);
-}
-
-Guard::Guard(EngineFPS *engine) : Enemy(engine)
-{
-	directionSprites[BACK] = engine->GetSprite("Guard Back");
-	directionSprites[RIGHT] = engine->GetSprite("Guard Right");
-	directionSprites[FRONT] = engine->GetSprite("Guard Front");
-	directionSprites[LEFT] = engine->GetSprite("Guard Left");
-
-	reloadingSpr = engine->GetSprite("Guard Reload");
-	shootingSpr = engine->GetSprite("Guard Fire");
-
-	currentHealth = maxHealth = 50;
-
-	state = PATROL;
-
-	angle = 3.14159f;
-
-	speed = 1.5f;
-
-	weapon = engine->CreateWeapon(Weapons::MACHINE_GUN, this);
-}
-
-void Guard::OnHit(int damage)
-{
-	playerDetected = true;
-
-	Damage(damage);
-	if (currentHealth <= 0)
-	{
-		removed = true;
-		engine->AddItem((int)x, (int)y, 'G');
-		engine->PlayAudio("Enemy Death 1");
-	}
-
-	if (rand() % 5 == 0)
-		engine->PlayAudio("Enemy Pain");
 }

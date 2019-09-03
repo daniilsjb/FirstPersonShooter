@@ -27,8 +27,8 @@ public:
 	bool ObjectsCollide(float x0, float y0, float x1, float y1) const;
 	bool IsObstacle(float x, float y, GameObject* ignored = nullptr) const;
 
+	bool DynamicObjectVisible(DynamicObject *eye, DynamicObject *object, float &angle, float &distance) const;
 	bool ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance) const;
-	bool DynamicObjectVisible(DynamicObject *eye, DynamicObject *object) const;
 
 	bool FindMove(GameObject *start, GameObject *finish, float &x, float &y);
 	void DrawObject2D(Sprite* spr, float angle, float distance);

@@ -2,6 +2,9 @@
 #include "GameObject.h"
 #include "Node.h"
 
+#include <list>
+#include <map>
+
 Pathfinder::Pathfinder() {}
 
 Pathfinder::~Pathfinder() {}

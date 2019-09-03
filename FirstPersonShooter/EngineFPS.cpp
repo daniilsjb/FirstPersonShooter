@@ -1,17 +1,29 @@
 #include "EngineFPS.h"
+#include "Node.h"
+#include "Weapon.h"
+
+#include "GameObject.h"
+
 #include "Wall.h"
+#include "Door.h"
+
 #include "Decoration.h"
+
+#include "Item.h"
+#include "HealthItem.h"
+#include "ScoreItem.h"
+#include "WeaponItem.h"
+#include "AmmoItem.h"
+
 #include "DynamicObject.h"
 #include "Mob.h"
-#include "Item.h"
 #include "Player.h"
+
 #include "Enemy.h"
-#include "Node.h"
+#include "Guard.h"
 
 bool EngineFPS::OnStart()
 {
-	SetApplicationTitle(L"First Person Shooter");
-
 	LoadAudio();
 	LoadSprites();
 
@@ -460,12 +472,12 @@ void EngineFPS::AddItem(int x, int y, wchar_t type)
 		//Health
 		case 'M':
 		{
-			item = new Medkit(this, 10, sprites["Item Medpack"]);
+			item = new HealthItem(this, 10, sprites["Item Medpack"]);
 			break;
 		}
 		case 'K':
 		{
-			item = new Medkit(this, 40, sprites["Item Medkit"]);
+			item = new HealthItem(this, 40, sprites["Item Medkit"]);
 			break;
 		}
 
@@ -729,23 +741,22 @@ bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float
 	return (withinFoV && distance >= 0.5f && distance < depth);
 }
 
-bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object) const
+bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object, float &angle, float &distance) const
 {
-	for (int x = 0; x < 4; x++)
+	float objectAngle, objectDistance;
+	if (ObjectWithinFoV(eye->x, eye->y, eye->GetAngle(), object->x, object->y, objectAngle, objectDistance))
 	{
-		float rayOffset = (float)x / 4;
-		float rayAngle = (eye->GetAngle() - FoV * 0.5f) + rayOffset * FoV;
-
-		float rayX, rayY;
-		float distance;
-
-		if (CastRay(eye->x, eye->y, rayAngle, rayX, rayY, distance, false, true, eye))
+		float rayX, rayY, rayDistance;
+		if (CastRay(eye->x, eye->y, eye->GetAngle() + objectAngle, rayX, rayY, rayDistance, true, true, eye))
 		{
 			if (GetDynamicObject(rayX, rayY) == object)
+			{
+				angle = objectAngle;
+				distance = objectDistance;
 				return true;
+			}
 		}
 	}
-
 	return false;
 }
 
