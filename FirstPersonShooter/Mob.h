@@ -9,15 +9,21 @@ public:
 	Mob(EngineFPS *engine);
 	virtual ~Mob();
 
-	Weapon *weapon = nullptr;
+	bool HasWeapon() const;
+	Sprite* GetWeaponSprite() const;
 
-	int GetMaxHealth();
-	int GetHealth();
+	int GetWeaponAmmo() const;
+	int GetWeaponCapacity() const;
+
+	int GetMaxHealth() const;
+	int GetHealth() const;
 
 	void Heal(int amount);
 	void Damage(int amount);
 
 protected:
+	Weapon *weapon = nullptr;
+
 	int maxHealth;
 	int currentHealth;
 };

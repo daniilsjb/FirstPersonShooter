@@ -10,12 +10,32 @@ Mob::~Mob()
 	weapon = nullptr;
 }
 
-int Mob::GetMaxHealth()
+bool Mob::HasWeapon() const
+{
+	return (weapon != nullptr);
+}
+
+Sprite* Mob::GetWeaponSprite() const
+{
+	return weapon->currentSpr;
+}
+
+int Mob::GetWeaponAmmo() const
+{
+	return weapon->GetAmmo();
+}
+
+int Mob::GetWeaponCapacity() const
+{
+	return weapon->GetCapacity();
+}
+
+int Mob::GetMaxHealth() const
 {
 	return maxHealth;
 }
 
-int Mob::GetHealth()
+int Mob::GetHealth() const
 {
 	return currentHealth;
 }

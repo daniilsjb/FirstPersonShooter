@@ -4,18 +4,20 @@ class EngineFPS;
 class Sprite;
 class Mob;
 
+namespace Weapons
+{
+	enum { PISTOL = 0, MACHINE_GUN, COUNT };
+}
+
 class Weapon
 {
 public:
-	Weapon(EngineFPS *engine, Mob *parent, short index);
+	Weapon(EngineFPS *engine, Mob *parent);
 	virtual ~Weapon();
 
 	Mob *parent = nullptr;
 
-	const short WEAPON_INDEX;
-
-	void OnUpdate(float elapsedTime);
-	virtual void Fire() = 0;
+	Sprite *currentSpr = nullptr;
 
 	bool Ready() const;
 
@@ -24,13 +26,12 @@ public:
 
 	void AddAmmo(int amount);
 
-	Sprite *currentSpr = nullptr;
+	void OnUpdate(float elapsedTime);
+	virtual void Fire() = 0;
 
 protected:
 	EngineFPS *engine = nullptr;
 
-
-protected:
 	Sprite *sprIdle = nullptr;
 	Sprite *sprFire = nullptr;
 
@@ -45,15 +46,17 @@ protected:
 	float timer = 0.0f;
 };
 
-struct Gun : Weapon
+class Pistol : public Weapon
 {
-	Gun(EngineFPS *engine, Mob *parent);
+public:
+	Pistol(EngineFPS *engine, Mob *parent);
 
 	void Fire() override;
 };
 
-struct MachineGun : Weapon
+class MachineGun : public Weapon
 {
+public:
 	MachineGun(EngineFPS *engine, Mob *parent);
 
 	void Fire() override;

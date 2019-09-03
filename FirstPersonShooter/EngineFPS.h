@@ -5,24 +5,19 @@
 
 #include <map>
 
-constexpr int WEAPON_COUNT = 2;
-
 class GameObject;
 class Wall;
 class Item;
 class Decoration;
 class DynamicObject;
 class Player;
+class Weapon;
+class Mob;
 
 class EngineFPS : public ConsoleGameEngine
 {
 public:
 	Player *player = nullptr;
-
-	std::list<DynamicObject*> dynamicObjects;
-	std::vector<Wall*> walls;
-	std::vector<Item*> items;
-	std::list<Decoration*> decorations;
 
 	bool OnStart() override;
 	bool OnUpdate(float elapsedTime) override;
@@ -37,6 +32,13 @@ public:
 
 	bool FindMove(GameObject *start, GameObject *finish, float &x, float &y);
 	void DrawObject2D(Sprite* spr, float angle, float distance);
+
+	Weapon* CreateWeapon(short weaponID, Mob* parent);
+
+	void AddWall(int x, int y, wchar_t type);
+	void AddItem(int x, int y, wchar_t type);
+	void AddDecoration(int x, int y, wchar_t type);
+	void AddDynamicObject(int x, int y, wchar_t type);
 
 	Wall* GetWall(float x, float y);
 	Item* GetItem(float x, float y);
@@ -59,6 +61,11 @@ private:
 
 	int weaponWidth;
 	int weaponHeight;
+
+	std::list<DynamicObject*> dynamicObjects;
+	std::vector<Wall*> walls;
+	std::vector<Item*> items;
+	std::list<Decoration*> decorations;
 
 	int mapWidth = 48;
 	int mapHeight = 48;

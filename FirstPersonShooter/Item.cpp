@@ -11,45 +11,36 @@ bool Item::IsRemoved() const
 	return removed;
 }
 
-WeaponItem::WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr) : Item(engine), weapon(weapon)
+WeaponItem::WeaponItem(EngineFPS *engine, short weaponID, Sprite *spr) : Item(engine), weaponID(weaponID)
 {
 	texture = spr;
 }
 
 void WeaponItem::OnUse(Player *player)
 {
-	if (!player->AddWeapon(weapon))
-	{
-		if (player->AddAmmoFromWeapon(weapon))
-		{
-			engine->PlayAudio("Ammo");
-			removed = true;
-			delete weapon;
-		}
-	}
-	else
+	if (player->AddWeapon(weaponID))
 	{
 		engine->PlayAudio("Ammo");
 		removed = true;
-	}	
+	}
+	else if(player->AddAmmoFromWeapon(weaponID))
+	{
+		engine->PlayAudio("Ammo");
+		removed = true;
+	}
 }
 
-AmmoItem::AmmoItem(EngineFPS *engine, int weaponIndex, int amount, Sprite *spr) : Item(engine), weaponIndex(weaponIndex), amount(amount)
+AmmoItem::AmmoItem(EngineFPS *engine, short weaponID, int amount, Sprite *spr) : Item(engine), weaponID(weaponID), amount(amount)
 {
 	texture = spr;
 }
 
 void AmmoItem::OnUse(Player *player)
 {
-	Weapon *playerWeapon = player->availableWeapons[weaponIndex];
-	if (playerWeapon != nullptr)
+	if (player->AddAmmo(weaponID, amount))
 	{
-		if (playerWeapon->GetAmmo() < playerWeapon->GetCapacity())
-		{
-			playerWeapon->AddAmmo(amount);
-			removed = true;
-			engine->PlayAudio("Ammo");
-		}
+		removed = true;
+		engine->PlayAudio("Ammo");
 	}
 }
 

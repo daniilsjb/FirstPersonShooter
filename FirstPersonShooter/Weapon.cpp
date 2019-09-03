@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Mob.h"
 
-Weapon::Weapon(EngineFPS *engine, Mob *parent, short index) : engine(engine), parent(parent), WEAPON_INDEX(index) {}
+Weapon::Weapon(EngineFPS *engine, Mob *parent) : engine(engine), parent(parent) {}
 
 Weapon::~Weapon() {}
 
@@ -42,7 +42,7 @@ void Weapon::AddAmmo(int amount)
 	ammo = min(capacity, ammo + amount);
 }
 
-Gun::Gun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 0)
+Pistol::Pistol(EngineFPS *engine, Mob *parent) : Weapon(engine, parent)
 {
 	sprIdle = engine->GetSprite("Pistol");
 	sprFire = engine->GetSprite("Pistol Fire");
@@ -57,7 +57,7 @@ Gun::Gun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 0)
 	cooldown = 0.25f;
 }
 
-void Gun::Fire()
+void Pistol::Fire()
 {
 	if (shooting || ammo <= 0) return;
 
@@ -75,7 +75,7 @@ void Gun::Fire()
 	}
 }
 
-MachineGun::MachineGun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent, 1)
+MachineGun::MachineGun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent)
 {
 	sprIdle = engine->GetSprite("Machine Gun");
 	sprFire = engine->GetSprite("Machine Gun Fire");

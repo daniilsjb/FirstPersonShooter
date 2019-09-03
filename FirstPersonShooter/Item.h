@@ -21,23 +21,23 @@ protected:
 class WeaponItem : public Item
 {
 public:
-	WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr);
+	WeaponItem(EngineFPS *engine, short weaponID, Sprite *spr);
 
 	void OnUse(Player *player) override;
 
 protected:
-	Weapon *weapon;
+	short weaponID;
 };
 
 class AmmoItem : public Item
 {
 public:
-	AmmoItem(EngineFPS *engine, int weaponIndex, int amount, Sprite *spr);
+	AmmoItem(EngineFPS *engine, short weaponID, int amount, Sprite *spr);
 
 	void OnUse(Player *player) override;
 
 protected:
-	int weaponIndex;
+	int weaponID;
 	int amount;
 };
 

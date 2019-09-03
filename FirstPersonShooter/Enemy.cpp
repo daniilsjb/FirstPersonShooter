@@ -188,7 +188,7 @@ Guard::Guard(EngineFPS *engine) : Enemy(engine)
 
 	speed = 1.5f;
 
-	weapon = new MachineGun(engine, this);
+	weapon = engine->CreateWeapon(Weapons::MACHINE_GUN, this);
 }
 
 void Guard::OnHit(int damage)
@@ -199,11 +199,7 @@ void Guard::OnHit(int damage)
 	if (currentHealth <= 0)
 	{
 		removed = true;
-		Item *wpn = new WeaponItem(engine, new MachineGun(engine, engine->player), engine->GetSprite("Item Machine Gun"));
-		wpn->x = x + 0.5f;
-		wpn->y = y + 0.5f;
-		engine->items[engine->GetMapWidth() * (int)y + (int)x] = wpn;
-
+		engine->AddItem((int)x, (int)y, 'G');
 		engine->PlayAudio("Enemy Death 1");
 	}
 

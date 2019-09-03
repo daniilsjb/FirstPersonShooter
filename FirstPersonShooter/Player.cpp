@@ -8,7 +8,7 @@ Player::Player(EngineFPS *engine) : Mob(engine)
 
 	friendlyToPlayer = true;
 
-	availableWeapons.resize(WEAPON_COUNT, nullptr);
+	availableWeapons.resize(Weapons::COUNT, nullptr);
 }
 
 Player::~Player()
@@ -21,26 +21,39 @@ Player::~Player()
 	weapon = nullptr;
 }
 
-bool Player::AddWeapon(Weapon *weapon)
+bool Player::AddWeapon(short weaponID)
 {
-	if (availableWeapons[weapon->WEAPON_INDEX] == nullptr)
+	if (availableWeapons[weaponID] == nullptr)
 	{
-		availableWeapons[weapon->WEAPON_INDEX] = weapon;
-		this->weapon = weapon;
-
+		weapon = availableWeapons[weaponID] = engine->CreateWeapon(weaponID, this);
 		return true;
 	}
 	return false;
 }
 
-bool Player::AddAmmoFromWeapon(Weapon *weapon)
+bool Player::AddAmmoFromWeapon(short weaponID)
 {
-	Weapon *available = availableWeapons[weapon->WEAPON_INDEX];
+	Weapon *available = availableWeapons[weaponID];
 	if (available != nullptr)
 	{
 		if (available->GetAmmo() < available->GetCapacity())
 		{
-			available->AddAmmo(weapon->GetAmmo());
+			//Add 25% of weapon's capacity on top
+			available->AddAmmo((int)(available->GetCapacity() * 0.25f));
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Player::AddAmmo(short weaponID, int amount)
+{
+	Weapon *wpn = availableWeapons[weaponID];
+	if (wpn != nullptr)
+	{
+		if (wpn->GetAmmo() < wpn->GetCapacity())
+		{
+			wpn->AddAmmo(amount);
 			return true;
 		}
 	}
@@ -89,6 +102,9 @@ void Player::OnUpdate(float elapsedTime)
 		}
 	}
 
+	if (engine->GetKey('C').released)
+		OnHit(999999);
+
 	if (engine->GetKey('A').held)
 		angle -= (speed * 0.45f) * elapsedTime;
 
@@ -108,7 +124,7 @@ void Player::OnUpdate(float elapsedTime)
 		}
 	}
 
-	for (int i = 1; i <= WEAPON_COUNT; i++)
+	for (int i = 1; i <= Weapons::COUNT; i++)
 	{
 		if (engine->GetKey('0' + i).released)
 		{

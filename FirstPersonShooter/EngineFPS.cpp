@@ -20,53 +20,57 @@ bool EngineFPS::OnStart()
 	walls.resize(mapWidth * mapHeight, nullptr);
 	items.resize(mapWidth * mapHeight, nullptr);
 
+	//Special Characters - Walls
+	//Lowercase Letters  - Decorations
+	//Uppercase Letters  - Items
+	//Numbers            - Dynamic Objects
 	map.append(L"##########@#############$#####$####@#####$######");
-	map.append(L"#...-.#......#.......#....................F...T#");
-	map.append(L"#..P..H......#....U..#.J...#..L..#....J........#");
-	map.append(L"#F....#......H..SL...$.....#..G..#..........K..#");
-	map.append(L"###$#@#......#.......#.....##@##$#..L.....L....#");
+	map.append(L"#...P.#......#.......#....................f...t#");
+	map.append(L"#..0..-......#....U..#.j...#..l..#....j........#");
+	map.append(L"#f....#......-..Sl...$.....#..1..#..........K..#");
+	map.append(L"###$#@#......#.......#.....##@##$#..l.....l....#");
 	map.append(L"#............###@#####......................M..#");
-	map.append(L"#.F......L...#.S..M..#.T...L......G..G......M..#");
-	map.append(L"#............H...L...#.........................#");
-	map.append(L"###$###......#..U....$.....L....####$###$##H##@#");
-	map.append(L"#.CCC.#..L...###$##@##..........#....#.........#");
-	map.append(L"#.RUU.#......#.......#.....G....#....#..M...M..#");
-	map.append(L"#.USS.#......H..GL.R.#..........#....#.........#");
-	map.append(L"###?###..L...#.......#...##@##########.F.......#");
-	map.append(L"#............#########...#.M.....K...#.....G...#");
-	map.append(L"#.U......G...........#...#...%%..^^..#.........#");
-	map.append(L"#...$....L..L.GL..L..H...#...........#.........#");
-	map.append(L"#....................#...#@#####?###@#......L..#");
+	map.append(L"#.f......l...#.S..M..#.t...l......1..1......M..#");
+	map.append(L"#............-...l...#.........................#");
+	map.append(L"###$###......#..U....$.....l....####$###$##H##@#");
+	map.append(L"#.CCC.#..l...###$##@##..........#....#.........#");
+	map.append(L"#.RUU.#......#.......#.....1....#....#..M...M..#");
+	map.append(L"#.USS.#......-..1l.R.#..........#....#.........#");
+	map.append(L"###?###..l...#.......#...##@##########.f.......#");
+	map.append(L"#............#########...#.M.....K...#.....1...#");
+	map.append(L"#.U......1...........#...#...AA..BB..#.........#");
+	map.append(L"#...$....l..l.1L..l..H...#...........#.........#");
+	map.append(L"#....................#...#@#####?###@#......l..#");
 	map.append(L"###@####$#####@#######.........................#");
-	map.append(L"#...........................L....L..........L..#");
-	map.append(L"#..F...................................G.......#");
+	map.append(L"#...........................l....l..........l..#");
+	map.append(L"#..f...................................1.......#");
 	map.append(L"#............###@#####$#####$#####@####@###....#");
 	map.append(L"#...#........#............................#....#");
-	map.append(L"#...#.G..L...$............................#....#");
+	map.append(L"#...#.1..l...$............................#....#");
 	map.append(L"#...#........#............................#....#");
 	map.append(L"#...@###$#####......###@####@####$###.....#....#");
 	map.append(L"#...#...............#...............#.....#....#");
-	map.append(L"#...$...............#..T......G...T.###@###....#");
+	map.append(L"#...$...............#..t......1...t.###@###....#");
 	map.append(L"#...######@######@###..........................#");
 	map.append(L"#..............................................#");
-	map.append(L"#................G.............................#");
-	map.append(L"#######H###@####H##$#####H#########$##.........#");
-	map.append(L"#..........#.S.....U.#........#......#....L...F#");
-	map.append(L"#.S..L..G..#.G..L....#...L....#...L..#.........#");
-	map.append(L"#.U.......M#.......U.#.K....M.#.G....#........F#");
-	map.append(L"######?##$######@########$#####......#....L....#");
-	map.append(L"#..........#.G.......F.......F.......#........F#");
+	map.append(L"#................1.............................#");
+	map.append(L"#######-###@####-##$#####-#########$##.........#");
+	map.append(L"#..........#.S.....U.#........#......#....l...f#");
+	map.append(L"#.S..l..1..#.1..l....#...l....#...l..#.........#");
+	map.append(L"#.U.......M#.......U.#.K....M.#.1....#.........#");
+	map.append(L"######?##$######@########$#####......#....l...f#");
+	map.append(L"#..........#.1.......f.......f.......#.........#");
 	map.append(L"#..M.UU..M.#.........................#.........#");
-	map.append(L"#%..RSSR..%#........K....K...........#....L...F#");
+	map.append(L"#A..RSSR..A#........K....K...........#....l...f#");
 	map.append(L"######@#####...................................#");
-	map.append(L"#.............................................F#");
-	map.append(L"#....................###?###..............L....#");
-	map.append(L"######?####....G.....#S...S#......G...........F#");
-	map.append(L"#%.R...U..#..........#..MM.#...................#");
-	map.append(L"#..UU.L.U.#..........#######......G.......L...F#");
-	map.append(L"###?###..^#...G................................#");
-	map.append(L"#RUUUC#.KC#...................................F#");
-	map.append(L"#RSSSC#M..#........F.............F.F.F.F.F.F.FJ#");
+	map.append(L"#..............................................#");
+	map.append(L"#....................###?###..............l...f#");
+	map.append(L"######?####....1.....#S...S#......1............#");
+	map.append(L"#A.R...U..#..........#..MM.#...................#");
+	map.append(L"#..UU.L.U.#..........#######......1.......l...f#");
+	map.append(L"###?###..B#...1................................#");
+	map.append(L"#RUUUC#.KC#....................................#");
+	map.append(L"#RSSSC#M..#........f...........f..f..f..f..f..j#");
 	map.append(L"############@####$####@####$####################");
 
 	ParseMap();
@@ -246,7 +250,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	}
 
 	//Draw the weapon in the bottom-middle of the screen
-	if (player->weapon != nullptr)
+	if (player->HasWeapon())
 	{
 		for (int x = 0; x < weaponWidth; x++)
 		{
@@ -255,8 +259,8 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 				float sampleX = (float)x / (float)weaponWidth;
 				float sampleY = (float)y / (float)weaponHeight;
 
-				short symbol = player->weapon->currentSpr->SampleCharacter(sampleX, sampleY);
-				short color = player->weapon->currentSpr->SampleColor(sampleX, sampleY);
+				short symbol = player->GetWeaponSprite()->SampleCharacter(sampleX, sampleY);
+				short color = player->GetWeaponSprite()->SampleColor(sampleX, sampleY);
 
 				if (color != BG_DARK_PINK)
 				{
@@ -268,7 +272,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 			}
 		}
 	}
-	
+
 	//Draw the map (for debug purposes mainly)
 	/*for (float i = 0.0f; i < mapWidth; i++)
 	{
@@ -294,10 +298,10 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 
 	int ammo = 0;
 	int capacity = 0;
-	if (player->weapon != nullptr)
+	if (player->HasWeapon())
 	{
-		ammo = player->weapon->GetAmmo();
-		capacity = player->weapon->GetCapacity();
+		ammo = player->GetWeaponAmmo();
+		capacity = player->GetWeaponCapacity();
 	}
 
 	int score = player->GetScore();
@@ -355,6 +359,239 @@ int EngineFPS::GetMapHeight()
 	return mapHeight;
 }
 
+void EngineFPS::ParseMap()
+{
+	for (int x = 0; x < mapWidth; x++)
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
+			wchar_t type = map[mapWidth * y + x];
+
+			if (type == '.')
+			{
+				continue;
+			}
+			if (isdigit(type))
+			{
+				AddDynamicObject(x, y, type);
+			}
+			else if (islower(type))
+			{
+				AddDecoration(x, y, type);
+			}
+			else if (isupper(type))
+			{
+				AddItem(x, y, type);
+			}
+			else
+			{
+				AddWall(x, y, type);
+			}
+		}
+	}
+}
+
+Weapon* EngineFPS::CreateWeapon(short weaponID, Mob* parent)
+{
+	switch (weaponID)
+	{
+		case Weapons::PISTOL:
+			return new Pistol(this, parent);
+		case Weapons::MACHINE_GUN:
+			return new MachineGun(this, parent);
+		default:
+			return nullptr;
+	}
+}
+
+void EngineFPS::AddWall(int x, int y, wchar_t type)
+{
+	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+		return;
+
+	Wall* wall = nullptr;
+
+	switch (type)
+	{
+		case '#':
+		{
+			wall = new Wall(this, sprites["Stone Wall"]);
+			break;
+		}
+		case '$':
+		{
+			wall = new Wall(this, sprites["Stone Wall Eagle"]);
+			break;
+		}
+		case '@':
+		{
+			wall = new Wall(this, sprites["Stone Wall Flag"]);
+			break;
+		}
+		case '?':
+		{
+			wall = new Door(this, sprites["Stone Wall Flag"]);
+			break;
+		}
+		case '-':
+		{
+			wall = new Door(this, sprites["Metal Door"]);
+			break;
+		}
+	}
+
+	if (wall != nullptr)
+	{
+		wall->x = x + 0.5f;
+		wall->y = y + 0.5f;
+		walls[mapWidth * y + x] = wall;
+	}
+}
+
+void EngineFPS::AddItem(int x, int y, wchar_t type)
+{
+	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+		return;
+
+	Item* item = nullptr;
+
+	switch (type)
+	{
+		//Health
+		case 'M':
+		{
+			item = new Medkit(this, 10, sprites["Item Medpack"]);
+			break;
+		}
+		case 'K':
+		{
+			item = new Medkit(this, 40, sprites["Item Medkit"]);
+			break;
+		}
+
+		//Weapons
+		case 'P':
+		{
+			item = new WeaponItem(this, Weapons::PISTOL, sprites["Item Pistol"]);
+			break;
+		}
+		case 'G':
+		{
+			item = new WeaponItem(this, Weapons::MACHINE_GUN, sprites["Item Machine Gun"]);
+			break;
+		}
+
+		//Ammo
+		case 'A':
+		{
+			item = new AmmoItem(this, Weapons::PISTOL, 5, sprites["Item Pistol Ammo"]);
+			break;
+		}
+		case 'B':
+		{
+			item = new AmmoItem(this, Weapons::MACHINE_GUN, 50, sprites["Item Machine Gun Ammo"]);
+			break;
+		}
+
+		//Score
+		case 'S':
+		{
+			item = new ScoreItem(this, 10, sprites["Item Cross"]);
+			break;
+		}
+		case 'C':
+		{
+			item = new ScoreItem(this, 35, sprites["Item Chest"]);
+			break;
+		}
+		case 'R':
+		{
+			item = new ScoreItem(this, 60, sprites["Item Crown"]);
+			break;
+		}
+		case 'U':
+		{
+			item = new ScoreItem(this, 5, sprites["Item Cup"]);
+			break;
+		}
+	}
+
+	if (item != nullptr)
+	{
+		item->x = x + 0.5f;
+		item->y = y + 0.5f;
+		items[mapWidth * y + x] = item;
+	}
+}
+
+void EngineFPS::AddDecoration(int x, int y, wchar_t type)
+{
+	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+		return;
+
+	Decoration* decor = nullptr;
+
+	switch (type)
+	{
+		case 'f':
+		{
+			decor = new Decoration(this, sprites["Flag"]);
+			break;
+		}
+		case 'j':
+		{
+			decor = new Decoration(this, sprites["Jug"]);
+			break;
+		}
+		case 't':
+		{
+			decor = new Decoration(this, sprites["Tree"]);
+			break;
+		}
+		case 'l':
+		{
+			decor = new Decoration(this, sprites["Lamp"]);
+			break;
+		}
+	}
+
+	if (decor != nullptr)
+	{
+		decor->x = x + 0.5f;
+		decor->y = y + 0.5f;
+		decorations.push_back(decor);
+	}
+}
+
+void EngineFPS::AddDynamicObject(int x, int y, wchar_t type)
+{
+	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+		return;
+
+	DynamicObject* object = nullptr;
+
+	switch (type)
+	{
+		case '0':
+		{
+			player = new Player(this);
+			object = player;
+			break;
+		}
+		case '1':
+		{
+			object = new Guard(this);
+			break;
+		}
+	}
+
+	if (object != nullptr)
+	{
+		object->x = x + 0.5f;
+		object->y = y + 0.5f;
+		dynamicObjects.push_back(object);
+	}
+}
 
 Wall* EngineFPS::GetWall(float x, float y)
 {
@@ -671,191 +908,4 @@ void EngineFPS::LoadSprites()
 	load("Item Cross", L"Sprites/Item Cross.spr");
 	load("Item Crown", L"Sprites/Item Crown.spr");
 	load("Item Cup", L"Sprites/Item Cup.spr");
-}
-
-void EngineFPS::ParseMap()
-{
-	for (float x = 0.0f; x < (float)mapWidth; x++)
-	{
-		for (float y = 0.0f; y < (float)mapHeight; y++)
-		{
-			wchar_t c = map[mapWidth * (int)y + (int)x];
-
-			switch (c)
-			{
-				case 'P':
-				{
-					player = new Player(this);
-					player->x = x + 0.5f;
-					player->y = y + 0.5f;
-					dynamicObjects.push_front(player);
-					break;
-				}
-
-				case '#':
-				{
-					Wall *wall = new Wall(this, sprites["Stone Wall"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case '$':
-				{
-					Wall *wall = new Wall(this, sprites["Stone Wall Eagle"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case '@':
-				{
-					Wall *wall = new Wall(this, sprites["Stone Wall Flag"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case '?':
-				{
-					Wall *wall = new Door(this, sprites["Stone Wall Flag"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case 'H':
-				{
-					Wall *wall = new Door(this, sprites["Metal Door"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-
-				case 'M':
-				{
-					Item *item = new Medkit(this, 10, sprites["Item Medpack"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case 'K':
-				{
-					Item *item = new Medkit(this, 40, sprites["Item Medkit"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case '-':
-				{
-					Item *item = new WeaponItem(this, new Gun(this, player), sprites["Item Pistol"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case '_':
-				{
-					Item *item = new WeaponItem(this, new MachineGun(this, player), sprites["Item Machine Gun"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case '%':
-				{
-					Item *item = new AmmoItem(this, 0, 5, sprites["Item Pistol Ammo"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case '^':
-				{
-					Item *item = new AmmoItem(this, 1, 50, sprites["Item Machine Gun Ammo"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case 'S':
-				{
-					Item *item = new ScoreItem(this, 10, sprites["Item Cross"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case 'C':
-				{
-					Item *item = new ScoreItem(this, 35, sprites["Item Chest"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case 'R':
-				{
-					Item *item = new ScoreItem(this, 60, sprites["Item Crown"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case 'U':
-				{
-					Item *item = new ScoreItem(this, 5, sprites["Item Cup"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-
-				case 'G':
-				{
-					DynamicObject* enemy = new Guard(this);
-					enemy->x = x + 0.5f;
-					enemy->y = y + 0.5f;
-					dynamicObjects.push_back(enemy);
-					break;
-				}
-
-				case 'F':
-				{
-					Decoration *decor = new Decoration(this, sprites["Flag"]);
-					decor->x = x + 0.5f;
-					decor->y = y + 0.5f;
-					decorations.push_back(decor);
-					break;
-				}
-				case 'J':
-				{
-					Decoration *decor = new Decoration(this, sprites["Jug"]);
-					decor->x = x + 0.5f;
-					decor->y = y + 0.5f;
-					decorations.push_back(decor);
-					break;
-				}
-				case 'T':
-				{
-					Decoration *decor = new Decoration(this, sprites["Tree"]);
-					decor->x = x + 0.5f;
-					decor->y = y + 0.5f;
-					decorations.push_back(decor);
-					break;
-				}
-				case 'L':
-				{
-					Decoration *decor = new Decoration(this, sprites["Lamp"]);
-					decor->x = x + 0.5f;
-					decor->y = y + 0.5f;
-					decorations.push_back(decor);
-					break;
-				}
-			}
-		}
-	}
 }

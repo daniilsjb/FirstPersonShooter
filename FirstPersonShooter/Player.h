@@ -10,8 +10,9 @@ public:
 	Player(EngineFPS *engine);
 	~Player();
 
-	bool AddWeapon(Weapon *weapon);
-	bool AddAmmoFromWeapon(Weapon *weapon);
+	bool AddWeapon(short weaponID);
+	bool AddAmmo(short weaponID, int amount);
+	bool AddAmmoFromWeapon(short weaponID);
 
 	void OnUpdate(float elapsedTime) override;
 	void OnHit(int damage) override;
@@ -19,8 +20,8 @@ public:
 	void AddScore(int amount);
 	int GetScore() const;
 
+private:
 	std::vector<Weapon*> availableWeapons;
 
-private:
 	int score = 0;
 };
