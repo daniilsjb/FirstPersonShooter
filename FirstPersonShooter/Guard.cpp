@@ -1,6 +1,7 @@
 #include "Guard.h"
 #include "EngineFPS.h"
 #include "Weapon.h"
+#include "Player.h"
 
 Guard::Guard(EngineFPS* engine) : Enemy(engine)
 {
@@ -29,7 +30,11 @@ void Guard::OnHit(int damage)
 	if (currentHealth <= 0)
 	{
 		removed = true;
-		engine->AddItem((int)x, (int)y, 'G');
+		if (engine->player->WeaponAcquired(Weapons::MACHINE_GUN))
+			engine->AddItem((int)x, (int)y, 'B');
+		else
+			engine->AddItem((int)x, (int)y, 'G');
+
 		engine->PlayAudio("Enemy Death 1");
 	}
 

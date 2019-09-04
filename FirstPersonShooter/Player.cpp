@@ -23,27 +23,17 @@ Player::~Player()
 	weapon = nullptr;
 }
 
+bool Player::WeaponAcquired(short weaponID) const
+{
+	return (availableWeapons[weaponID] != nullptr);
+}
+
 bool Player::AddWeapon(short weaponID)
 {
 	if (availableWeapons[weaponID] == nullptr)
 	{
 		weapon = availableWeapons[weaponID] = engine->CreateWeapon(weaponID, this);
 		return true;
-	}
-	return false;
-}
-
-bool Player::AddAmmoFromWeapon(short weaponID)
-{
-	Weapon *wpn = availableWeapons[weaponID];
-	if (wpn != nullptr)
-	{
-		if (!wpn->IsFull())
-		{
-			//Restore 25% of weapon's capacity
-			wpn->RestoreAmmo(0.25f);
-			return true;
-		}
 	}
 	return false;
 }

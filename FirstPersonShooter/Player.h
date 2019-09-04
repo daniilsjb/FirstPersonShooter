@@ -10,9 +10,9 @@ public:
 	Player(EngineFPS* engine);
 	~Player();
 
+	bool WeaponAcquired(short weaponID) const;
 	bool AddWeapon(short weaponID);
 	bool AddAmmo(short weaponID, int amount);
-	bool AddAmmoFromWeapon(short weaponID);
 
 	void OnUpdate(float elapsedTime) override;
 	void OnHit(int damage) override;

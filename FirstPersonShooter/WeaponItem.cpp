@@ -14,9 +14,4 @@ void WeaponItem::OnUse(Player *player)
 		engine->PlayAudio("Ammo");
 		removed = true;
 	}
-	else if (player->AddAmmoFromWeapon(weaponID))
-	{
-		engine->PlayAudio("Ammo");
-		removed = true;
-	}
 }
