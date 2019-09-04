@@ -29,6 +29,11 @@ public:
 	void RestoreAmmo(float percent = 1.0f);
 
 	void OnUpdate(float elapsedTime);
+
+	virtual void OnFirePressed();
+	virtual void OnFireHeld();
+	virtual void OnFireReleased();
+
 	virtual void Fire() = 0;
 
 protected:

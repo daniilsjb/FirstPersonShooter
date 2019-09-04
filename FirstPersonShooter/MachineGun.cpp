@@ -17,6 +17,11 @@ MachineGun::MachineGun(EngineFPS* engine, Mob* parent) : Weapon(engine, parent)
 	cooldown = 0.01f;
 }
 
+void MachineGun::OnFireHeld()
+{
+	Fire();
+}
+
 void MachineGun::Fire()
 {
 	if (shooting || ammo <= 0) return;

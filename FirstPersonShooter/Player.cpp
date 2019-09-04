@@ -123,10 +123,22 @@ void Player::OnUpdate(float elapsedTime)
 		}
 	}
 
+	if (engine->GetKey(' ').pressed)
+	{
+		if (weapon != nullptr)
+			weapon->OnFirePressed();
+	}
+
+	if (engine->GetKey(' ').held)
+	{
+		if (weapon != nullptr)
+			weapon->OnFireHeld();
+	}
+
 	if (engine->GetKey(' ').released)
 	{
 		if (weapon != nullptr)
-			weapon->Fire();
+			weapon->OnFireReleased();
 	}
 
 	if (weapon != nullptr)

@@ -17,6 +17,11 @@ Pistol::Pistol(EngineFPS* engine, Mob* parent) : Weapon(engine, parent)
 	cooldown = 0.25f;
 }
 
+void Pistol::OnFirePressed()
+{
+	Fire();
+}
+
 void Pistol::Fire()
 {
 	if (shooting || ammo <= 0) return;

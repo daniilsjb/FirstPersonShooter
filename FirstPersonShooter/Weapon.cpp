@@ -22,6 +22,12 @@ void Weapon::OnUpdate(float elapsedTime)
 		currentSpr = sprIdle;
 }
 
+void Weapon::OnFirePressed() {}
+
+void Weapon::OnFireHeld() {}
+
+void Weapon::OnFireReleased() {}
+
 bool Weapon::Ready() const
 {
 	return !shooting;
