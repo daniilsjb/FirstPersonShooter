@@ -5,7 +5,7 @@
 class Door : public Wall
 {
 public:
-	Door(EngineFPS *engine, Sprite* texture);
+	Door(EngineFPS* engine, Sprite* spr);
 
 	void OnInteract() override;
 };

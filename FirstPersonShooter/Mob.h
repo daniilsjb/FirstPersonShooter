@@ -7,7 +7,7 @@ class Weapon;
 class Mob : public DynamicObject
 {
 public:
-	Mob(EngineFPS *engine);
+	Mob(EngineFPS* engine);
 	virtual ~Mob();
 
 	bool HasWeapon() const;
@@ -23,7 +23,7 @@ public:
 	void Damage(int amount);
 
 protected:
-	Weapon *weapon = nullptr;
+	Weapon* weapon = nullptr;
 
 	int maxHealth;
 	int currentHealth;

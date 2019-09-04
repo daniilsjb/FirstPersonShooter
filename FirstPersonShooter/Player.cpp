@@ -3,7 +3,7 @@
 #include "Weapon.h"
 #include "Wall.h"
 
-Player::Player(EngineFPS *engine) : Mob(engine)
+Player::Player(EngineFPS* engine) : Mob(engine)
 {
 	speed = 5.0f;
 	currentHealth = maxHealth = 100;
@@ -35,13 +35,13 @@ bool Player::AddWeapon(short weaponID)
 
 bool Player::AddAmmoFromWeapon(short weaponID)
 {
-	Weapon *available = availableWeapons[weaponID];
-	if (available != nullptr)
+	Weapon *wpn = availableWeapons[weaponID];
+	if (wpn != nullptr)
 	{
-		if (available->GetAmmo() < available->GetCapacity())
+		if (!wpn->IsFull())
 		{
-			//Add 25% of weapon's capacity on top
-			available->AddAmmo((int)(available->GetCapacity() * 0.25f));
+			//Restore 25% of weapon's capacity
+			wpn->RestoreAmmo(0.25f);
 			return true;
 		}
 	}
@@ -53,7 +53,7 @@ bool Player::AddAmmo(short weaponID, int amount)
 	Weapon *wpn = availableWeapons[weaponID];
 	if (wpn != nullptr)
 	{
-		if (wpn->GetAmmo() < wpn->GetCapacity())
+		if (!wpn->IsFull())
 		{
 			wpn->AddAmmo(amount);
 			return true;

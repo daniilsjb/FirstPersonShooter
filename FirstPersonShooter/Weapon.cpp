@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Mob.h"
 
-Weapon::Weapon(EngineFPS *engine, Mob *parent) : engine(engine), parent(parent) {}
+Weapon::Weapon(EngineFPS* engine, Mob* parent) : engine(engine), parent(parent) {}
 
 Weapon::~Weapon() {}
 
@@ -27,6 +27,11 @@ bool Weapon::Ready() const
 	return !shooting;
 }
 
+bool Weapon::IsFull() const
+{
+	return (ammo >= capacity);
+}
+
 int Weapon::GetAmmo() const
 {
 	return ammo;
@@ -40,4 +45,9 @@ int Weapon::GetCapacity() const
 void Weapon::AddAmmo(int amount)
 {
 	ammo = min(capacity, ammo + amount);
+}
+
+void Weapon::RestoreAmmo(float percent)
+{
+	AddAmmo((int)(percent * capacity));
 }

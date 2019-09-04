@@ -5,9 +5,9 @@
 class HealthItem : public Item
 {
 public:
-	HealthItem(EngineFPS *engine, int healthBonus, Sprite *spr);
+	HealthItem(EngineFPS* engine, int healthBonus, Sprite* spr);
 
-	void OnUse(Player *player) override;
+	void OnUse(Player* player) override;
 
 protected:
 	int healthBonus;

@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Weapon.h"
 
-Guard::Guard(EngineFPS *engine) : Enemy(engine)
+Guard::Guard(EngineFPS* engine) : Enemy(engine)
 {
 	directionSprites[BACK] = engine->GetSprite("Guard Back");
 	directionSprites[RIGHT] = engine->GetSprite("Guard Right");
@@ -13,8 +13,6 @@ Guard::Guard(EngineFPS *engine) : Enemy(engine)
 	shootingSpr = engine->GetSprite("Guard Fire");
 
 	currentHealth = maxHealth = 50;
-
-	state = PATROL;
 
 	angle = 3.14159f;
 

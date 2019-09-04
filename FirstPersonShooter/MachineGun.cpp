@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Mob.h"
 
-MachineGun::MachineGun(EngineFPS *engine, Mob *parent) : Weapon(engine, parent)
+MachineGun::MachineGun(EngineFPS* engine, Mob* parent) : Weapon(engine, parent)
 {
 	sprIdle = engine->GetSprite("Machine Gun");
 	sprFire = engine->GetSprite("Machine Gun Fire");
@@ -27,7 +27,7 @@ void MachineGun::Fire()
 	float rayX, rayY, distance;
 	if (engine->CastRay(parent->x, parent->y, parent->GetAngle(), rayX, rayY, distance, true, true, parent))
 	{
-		DynamicObject *other = engine->GetDynamicObject(rayX, rayY);
+		DynamicObject* other = engine->GetDynamicObject(rayX, rayY);
 		if (other != nullptr && other->IsFriendly() != parent->IsFriendly())
 			other->OnHit(rand() % maxDmg + minDmg);
 

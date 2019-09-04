@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Player.h"
 
-HealthItem::HealthItem(EngineFPS *engine, int healthBonus, Sprite *spr) : Item(engine), healthBonus(healthBonus)
+HealthItem::HealthItem(EngineFPS* engine, int healthBonus, Sprite* spr) : Item(engine), healthBonus(healthBonus)
 {
 	texture = spr;
 }

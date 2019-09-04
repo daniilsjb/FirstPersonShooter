@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Player.h"
 
-WeaponItem::WeaponItem(EngineFPS *engine, short weaponID, Sprite *spr) : Item(engine), weaponID(weaponID)
+WeaponItem::WeaponItem(EngineFPS* engine, short weaponID, Sprite* spr) : Item(engine), weaponID(weaponID)
 {
 	texture = spr;
 }

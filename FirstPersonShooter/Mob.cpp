@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Weapon.h"
 
-Mob::Mob(EngineFPS *engine) : DynamicObject(engine) {}
+Mob::Mob(EngineFPS* engine) : DynamicObject(engine) {}
 
 Mob::~Mob()
 {

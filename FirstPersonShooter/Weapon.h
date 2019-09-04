@@ -12,28 +12,30 @@ namespace Weapons
 class Weapon
 {
 public:
-	Weapon(EngineFPS *engine, Mob *parent);
+	Weapon(EngineFPS* engine, Mob* parent);
 	virtual ~Weapon();
 
-	Mob *parent = nullptr;
+	Mob* parent = nullptr;
 
-	Sprite *currentSpr = nullptr;
+	Sprite* currentSpr = nullptr;
 
 	bool Ready() const;
+	bool IsFull() const;
 
 	int GetAmmo() const;
 	int GetCapacity() const;
 
 	void AddAmmo(int amount);
+	void RestoreAmmo(float percent = 1.0f);
 
 	void OnUpdate(float elapsedTime);
 	virtual void Fire() = 0;
 
 protected:
-	EngineFPS *engine = nullptr;
+	EngineFPS* engine = nullptr;
 
-	Sprite *sprIdle = nullptr;
-	Sprite *sprFire = nullptr;
+	Sprite* sprIdle = nullptr;
+	Sprite* sprFire = nullptr;
 
 	int ammo;
 	int capacity;

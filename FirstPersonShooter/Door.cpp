@@ -1,7 +1,7 @@
 #include "Door.h"
 #include "EngineFPS.h"
 
-Door::Door(EngineFPS *engine, Sprite* texture) : Wall(engine, texture) {}
+Door::Door(EngineFPS *engine, Sprite* spr) : Wall(engine, spr) {}
 
 void Door::OnInteract()
 {

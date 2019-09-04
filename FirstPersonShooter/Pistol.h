@@ -5,7 +5,7 @@
 class Pistol : public Weapon
 {
 public:
-	Pistol(EngineFPS *engine, Mob *parent);
+	Pistol(EngineFPS* engine, Mob* parent);
 
 	void Fire() override;
 };

@@ -17,20 +17,20 @@ class Mob;
 class EngineFPS : public ConsoleGameEngine
 {
 public:
-	Player *player = nullptr;
+	Player* player = nullptr;
 
 	bool OnStart() override;
 	bool OnUpdate(float elapsedTime) override;
 	bool OnDestroy() override;
 
-	bool CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored = nullptr) const;
+	bool CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject* ignored = nullptr) const;
 	bool ObjectsCollide(float x0, float y0, float x1, float y1) const;
 	bool IsObstacle(float x, float y, GameObject* ignored = nullptr) const;
 
-	bool DynamicObjectVisible(DynamicObject *eye, DynamicObject *object, float &angle, float &distance) const;
+	bool DynamicObjectVisible(DynamicObject* eye, DynamicObject* object, float &angle, float &distance) const;
 	bool ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance) const;
 
-	bool FindMove(GameObject *start, GameObject *finish, float &x, float &y);
+	bool FindMove(GameObject* start, GameObject* finish, float &x, float &y);
 	void DrawObject2D(Sprite* spr, float angle, float distance);
 
 	Weapon* CreateWeapon(short weaponID, Mob* parent);
@@ -57,7 +57,7 @@ private:
 	float FoV = 3.14159f / 4.0f;
 	float depth = 20.0f;
 
-	float *depthBuffer = nullptr;
+	float* depthBuffer = nullptr;
 
 	int weaponWidth;
 	int weaponHeight;

@@ -1,9 +1,9 @@
 #include "Wall.h"
 #include "EngineFPS.h"
 
-Wall::Wall(EngineFPS *engine, Sprite* texture) : GameObject(engine)
+Wall::Wall(EngineFPS* engine, Sprite* spr) : GameObject(engine)
 {
-	this->texture = texture;
+	texture = spr;
 }
 
 Wall::~Wall() {}
