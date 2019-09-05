@@ -7,12 +7,12 @@ HealthItem::HealthItem(EngineFPS* engine, int healthBonus, Sprite* spr) : Item(e
 	texture = spr;
 }
 
-void HealthItem::OnUse(Player *player)
+void HealthItem::OnUse(Player& player)
 {
-	if (player->GetHealth() < player->GetMaxHealth())
+	if (!player.FullHealth())
 	{
-		engine->PlayAudio("Health");
-		player->Heal(healthBonus);
+		player.Heal(healthBonus);
 		removed = true;
+		engine->PlayAudio("Health");
 	}
 }

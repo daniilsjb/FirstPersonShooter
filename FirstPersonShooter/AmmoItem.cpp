@@ -7,9 +7,9 @@ AmmoItem::AmmoItem(EngineFPS* engine, int amount, Sprite* spr) : Item(engine), a
 	texture = spr;
 }
 
-void AmmoItem::OnUse(Player* player)
+void AmmoItem::OnUse(Player& player)
 {
-	if (player->AddAmmo(amount))
+	if (player.AddAmmo(amount))
 	{
 		removed = true;
 		engine->PlayAudio("Ammo");

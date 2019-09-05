@@ -7,17 +7,17 @@ WeaponItem::WeaponItem(EngineFPS* engine, short weaponID, short ammoWorth, Sprit
 	texture = spr;
 }
 
-void WeaponItem::OnUse(Player *player)
+void WeaponItem::OnUse(Player& player)
 {
-	if (player->WeaponAcquired(weaponID))
+	if (player.WeaponAcquired(weaponID))
 	{
-		if (player->AddAmmo(ammoWorth))
+		if (player.AddAmmo(ammoWorth))
 		{
 			engine->PlayAudio("Ammo");
 			removed = true;
 		}
 	}
-	else if (player->AddWeapon(weaponID))
+	else if (player.AddWeapon(weaponID))
 	{
 		engine->PlayAudio("Ammo");
 		removed = true;

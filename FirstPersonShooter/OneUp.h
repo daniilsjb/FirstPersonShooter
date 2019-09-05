@@ -7,5 +7,5 @@ class OneUp : public Item
 public:
 	OneUp(EngineFPS* engine, Sprite* spr);
 
-	void OnUse(Player* player) override;
+	void OnUse(Player& player) override;
 };

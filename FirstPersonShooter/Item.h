@@ -12,7 +12,7 @@ public:
 
 	bool IsRemoved() const;
 
-	virtual void OnUse(Player* player) = 0;
+	virtual void OnUse(Player& player) = 0;
 
 protected:
 	bool removed = false;

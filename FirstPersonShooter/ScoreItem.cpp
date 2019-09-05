@@ -7,9 +7,9 @@ ScoreItem::ScoreItem(EngineFPS* engine, int worth, Sprite* spr) : Item(engine), 
 	texture = spr;
 }
 
-void ScoreItem::OnUse(Player* player)
+void ScoreItem::OnUse(Player& player)
 {
-	player->AddScore(worth);
+	player.AddScore(worth);
 	removed = true;
 	engine->PlayAudio("Pickup");
 }

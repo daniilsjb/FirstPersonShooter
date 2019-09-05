@@ -7,17 +7,17 @@ OneUp::OneUp(EngineFPS* engine, Sprite* spr) : Item(engine)
 	texture = spr;
 }
 
-void OneUp::OnUse(Player* player)
+void OneUp::OnUse(Player& player)
 {
-	if (!player->FullHealth())
+	if (!player.FullHealth())
 	{
-		player->RestoreHealth();
+		player.RestoreHealth();
 		removed = true;
 		engine->PlayAudio("Health");
 	}
-	else if (!player->FullAmmo())
+	else if (!player.FullAmmo())
 	{
-		player->RestoreAmmo();
+		player.RestoreAmmo();
 		removed = true;
 		engine->PlayAudio("Ammo");
 	}

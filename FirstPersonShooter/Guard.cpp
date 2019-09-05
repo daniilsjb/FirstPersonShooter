@@ -3,7 +3,7 @@
 #include "Weapon.h"
 #include "Player.h"
 
-Guard::Guard(EngineFPS *engine) : Enemy(engine)
+Guard::Guard(EngineFPS* engine) : Enemy(engine)
 {
 	directionSprites[BACK] = engine->GetSprite("Guard Back");
 	directionSprites[RIGHT] = engine->GetSprite("Guard Right");

@@ -140,7 +140,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	//Check if there is an item under player's feet
 	Item* item = GetItem(player->x, player->y);
 	if (item != nullptr)
-		item->OnUse(player);
+		item->OnUse(*player);
 
 	//Since everything's been updated now, we may garbage collect marked objects
 	//We don't want to remove destroyed walls from the vector, so we just deallocate memory
