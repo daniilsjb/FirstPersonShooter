@@ -40,7 +40,7 @@ bool Player::AddWeapon(short weaponID)
 
 bool Player::AddAmmo(int amount)
 {
-	if (weapon != nullptr)
+	if (HasWeapon())
 	{
 		if (!weapon->IsFull())
 		{

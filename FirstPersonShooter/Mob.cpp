@@ -17,17 +17,23 @@ bool Mob::HasWeapon() const
 
 Sprite* Mob::GetWeaponSprite() const
 {
-	return weapon->currentSpr;
+	return (weapon != nullptr) ? weapon->currentSpr : nullptr;
 }
 
 int Mob::GetWeaponAmmo() const
 {
-	return weapon->GetAmmo();
+	return (weapon != nullptr) ? weapon->GetAmmo() : 0;
 }
 
-int Mob::GetWeaponCapacity() const
+bool Mob::FullAmmo() const
 {
-	return weapon->GetCapacity();
+	return (weapon != nullptr) ? (weapon->GetAmmo() >= Weapons::CAPACITY) : true;
+}
+
+void Mob::RestoreAmmo()
+{
+	if (weapon!= nullptr)
+		weapon->RestoreAmmo();
 }
 
 int Mob::GetMaxHealth() const
@@ -38,6 +44,16 @@ int Mob::GetMaxHealth() const
 int Mob::GetHealth() const
 {
 	return currentHealth;
+}
+
+bool Mob::FullHealth() const
+{
+	return (currentHealth >= maxHealth);
+}
+
+void Mob::RestoreHealth()
+{
+	currentHealth = maxHealth;
 }
 
 void Mob::Heal(int amount)

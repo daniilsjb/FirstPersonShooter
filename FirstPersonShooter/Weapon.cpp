@@ -55,7 +55,7 @@ bool Weapon::Ready() const
 
 bool Weapon::IsFull() const
 {
-	return (ammo >= CAPACITY);
+	return (ammo >= Weapons::CAPACITY);
 }
 
 int Weapon::GetAmmo() const
@@ -63,12 +63,12 @@ int Weapon::GetAmmo() const
 	return ammo;
 }
 
-int Weapon::GetCapacity() const
-{
-	return CAPACITY;
-}
-
 void Weapon::AddAmmo(int amount)
 {
-	ammo = min(CAPACITY, ammo + amount);
+	ammo = min(Weapons::CAPACITY, ammo + amount);
+}
+
+void Weapon::RestoreAmmo()
+{
+	ammo = Weapons::CAPACITY;
 }

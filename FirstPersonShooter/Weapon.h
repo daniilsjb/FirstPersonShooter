@@ -6,6 +6,7 @@ class Mob;
 
 namespace Weapons
 {
+	const int CAPACITY = 99;
 	enum { PISTOL = 0, MACHINE_GUN, COUNT };
 }
 
@@ -23,9 +24,8 @@ public:
 	bool IsFull() const;
 
 	int GetAmmo() const;
-	int GetCapacity() const;
-
 	void AddAmmo(int amount);
+	void RestoreAmmo();
 
 	void OnUpdate(float elapsedTime);
 
@@ -39,7 +39,6 @@ protected:
 	EngineFPS* engine = nullptr;
 
 	int ammo;
-	const int CAPACITY = 99;
 
 	int minDmg;
 	int maxDmg;

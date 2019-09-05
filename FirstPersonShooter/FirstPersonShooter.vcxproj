@@ -148,6 +148,7 @@
     <ClInclude Include="EngineFPS.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Guard.h" />
+    <ClInclude Include="OneUp.h" />
     <ClInclude Include="SS.h" />
     <ClInclude Include="HealthItem.h" />
     <ClInclude Include="Item.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="EngineFPS.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Guard.cpp" />
+    <ClCompile Include="OneUp.cpp" />
     <ClCompile Include="SS.cpp" />
     <ClCompile Include="HealthItem.cpp" />
     <ClCompile Include="Item.cpp" />

@@ -129,6 +129,9 @@
     <ClInclude Include="Guard.h">
       <Filter>Header Files\GameObjects\DynamicObjects\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="OneUp.h">
+      <Filter>Header Files\GameObjects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineFPS.cpp">
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Guard.cpp">
       <Filter>Source Files\GameObjects\DynamicObjects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="OneUp.cpp">
+      <Filter>Source Files\GameObjects\Items</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -14,10 +14,13 @@ public:
 	Sprite* GetWeaponSprite() const;
 
 	int GetWeaponAmmo() const;
-	int GetWeaponCapacity() const;
+	bool FullAmmo() const;
+	void RestoreAmmo();
 
 	int GetMaxHealth() const;
 	int GetHealth() const;
+	bool FullHealth() const;
+	void RestoreHealth();
 
 	void Heal(int amount);
 	void Damage(int amount);

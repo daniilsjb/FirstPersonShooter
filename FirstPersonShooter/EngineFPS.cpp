@@ -17,6 +17,7 @@
 #include "ScoreItem.h"
 #include "WeaponItem.h"
 #include "AmmoItem.h"
+#include "OneUp.h"
 
 #include "DynamicObject.h"
 #include "Mob.h"
@@ -94,7 +95,7 @@ bool EngineFPS::OnStart()
 	map.append(L"#.........##.....###.......%....-.l.-.s..%.....................#");
 	map.append(L"#..........##?####.........%....%...%....%.....................#");
 	map.append(L"#...........#..#...........%....%...%....%.....................#");
-	map.append(L"#...........#..#...........%%%%%%...%%%%%%.....................#");
+	map.append(L"#...........#.O#...........%%%%%%...%%%%%%.....................#");
 	map.append(L"#...........####...........%...P%...%....%.....................#");
 	map.append(L"#..........................%.0..-.l.-D..b%.....................#");
 	map.append(L"#..........................%....%...%....%.....................#");
@@ -333,7 +334,7 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 	if (player->HasWeapon())
 	{
 		ammo = player->GetWeaponAmmo();
-		capacity = player->GetWeaponCapacity();
+		capacity = Weapons::CAPACITY;
 	}
 
 	int score = player->GetScore();
@@ -559,6 +560,13 @@ void EngineFPS::AddItem(int x, int y, wchar_t type)
 		case 'R':
 		{
 			item = new ScoreItem(this, 5000, sprites["Item Crown"]);
+			break;
+		}
+
+		//Other
+		case 'O':
+		{
+			item = new OneUp(this, sprites["Item One Up"]);
 			break;
 		}
 	}
@@ -1047,6 +1055,6 @@ void EngineFPS::LoadSprites()
 	load("Item Ammo", L"Sprites/Items/Ammo.spr");
 	load("Item Machine Gun", L"Sprites/Items/Machine Gun.spr");
 	load("Item Medkit", L"Sprites/Items/Medkit.spr");
-	load("One Up", L"Sprites/Items/One Up.spr");
+	load("Item One Up", L"Sprites/Items/One Up.spr");
 	load("Item Pistol", L"Sprites/Items/Pistol.spr");
 }
