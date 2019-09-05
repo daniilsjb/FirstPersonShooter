@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AmmoItem.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="ConsoleGameEngine.h" />
     <ClInclude Include="Decoration.h" />
     <ClInclude Include="Door.h" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AmmoItem.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="ConsoleGameEngine.cpp" />
     <ClCompile Include="Decoration.cpp" />
     <ClCompile Include="Door.cpp" />

@@ -2,6 +2,7 @@
 
 #include "ConsoleGameEngine.h"
 #include "Pathfinder.h"
+#include "AssetManager.h"
 
 #include <map>
 
@@ -53,6 +54,7 @@ public:
 
 private:
 	Pathfinder pathfinder;
+	AssetManager assetManager;
 
 	float FoV = 3.14159f / 4.0f;
 	float depth = 20.0f;
@@ -74,11 +76,8 @@ private:
 
 	void ParseMap();
 
-	std::map<std::string, Sprite*> sprites;
-	std::map<std::string, int> audio;
-
 	float gameOverTimer = 0.0f;
 
+	std::map<std::string, int> audio;
 	void LoadAudio();
-	void LoadSprites();
 };
