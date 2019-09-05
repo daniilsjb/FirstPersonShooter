@@ -38,14 +38,13 @@ bool Player::AddWeapon(short weaponID)
 	return false;
 }
 
-bool Player::AddAmmo(short weaponID, int amount)
+bool Player::AddAmmo(int amount)
 {
-	Weapon *wpn = availableWeapons[weaponID];
-	if (wpn != nullptr)
+	if (weapon != nullptr)
 	{
-		if (!wpn->IsFull())
+		if (!weapon->IsFull())
 		{
-			wpn->AddAmmo(amount);
+			weapon->AddAmmo(amount);
 			return true;
 		}
 	}

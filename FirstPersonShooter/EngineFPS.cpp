@@ -24,6 +24,7 @@
 
 #include "Enemy.h"
 #include "Guard.h"
+#include "SS.h"
 
 bool EngineFPS::OnStart()
 {
@@ -39,54 +40,70 @@ bool EngineFPS::OnStart()
 	//Lowercase Letters  - Decorations
 	//Uppercase Letters  - Items
 	//Numbers            - Dynamic Objects
-	map.append(L"##########@#############$#####$####@#####$######");
-	map.append(L"#...P.#......#.......#....................f...t#");
-	map.append(L"#..0..-......#....U..#.j...#..l..#....j........#");
-	map.append(L"#f....#......-..Sl...$.....#..1..#..........K..#");
-	map.append(L"###$#@#......#.......#.....##@##$#..l.....l....#");
-	map.append(L"#............###@#####......................M..#");
-	map.append(L"#.f......l...#.S..M..#.t...l......1..1......M..#");
-	map.append(L"#............-...l...#.........................#");
-	map.append(L"###$###......#..U....$.....l....####$###$##H##@#");
-	map.append(L"#.CCC.#..l...###$##@##..........#....#.........#");
-	map.append(L"#.RUU.#......#.......#.....1....#....#..M...M..#");
-	map.append(L"#.USS.#......-..1l.R.#..........#....#.........#");
-	map.append(L"###?###..l...#.......#...##@##########.f.......#");
-	map.append(L"#............#########...#.M.....K...#.....1...#");
-	map.append(L"#.U......1...........#...#...AA..BB..#.........#");
-	map.append(L"#...$....l..l.1L..l..H...#...........#.........#");
-	map.append(L"#....................#...#@#####?###@#......l..#");
-	map.append(L"###@####$#####@#######.........................#");
-	map.append(L"#...........................l....l..........l..#");
-	map.append(L"#..f...................................1.......#");
-	map.append(L"#............###@#####$#####$#####@####@###....#");
-	map.append(L"#...#........#............................#....#");
-	map.append(L"#...#.1..l...$............................#....#");
-	map.append(L"#...#........#............................#....#");
-	map.append(L"#...@###$#####......###@####@####$###.....#....#");
-	map.append(L"#...#...............#...............#.....#....#");
-	map.append(L"#...$...............#..t......1...t.###@###....#");
-	map.append(L"#...######@######@###..........................#");
-	map.append(L"#..............................................#");
-	map.append(L"#................1.............................#");
-	map.append(L"#######-###@####-##$#####-#########$##.........#");
-	map.append(L"#..........#.S.....U.#........#......#....l...f#");
-	map.append(L"#.S..l..1..#.1..l....#...l....#...l..#.........#");
-	map.append(L"#.U.......M#.......U.#.K....M.#.1....#.........#");
-	map.append(L"######?##$######@########$#####......#....l...f#");
-	map.append(L"#..........#.1.......f.......f.......#.........#");
-	map.append(L"#..M.UU..M.#.........................#.........#");
-	map.append(L"#A..RSSR..A#........K....K...........#....l...f#");
-	map.append(L"######@#####...................................#");
-	map.append(L"#..............................................#");
-	map.append(L"#....................###?###..............l...f#");
-	map.append(L"######?####....1.....#S...S#......1............#");
-	map.append(L"#A.R...U..#..........#..MM.#...................#");
-	map.append(L"#..UU.L.U.#..........#######......1.......l...f#");
-	map.append(L"###?###..B#...1................................#");
-	map.append(L"#RUUUC#.KC#....................................#");
-	map.append(L"#RSSSC#M..#........f...........f..f..f..f..f..j#");
-	map.append(L"############@####$####@####$####################");
+	map.append(L"################################################################");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#...........................#############......................#");
+	map.append(L"#....######.................#j.........j#......................#");
+	map.append(L"#....#AASS#......############..y.1y..y..#####..................#");
+	map.append(L"#....#AACS##.....#..........#...........#SSU#..................#");
+	map.append(L"#....#AACC.#.....#.l....l...-.....q....1-.1S#..................#");
+	map.append(L"#....#AAC..#.....#..........#...........#UUU#..................#");
+	map.append(L"#....#####?#####.#...########...........#####..................#");
+	map.append(L"#....#.SUt.tU..#.#...#......#...........#######................#");
+	map.append(L"#....#.....S..1###...###....######-######......................#");
+	map.append(L"#....#f.1......#...1...#........#...#..........................#");
+	map.append(L"#....#....y.1..-...l...#........#.1.#..........................#");
+	map.append(L"#....#.........#.....1.#........#.l.#..........................#");
+	map.append(L"######C.1......#########........#...#..........................#");
+	map.append(L"#.Mo##CC......1#................#...#..........................#");
+	map.append(L"#.l.######-#####...........######...###........................#");
+	map.append(L"#...#...#...#..............#..?1..l..a#........................#");
+	map.append(L"##-##...#.l.#..............#A.###...###........................#");
+	map.append(L"#...#####...#..............#AM#.#...#..........................#");
+	map.append(L"#.l.#..D#...#..............#GM#.#...#..........................#");
+	map.append(L"#...-.l1#.l.#..............####.#.l.#..........................#");
+	map.append(L"#...#..U#.1.#..................##...##.........................#");
+	map.append(L"#...######-#####...............###-###...............%%%%%%%%%%#");
+	map.append(L"#.l.##1........#..........######v...v######..........%D...pooo%#");
+	map.append(L"#...##.v.....v.#..........#v.1...........v#..........%.......o%#");
+	map.append(L"#...##..w...w..#..........#...............#%%%%%%%%%%%.....1..%#");
+	map.append(L"#....#.........#..........#................%.........%........%#");
+	map.append(L"#....-.1.......#..........#..q....q...1q...-.........-........^#");
+	map.append(L"#....#.........#..........#................%.........%........%#");
+	map.append(L"#...##..w...w..#..........#...............#%%%....%%%%..yD.y.1%#");
+	map.append(L"#...##.v.....v.#..........#v.............v#..%%..%%..%........%#");
+	map.append(L"#...##.......1.#..........######.....######...%..%...%......D.%#");
+	map.append(L"#.l.######-#####...............%%%-%%%........%..%...%%%r%%e%%%#");
+	map.append(L"#...#####...#...................%...%.........%..%.....%%%%%%..#");
+	map.append(L"#...#####...#...................%.l.%.........%.1%%%%%%%%%%%...#");
+	map.append(L"#...#1..#...#...................%...%.........%..%%%.%.%.%u%%..#");
+	map.append(L"#...-...#.l.#...................%...%.........%...%.........%%.#");
+	map.append(L"#...#...#...#...................%...%.........%...-..........^.#");
+	map.append(L"#.l.#####...#...................%.l.%.........%.1.%........u%%.#");
+	map.append(L"#.1.#####.1.#############.......%.1.%.........%%%%%%.%.%.%.%%..#");
+	map.append(L"#................#.....1##......%...%.........%%%%%%%%%%%%%%...#");
+	map.append(L"#.....l.......l..-...1..&.#.....%...%..........................#");
+	map.append(L"#................#.....1##......%.l.%..........................#");
+	map.append(L"##################?######.......%...%..........................#");
+	map.append(L"#.........##..#..?.M#......%%%%%%%-%%%%%%%.....................#");
+	map.append(L"#........#.&..#..#.##......%bD..%...%....%.....................#");
+	map.append(L"#.........##.....###.......%....-.l.-.s..%.....................#");
+	map.append(L"#..........##?####.........%....%...%....%.....................#");
+	map.append(L"#...........#..#...........%....%...%....%.....................#");
+	map.append(L"#...........#..#...........%%%%%%...%%%%%%.....................#");
+	map.append(L"#...........####...........%...P%...%....%.....................#");
+	map.append(L"#..........................%.0..-.l.-D..b%.....................#");
+	map.append(L"#..........................%....%...%....%.....................#");
+	map.append(L"#..........................%%%%%%...%%%%%%.....................#");
+	map.append(L"#..........................%.............%.....................#");
+	map.append(L"#..........................%..l...l...l1A%.....................#");
+	map.append(L"#..........................%1.....D......%.....................#");
+	map.append(L"#..........................%^%%^%%^%%^%%^%.....................#");
+	map.append(L"################################################################");
 
 	ParseMap();
 
@@ -374,6 +391,19 @@ int EngineFPS::GetMapHeight() const
 	return mapHeight;
 }
 
+Weapon* EngineFPS::CreateWeapon(short weaponID, Mob* parent)
+{
+	switch (weaponID)
+	{
+		case Weapons::PISTOL:
+			return new Pistol(this, parent);
+		case Weapons::MACHINE_GUN:
+			return new MachineGun(this, parent);
+		default:
+			return nullptr;
+	}
+}
+
 void EngineFPS::ParseMap()
 {
 	for (int x = 0; x < mapWidth; x++)
@@ -406,19 +436,6 @@ void EngineFPS::ParseMap()
 	}
 }
 
-Weapon* EngineFPS::CreateWeapon(short weaponID, Mob* parent)
-{
-	switch (weaponID)
-	{
-		case Weapons::PISTOL:
-			return new Pistol(this, parent);
-		case Weapons::MACHINE_GUN:
-			return new MachineGun(this, parent);
-		default:
-			return nullptr;
-	}
-}
-
 void EngineFPS::AddWall(int x, int y, wchar_t type)
 {
 	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
@@ -443,6 +460,16 @@ void EngineFPS::AddWall(int x, int y, wchar_t type)
 			wall = new Wall(this, sprites["Stone Wall Flag"]);
 			break;
 		}
+		case '%':
+		{
+			wall = new Wall(this, sprites["Blue Wall"]);
+			break;
+		}
+		case '^':
+		{
+			wall = new Wall(this, sprites["Blue Wall Cage"]);
+			break;
+		}
 		case '?':
 		{
 			wall = new Door(this, sprites["Stone Wall Flag"]);
@@ -451,6 +478,11 @@ void EngineFPS::AddWall(int x, int y, wchar_t type)
 		case '-':
 		{
 			wall = new Door(this, sprites["Metal Door"]);
+			break;
+		}
+		case '&':
+		{
+			wall = new Door(this, sprites["Next Level"]);
 			break;
 		}
 	}
@@ -473,60 +505,60 @@ void EngineFPS::AddItem(int x, int y, wchar_t type)
 	switch (type)
 	{
 		//Health
-		case 'M':
+		case 'D':
 		{
-			item = new HealthItem(this, 10, sprites["Item Medpack"]);
+			item = new HealthItem(this, 10, sprites["Item Dinner"]);
 			break;
 		}
-		case 'K':
+		case 'M':
 		{
-			item = new HealthItem(this, 40, sprites["Item Medkit"]);
+			item = new HealthItem(this, 25, sprites["Item Medkit"]);
 			break;
 		}
 
 		//Weapons
 		case 'P':
 		{
-			item = new WeaponItem(this, Weapons::PISTOL, sprites["Item Pistol"]);
+			item = new WeaponItem(this, Weapons::PISTOL, 2, sprites["Item Pistol"]);
 			break;
 		}
 		case 'G':
 		{
-			item = new WeaponItem(this, Weapons::MACHINE_GUN, sprites["Item Machine Gun"]);
+			item = new WeaponItem(this, Weapons::MACHINE_GUN, 6, sprites["Item Machine Gun"]);
 			break;
 		}
 
 		//Ammo
 		case 'A':
 		{
-			item = new AmmoItem(this, Weapons::PISTOL, 5, sprites["Item Pistol Ammo"]);
+			item = new AmmoItem(this, 8, sprites["Item Ammo"]);
 			break;
 		}
 		case 'B':
 		{
-			item = new AmmoItem(this, Weapons::MACHINE_GUN, 50, sprites["Item Machine Gun Ammo"]);
+			item = new AmmoItem(this, 4, sprites["Item Ammo"]);
 			break;
 		}
 
 		//Score
 		case 'S':
 		{
-			item = new ScoreItem(this, 10, sprites["Item Cross"]);
-			break;
-		}
-		case 'C':
-		{
-			item = new ScoreItem(this, 35, sprites["Item Chest"]);
-			break;
-		}
-		case 'R':
-		{
-			item = new ScoreItem(this, 60, sprites["Item Crown"]);
+			item = new ScoreItem(this, 100, sprites["Item Cross"]);
 			break;
 		}
 		case 'U':
 		{
-			item = new ScoreItem(this, 5, sprites["Item Cup"]);
+			item = new ScoreItem(this, 500, sprites["Item Chalice"]);
+			break;
+		}
+		case 'C':
+		{
+			item = new ScoreItem(this, 1000, sprites["Item Chest"]);
+			break;
+		}
+		case 'R':
+		{
+			item = new ScoreItem(this, 5000, sprites["Item Crown"]);
 			break;
 		}
 	}
@@ -548,6 +580,46 @@ void EngineFPS::AddDecoration(int x, int y, wchar_t type)
 
 	switch (type)
 	{
+		case 'a':
+		{
+			decor = new Decoration(this, sprites["Armor"]);
+			break;
+		}
+		case 'b':
+		{
+			decor = new Decoration(this, sprites["Bones"]);
+			break;
+		}
+		case 'p':
+		{
+			decor = new Decoration(this, sprites["Puddle"]);
+			break;
+		}
+		case 'g':
+		{
+			decor = new Decoration(this, sprites["Green Barrel"]);
+			break;
+		}
+		case 'e':
+		{
+			decor = new Decoration(this, sprites["Empty Well"]);
+			break;
+		}
+		case 'r':
+		{
+			decor = new Decoration(this, sprites["Filled Well"]);
+			break;
+		}
+		case 's':
+		{
+			decor = new Decoration(this, sprites["Skeleton"]);
+			break;
+		}
+		case 'o':
+		{
+			decor = new Decoration(this, sprites["Barrel"]);
+			break;
+		}
 		case 'f':
 		{
 			decor = new Decoration(this, sprites["Flag"]);
@@ -563,9 +635,34 @@ void EngineFPS::AddDecoration(int x, int y, wchar_t type)
 			decor = new Decoration(this, sprites["Tree"]);
 			break;
 		}
+		case 'v':
+		{
+			decor = new Decoration(this, sprites["Tree In Blue Jug"]);
+			break;
+		}
 		case 'l':
 		{
-			decor = new Decoration(this, sprites["Lamp"]);
+			decor = new Decoration(this, sprites["Simple Lamp"]);
+			break;
+		}
+		case 'q':
+		{
+			decor = new Decoration(this, sprites["Golden Lamp"]);
+			break;
+		}
+		case 'w':
+		{
+			decor = new Decoration(this, sprites["Floor Lamp"]);
+			break;
+		}
+		case 'y':
+		{
+			decor = new Decoration(this, sprites["Table"]);
+			break;
+		}
+		case 'u':
+		{
+			decor = new Decoration(this, sprites["Bowl"]);
 			break;
 		}
 	}
@@ -596,6 +693,11 @@ void EngineFPS::AddDynamicObject(int x, int y, wchar_t type)
 		case '1':
 		{
 			object = new Guard(this);
+			break;
+		}
+		case '2':
+		{
+			object = new SS(this);
 			break;
 		}
 	}
@@ -884,42 +986,67 @@ void EngineFPS::LoadSprites()
 		sprites[spriteName] = spr;
 	};
 
-	//Textures
-	load("Brick Wall", L"Sprites/Brick Wall.spr");
-	load("Stone Wall", L"Sprites/Stone Wall.spr");
-	load("Stone Wall Eagle", L"Sprites/Stone Wall Eagle.spr");
-	load("Stone Wall Flag", L"Sprites/Stone Wall Flag.spr");
-	load("Metal Door", L"Sprites/Metal Door.spr");
+	//Walls
+	load("Blue Wall Cage", L"Sprites/Walls/Blue Wall Cage.spr");
+	load("Blue Wall", L"Sprites/Walls/Blue Wall.spr");
+	load("Brick Wall", L"Sprites/Walls/Brick Wall.spr");
+	load("Metal Door", L"Sprites/Walls/Metal Door.spr");
+	load("Next Level", L"Sprites/Walls/Next Level.spr");
+	load("Stone Wall Eagle", L"Sprites/Walls/Stone Wall Eagle.spr");
+	load("Stone Wall Flag", L"Sprites/Walls/Stone Wall Flag.spr");
+	load("Stone Wall", L"Sprites/Walls/Stone Wall.spr");
 
 	//Decorations
-	load("Flag", L"Sprites/Flag.spr");
-	load("Jug", L"Sprites/Jug.spr");
-	load("Tree", L"Sprites/Tree.spr");
-	load("Lamp", L"Sprites/Lamp.spr");
+	load("Armor", L"Sprites/Decorations/Armor.spr");
+	load("Barrel", L"Sprites/Decorations/Barrel.spr");
+	load("Bones", L"Sprites/Decorations/Bones.spr");
+	load("Bowl", L"Sprites/Decorations/Bowl.spr");
+	load("Empty Well", L"Sprites/Decorations/Empty Well.spr");
+	load("Filled Well", L"Sprites/Decorations/Filled Well.spr");
+	load("Flag", L"Sprites/Decorations/Flag.spr");
+	load("Floor Lamp", L"Sprites/Decorations/Floor Lamp.spr");
+	load("Golden Lamp", L"Sprites/Decorations/Golden Lamp.spr");
+	load("Green Barrel", L"Sprites/Decorations/Green Barrel.spr");
+	load("Jug", L"Sprites/Decorations/Jug.spr");
+	load("Puddle", L"Sprites/Decorations/Puddle.spr");
+	load("Simple Lamp", L"Sprites/Decorations/Simple Lamp.spr");
+	load("Skeleton", L"Sprites/Decorations/Skeleton.spr");
+	load("Table", L"Sprites/Decorations/Table.spr");
+	load("Tree In Blue Jug", L"Sprites/Decorations/Tree In Blue Jug.spr");
+	load("Tree", L"Sprites/Decorations/Tree.spr");
 
 	//Enemies
-	load("Guard Back", L"Sprites/Guard Back.spr");
-	load("Guard Front", L"Sprites/Guard Front.spr");
-	load("Guard Left", L"Sprites/Guard Left.spr");
-	load("Guard Right", L"Sprites/Guard Right.spr");
-	load("Guard Reload", L"Sprites/Guard Reload.spr");
-	load("Guard Fire", L"Sprites/Guard Fire.spr");
+	load("Guard Aim", L"Sprites/Enemies/Guard Aim.spr");
+	load("Guard Back", L"Sprites/Enemies/Guard Back.spr");
+	load("Guard Fire", L"Sprites/Enemies/Guard Fire.spr");
+	load("Guard Front", L"Sprites/Enemies/Guard Front.spr");
+	load("Guard Left", L"Sprites/Enemies/Guard Left.spr");
+	load("Guard Right", L"Sprites/Enemies/Guard Right.spr");
+
+	load("SS Aim", L"Sprites/Enemies/SS Aim.spr");
+	load("SS Back", L"Sprites/Enemies/SS Back.spr");
+	load("SS Fire", L"Sprites/Enemies/SS Fire.spr");
+	load("SS Front", L"Sprites/Enemies/SS Front.spr");
+	load("SS Left", L"Sprites/Enemies/SS Left.spr");
+	load("SS Right", L"Sprites/Enemies/SS Right.spr");
 
 	//Weapons
-	load("Pistol", L"Sprites/Weapon Pistol.spr");
-	load("Pistol Fire", L"Sprites/Weapon Pistol Fire.spr");
-	load("Machine Gun", L"Sprites/Weapon Machine Gun.spr");
-	load("Machine Gun Fire", L"Sprites/Weapon Machine Gun Fire.spr");
+	load("Pistol", L"Sprites/Weapons/Pistol.spr");
+	load("Pistol Fire", L"Sprites/Weapons/Pistol Fire.spr");
+	load("Pistol Cooldown", L"Sprites/Weapons/Pistol Cooldown.spr");
+	load("Machine Gun", L"Sprites/Weapons/Machine Gun.spr");
+	load("Machine Gun Fire", L"Sprites/Weapons/Machine Gun Fire.spr");
+	load("Machine Gun Cooldown", L"Sprites/Weapons/Machine Gun Cooldown.spr");
 
 	//Items
-	load("Item Pistol", L"Sprites/Item Pistol.spr");
-	load("Item Machine Gun", L"Sprites/Item Machine Gun.spr");
-	load("Item Pistol Ammo", L"Sprites/Item Pistol Ammo.spr");
-	load("Item Machine Gun Ammo", L"Sprites/Item Machine Gun Ammo.spr");
-	load("Item Medpack", L"Sprites/Item Medpack.spr");
-	load("Item Medkit", L"Sprites/Item Medkit.spr");
-	load("Item Chest", L"Sprites/Item Chest.spr");
-	load("Item Cross", L"Sprites/Item Cross.spr");
-	load("Item Crown", L"Sprites/Item Crown.spr");
-	load("Item Cup", L"Sprites/Item Cup.spr");
+	load("Item Chalice", L"Sprites/Items/Chalice.spr");
+	load("Item Chest", L"Sprites/Items/Chest.spr");
+	load("Item Cross", L"Sprites/Items/Cross.spr");
+	load("Item Crown", L"Sprites/Items/Crown.spr");
+	load("Item Dinner", L"Sprites/Items/Dinner.spr");
+	load("Item Ammo", L"Sprites/Items/Ammo.spr");
+	load("Item Machine Gun", L"Sprites/Items/Machine Gun.spr");
+	load("Item Medkit", L"Sprites/Items/Medkit.spr");
+	load("One Up", L"Sprites/Items/One Up.spr");
+	load("Item Pistol", L"Sprites/Items/Pistol.spr");
 }

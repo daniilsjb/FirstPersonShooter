@@ -23,7 +23,7 @@ protected:
 	float delayTimer = 0.25f;
 
 	std::vector<Sprite*> directionSprites;
-	Sprite* reloadingSpr;
+	Sprite* aimingSpr;
 	Sprite* shootingSpr;
 
 	Sprite* ChooseDirectionSprite(DynamicObject* relativeObject) const;

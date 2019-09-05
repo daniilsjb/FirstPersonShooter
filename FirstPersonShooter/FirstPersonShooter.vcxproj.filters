@@ -108,9 +108,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\GameObjects\DynamicObjects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Guard.h">
-      <Filter>Header Files\GameObjects\DynamicObjects\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="Decoration.h">
       <Filter>Header Files\GameObjects\Decorations</Filter>
     </ClInclude>
@@ -125,6 +122,12 @@
     </ClInclude>
     <ClInclude Include="MachineGun.h">
       <Filter>Header Files\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="SS.h">
+      <Filter>Header Files\GameObjects\DynamicObjects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Guard.h">
+      <Filter>Header Files\GameObjects\DynamicObjects\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +179,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\GameObjects\DynamicObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Guard.cpp">
-      <Filter>Source Files\GameObjects\DynamicObjects\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="Decoration.cpp">
       <Filter>Source Files\GameObjects\Decorations</Filter>
     </ClCompile>
@@ -190,6 +190,12 @@
     </ClCompile>
     <ClCompile Include="MachineGun.cpp">
       <Filter>Source Files\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="SS.cpp">
+      <Filter>Source Files\GameObjects\DynamicObjects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Guard.cpp">
+      <Filter>Source Files\GameObjects\DynamicObjects\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

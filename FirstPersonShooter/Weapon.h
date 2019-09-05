@@ -26,7 +26,6 @@ public:
 	int GetCapacity() const;
 
 	void AddAmmo(int amount);
-	void RestoreAmmo(float percent = 1.0f);
 
 	void OnUpdate(float elapsedTime);
 
@@ -39,16 +38,19 @@ public:
 protected:
 	EngineFPS* engine = nullptr;
 
-	Sprite* sprIdle = nullptr;
-	Sprite* sprFire = nullptr;
-
 	int ammo;
-	int capacity;
+	const int CAPACITY = 99;
 
 	int minDmg;
 	int maxDmg;
 
-	bool shooting = false;
-	float cooldown;
-	float timer = 0.0f;
+	enum { READY, SHOOTING, COOLDOWN } state = READY;
+
+	Sprite* readySpr = nullptr;
+	Sprite* shootingSpr = nullptr;
+	Sprite* cooldownSpr = nullptr;
+
+	float shooting = 0.0f;
+	float cooldown = 0.0f;
+	float stateTimer = 0.0f;
 };

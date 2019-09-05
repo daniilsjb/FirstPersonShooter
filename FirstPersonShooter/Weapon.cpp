@@ -8,18 +8,38 @@ Weapon::~Weapon() {}
 
 void Weapon::OnUpdate(float elapsedTime)
 {
-	if (shooting)
+	switch (state)
 	{
-		currentSpr = sprFire;
-		timer += elapsedTime;
-		if (timer >= cooldown)
+		case READY:
 		{
-			timer = 0.0f;
-			shooting = false;
+			currentSpr = readySpr;
+			break;
+		}
+		case SHOOTING:
+		{
+			currentSpr = shootingSpr;
+
+			stateTimer += elapsedTime;
+			if (stateTimer >= shooting)
+			{
+				stateTimer = 0.0f;
+				state = COOLDOWN;
+			}
+			break;
+		}
+		case COOLDOWN:
+		{
+			currentSpr = cooldownSpr;
+
+			stateTimer += elapsedTime;
+			if (stateTimer >= cooldown)
+			{
+				stateTimer = 0.0f;
+				state = READY;
+			}
+			break;
 		}
 	}
-	else
-		currentSpr = sprIdle;
 }
 
 void Weapon::OnFirePressed() {}
@@ -30,12 +50,12 @@ void Weapon::OnFireReleased() {}
 
 bool Weapon::Ready() const
 {
-	return !shooting;
+	return state == READY;
 }
 
 bool Weapon::IsFull() const
 {
-	return (ammo >= capacity);
+	return (ammo >= CAPACITY);
 }
 
 int Weapon::GetAmmo() const
@@ -45,15 +65,10 @@ int Weapon::GetAmmo() const
 
 int Weapon::GetCapacity() const
 {
-	return capacity;
+	return CAPACITY;
 }
 
 void Weapon::AddAmmo(int amount)
 {
-	ammo = min(capacity, ammo + amount);
-}
-
-void Weapon::RestoreAmmo(float percent)
-{
-	AddAmmo((int)(percent * capacity));
+	ammo = min(CAPACITY, ammo + amount);
 }

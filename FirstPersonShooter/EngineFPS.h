@@ -67,8 +67,8 @@ private:
 	std::vector<Item*> items;
 	std::list<Decoration*> decorations;
 
-	int mapWidth = 48;
-	int mapHeight = 48;
+	int mapWidth = 64;
+	int mapHeight = 64;
 
 	std::wstring map;
 

@@ -12,7 +12,7 @@ public:
 
 	bool WeaponAcquired(short weaponID) const;
 	bool AddWeapon(short weaponID);
-	bool AddAmmo(short weaponID, int amount);
+	bool AddAmmo(int amount);
 
 	void OnUpdate(float elapsedTime) override;
 	void OnHit(int damage) override;

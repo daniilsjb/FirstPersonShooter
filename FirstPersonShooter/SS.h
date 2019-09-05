@@ -2,10 +2,10 @@
 
 #include "Enemy.h"
 
-class Guard : public Enemy
+class SS : public Enemy
 {
 public:
-	Guard(EngineFPS *engine);
+	SS(EngineFPS* engine);
 
 	void OnHit(int damage) override;
 };

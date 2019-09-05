@@ -3,23 +3,23 @@
 #include "Weapon.h"
 #include "Player.h"
 
-Guard::Guard(EngineFPS* engine) : Enemy(engine)
+Guard::Guard(EngineFPS *engine) : Enemy(engine)
 {
 	directionSprites[BACK] = engine->GetSprite("Guard Back");
 	directionSprites[RIGHT] = engine->GetSprite("Guard Right");
 	directionSprites[FRONT] = engine->GetSprite("Guard Front");
 	directionSprites[LEFT] = engine->GetSprite("Guard Left");
 
-	reloadingSpr = engine->GetSprite("Guard Reload");
+	aimingSpr = engine->GetSprite("Guard Aim");
 	shootingSpr = engine->GetSprite("Guard Fire");
 
-	currentHealth = maxHealth = 50;
-
-	angle = 3.14159f;
+	currentHealth = maxHealth = 5;
 
 	speed = 1.5f;
 
-	weapon = engine->CreateWeapon(Weapons::MACHINE_GUN, this);
+	delayTimer = 0.05f;
+
+	weapon = engine->CreateWeapon(Weapons::PISTOL, this);
 }
 
 void Guard::OnHit(int damage)
@@ -30,10 +30,10 @@ void Guard::OnHit(int damage)
 	if (currentHealth <= 0)
 	{
 		removed = true;
-		if (engine->player->WeaponAcquired(Weapons::MACHINE_GUN))
+		if (engine->player->WeaponAcquired(Weapons::PISTOL))
 			engine->AddItem((int)x, (int)y, 'B');
 		else
-			engine->AddItem((int)x, (int)y, 'G');
+			engine->AddItem((int)x, (int)y, 'P');
 
 		engine->PlayAudio("Enemy Death 1");
 	}

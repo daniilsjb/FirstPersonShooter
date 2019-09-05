@@ -57,7 +57,7 @@ void Enemy::OnUpdate(float elapsedTime)
 						delayTimer = 0.0f;
 						shootingDelayed = false;
 					}
-					texture = reloadingSpr;
+					texture = aimingSpr;
 				}
 				else
 				{
@@ -70,7 +70,7 @@ void Enemy::OnUpdate(float elapsedTime)
 					}
 					else
 					{
-						texture = reloadingSpr;
+						texture = aimingSpr;
 					}
 				}
 			}
