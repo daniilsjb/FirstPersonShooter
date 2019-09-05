@@ -12,6 +12,7 @@ SS::SS(EngineFPS* engine) : Enemy(engine)
 
 	aimingSpr = engine->GetSprite("SS Aim");
 	shootingSpr = engine->GetSprite("SS Fire");
+	painSpr = engine->GetSprite("SS Pain");
 
 	currentHealth = maxHealth = 12;
 
@@ -25,6 +26,8 @@ void SS::OnHit(int damage)
 	playerDetected = true;
 
 	Damage(damage);
+	state = PAIN;
+	painTimer = 0.0f;
 	if (currentHealth <= 0)
 	{
 		removed = true;

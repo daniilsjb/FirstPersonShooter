@@ -113,6 +113,17 @@ void Enemy::OnUpdate(float elapsedTime)
 			texture = ChooseDirectionSprite(player);
 			break;
 		}
+		case PAIN:
+		{
+			painTimer += elapsedTime;
+			if (painTimer >= pain)
+			{
+				painTimer = 0.0f;
+				state = COMBAT;
+			}
+			texture = painSpr;
+			break;
+		}
 	}
 
 	weapon->OnUpdate(elapsedTime);

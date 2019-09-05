@@ -12,6 +12,7 @@ Guard::Guard(EngineFPS *engine) : Enemy(engine)
 
 	aimingSpr = engine->GetSprite("Guard Aim");
 	shootingSpr = engine->GetSprite("Guard Fire");
+	painSpr = engine->GetSprite("Guard Pain");
 
 	currentHealth = maxHealth = 5;
 
@@ -27,6 +28,8 @@ void Guard::OnHit(int damage)
 	playerDetected = true;
 
 	Damage(damage);
+	state = PAIN;
+	painTimer = 0.0f;
 	if (currentHealth <= 0)
 	{
 		removed = true;
