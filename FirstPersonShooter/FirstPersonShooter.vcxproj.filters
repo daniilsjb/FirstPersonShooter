@@ -132,6 +132,9 @@
     <ClInclude Include="OneUp.h">
       <Filter>Header Files\GameObjects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="Factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineFPS.cpp">
@@ -202,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="OneUp.cpp">
       <Filter>Source Files\GameObjects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Factory.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

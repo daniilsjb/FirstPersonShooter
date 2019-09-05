@@ -8,24 +8,17 @@
 #include "GameObject.h"
 
 #include "Wall.h"
-#include "Door.h"
 
 #include "Decoration.h"
 
 #include "Item.h"
-#include "HealthItem.h"
-#include "ScoreItem.h"
-#include "WeaponItem.h"
-#include "AmmoItem.h"
-#include "OneUp.h"
 
 #include "DynamicObject.h"
-#include "Mob.h"
 #include "Player.h"
 
 #include "Enemy.h"
-#include "Guard.h"
-#include "SS.h"
+
+#include "Factory.h"
 
 bool EngineFPS::OnStart()
 {
@@ -394,15 +387,7 @@ int EngineFPS::GetMapHeight() const
 
 Weapon* EngineFPS::CreateWeapon(short weaponID, Mob* parent)
 {
-	switch (weaponID)
-	{
-		case Weapons::PISTOL:
-			return new Pistol(this, parent);
-		case Weapons::MACHINE_GUN:
-			return new MachineGun(this, parent);
-		default:
-			return nullptr;
-	}
+	return Factory::MakeWeapon(this, weaponID, parent);
 }
 
 void EngineFPS::ParseMap()
@@ -439,282 +424,34 @@ void EngineFPS::ParseMap()
 
 void EngineFPS::AddWall(int x, int y, wchar_t type)
 {
-	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
-		return;
-
-	Wall* wall = nullptr;
-
-	switch (type)
-	{
-		case '#':
-		{
-			wall = new Wall(this, sprites["Stone Wall"]);
-			break;
-		}
-		case '$':
-		{
-			wall = new Wall(this, sprites["Stone Wall Eagle"]);
-			break;
-		}
-		case '@':
-		{
-			wall = new Wall(this, sprites["Stone Wall Flag"]);
-			break;
-		}
-		case '%':
-		{
-			wall = new Wall(this, sprites["Blue Wall"]);
-			break;
-		}
-		case '^':
-		{
-			wall = new Wall(this, sprites["Blue Wall Cage"]);
-			break;
-		}
-		case '?':
-		{
-			wall = new Door(this, sprites["Stone Wall Flag"]);
-			break;
-		}
-		case '-':
-		{
-			wall = new Door(this, sprites["Metal Door"]);
-			break;
-		}
-		case '&':
-		{
-			wall = new Door(this, sprites["Next Level"]);
-			break;
-		}
-	}
-
+	Wall* wall = Factory::MakeWall(this, x, y, type);
 	if (wall != nullptr)
-	{
-		wall->x = x + 0.5f;
-		wall->y = y + 0.5f;
 		walls[mapWidth * y + x] = wall;
-	}
 }
 
 void EngineFPS::AddItem(int x, int y, wchar_t type)
 {
-	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
-		return;
-
-	Item* item = nullptr;
-
-	switch (type)
-	{
-		//Health
-		case 'D':
-		{
-			item = new HealthItem(this, 10, sprites["Item Dinner"]);
-			break;
-		}
-		case 'M':
-		{
-			item = new HealthItem(this, 25, sprites["Item Medkit"]);
-			break;
-		}
-
-		//Weapons
-		case 'P':
-		{
-			item = new WeaponItem(this, Weapons::PISTOL, 2, sprites["Item Pistol"]);
-			break;
-		}
-		case 'G':
-		{
-			item = new WeaponItem(this, Weapons::MACHINE_GUN, 6, sprites["Item Machine Gun"]);
-			break;
-		}
-
-		//Ammo
-		case 'A':
-		{
-			item = new AmmoItem(this, 8, sprites["Item Ammo"]);
-			break;
-		}
-		case 'B':
-		{
-			item = new AmmoItem(this, 4, sprites["Item Ammo"]);
-			break;
-		}
-
-		//Score
-		case 'S':
-		{
-			item = new ScoreItem(this, 100, sprites["Item Cross"]);
-			break;
-		}
-		case 'U':
-		{
-			item = new ScoreItem(this, 500, sprites["Item Chalice"]);
-			break;
-		}
-		case 'C':
-		{
-			item = new ScoreItem(this, 1000, sprites["Item Chest"]);
-			break;
-		}
-		case 'R':
-		{
-			item = new ScoreItem(this, 5000, sprites["Item Crown"]);
-			break;
-		}
-
-		//Other
-		case 'O':
-		{
-			item = new OneUp(this, sprites["Item One Up"]);
-			break;
-		}
-	}
-
+	Item* item = Factory::MakeItem(this, x, y, type);
 	if (item != nullptr)
-	{
-		item->x = x + 0.5f;
-		item->y = y + 0.5f;
 		items[mapWidth * y + x] = item;
-	}
 }
 
 void EngineFPS::AddDecoration(int x, int y, wchar_t type)
 {
-	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
-		return;
-
-	Decoration* decor = nullptr;
-
-	switch (type)
-	{
-		case 'a':
-		{
-			decor = new Decoration(this, sprites["Armor"]);
-			break;
-		}
-		case 'b':
-		{
-			decor = new Decoration(this, sprites["Bones"]);
-			break;
-		}
-		case 'p':
-		{
-			decor = new Decoration(this, sprites["Puddle"]);
-			break;
-		}
-		case 'g':
-		{
-			decor = new Decoration(this, sprites["Green Barrel"]);
-			break;
-		}
-		case 'e':
-		{
-			decor = new Decoration(this, sprites["Empty Well"]);
-			break;
-		}
-		case 'r':
-		{
-			decor = new Decoration(this, sprites["Filled Well"]);
-			break;
-		}
-		case 's':
-		{
-			decor = new Decoration(this, sprites["Skeleton"]);
-			break;
-		}
-		case 'o':
-		{
-			decor = new Decoration(this, sprites["Barrel"]);
-			break;
-		}
-		case 'f':
-		{
-			decor = new Decoration(this, sprites["Flag"]);
-			break;
-		}
-		case 'j':
-		{
-			decor = new Decoration(this, sprites["Jug"]);
-			break;
-		}
-		case 't':
-		{
-			decor = new Decoration(this, sprites["Tree"]);
-			break;
-		}
-		case 'v':
-		{
-			decor = new Decoration(this, sprites["Tree In Blue Jug"]);
-			break;
-		}
-		case 'l':
-		{
-			decor = new Decoration(this, sprites["Simple Lamp"]);
-			break;
-		}
-		case 'q':
-		{
-			decor = new Decoration(this, sprites["Golden Lamp"]);
-			break;
-		}
-		case 'w':
-		{
-			decor = new Decoration(this, sprites["Floor Lamp"]);
-			break;
-		}
-		case 'y':
-		{
-			decor = new Decoration(this, sprites["Table"]);
-			break;
-		}
-		case 'u':
-		{
-			decor = new Decoration(this, sprites["Bowl"]);
-			break;
-		}
-	}
-
+	Decoration* decor = Factory::MakeDecoration(this, x, y, type);
 	if (decor != nullptr)
-	{
-		decor->x = x + 0.5f;
-		decor->y = y + 0.5f;
 		decorations.push_back(decor);
-	}
 }
 
 void EngineFPS::AddDynamicObject(int x, int y, wchar_t type)
 {
-	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
-		return;
-
-	DynamicObject* object = nullptr;
-
-	switch (type)
-	{
-		case '0':
-		{
-			player = new Player(this);
-			object = player;
-			break;
-		}
-		case '1':
-		{
-			object = new Guard(this);
-			break;
-		}
-		case '2':
-		{
-			object = new SS(this);
-			break;
-		}
-	}
-
+	DynamicObject* object = Factory::MakeDynamicObject(this, x, y, type);
 	if (object != nullptr)
 	{
-		object->x = x + 0.5f;
-		object->y = y + 0.5f;
 		dynamicObjects.push_back(object);
+
+		if (type == '0')
+			player = (Player*)object;
 	}
 }
 

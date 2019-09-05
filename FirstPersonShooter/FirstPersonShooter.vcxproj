@@ -148,6 +148,7 @@
     <ClInclude Include="EngineFPS.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Guard.h" />
+    <ClInclude Include="Factory.h" />
     <ClInclude Include="OneUp.h" />
     <ClInclude Include="SS.h" />
     <ClInclude Include="HealthItem.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="DynamicObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EngineFPS.cpp" />
+    <ClCompile Include="Factory.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Guard.cpp" />
     <ClCompile Include="OneUp.cpp" />
