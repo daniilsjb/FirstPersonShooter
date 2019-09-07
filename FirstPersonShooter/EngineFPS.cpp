@@ -116,7 +116,7 @@ bool EngineFPS::OnStart()
 
 bool EngineFPS::OnUpdate(float elapsedTime)
 {
-	if (player->GetHealth() <= 0)
+	if (player->IsDead())
 	{
 		gameOverTimer += elapsedTime;
 		if (gameOverTimer >= 3.0f)
@@ -125,216 +125,30 @@ bool EngineFPS::OnUpdate(float elapsedTime)
 		return true;
 	}
 
-	//Dynamic objects is where the entire game logic is stored; they must be updated first
 	for (auto &object : dynamicObjects)
 		object->OnUpdate(elapsedTime);
 
-	//Check if there is an item under player's feet
-	Item* item = GetItem(player->x, player->y);
-	if (item != nullptr)
-		item->OnUse(*player);
+	UseItemUnderPlayer();
 
-	//Since everything's been updated now, we may garbage collect marked objects
-	//We don't want to remove destroyed walls from the vector, so we just deallocate memory
-	for (auto &wall : walls)
-	{
-		if (wall != nullptr && wall->IsRemoved())
-		{
-			delete wall;
-			wall = nullptr;
-		}
-	}
+	CleanWalls();
+	CleanItems();
+	CleanDynamicObjects();
+	CleanDecorations();
 
-	//Same applies to item
-	for (auto &item : items)
-	{
-		if (item != nullptr && item->IsRemoved())
-		{
-			delete item;
-			item = nullptr;
-		}
-	}
+	ResetDepthBuffer();
 
-	//Dynamic objects, however, are not that easy to control, so we want to just remove it from the list completely
-	dynamicObjects.remove_if([](const DynamicObject* object)
-	{
-		if (object->IsRemoved())
-			delete object;
+	Render3DScene();
 
-		return object->IsRemoved();
-	});
+	DrawDynamicObjects();
+	DrawItems();
+	DrawDecorations();
 
-	//Reset depth buffer
-	for (int i = 0; i < GetScreenWidth() * GetScreenHeight(); i++)
-		depthBuffer[i] = FLT_MAX;
+	DrawPlayerWeapon();
 
-	//Draw the walls, floor, and ceiling
-	for (int x = 0; x < GetScreenWidth(); x++)
-	{
-		//Calculate ray angle depending on the column we're filling in
-		float rayOffset = (float)x / (float)GetScreenWidth();
-		float rayAngle = (player->GetAngle() - FoV * 0.5f) + rayOffset * FoV;
+	//Map may be drawn for the debug purposes
+	//DrawMap();
 
-		float rayX, rayY;
-		float distance;
-
-		//Texture information about the wall we may have hit with the ray
-		float sampleX = 0.0f;
-		Wall* wall = nullptr;
-
-		if (CastRay(player->x, player->y, rayAngle, rayX, rayY, distance, true, false))
-		{
-			wall = GetWall(rayX, rayY);
-
-			float blockMidX = rayX + 0.5f;
-			float blockMidY = rayY + 0.5f;
-
-			float collisionX = player->x + (cosf(rayAngle) * distance);
-			float collisionY = player->y + (sinf(rayAngle) * distance);
-
-			float collisionAngle = atan2f(collisionY - blockMidY, collisionX - blockMidX);
-
-			//Our collision angle is a value between -pi and pi, which allows us to determine the quadrant of the angle in a wall.
-			//However, we need to determine the face that we've hit, which we can achieve by "rotating" the quadrant by pi/4 radians.
-			//After that we can find the sample coordinate based on the decimal value of the ray's hitting point.
-
-			//Right face
-			if (collisionAngle >= -3.14159f * 0.25f && collisionAngle < 3.14159f * 0.25f)
-				sampleX = 1.0f - (collisionY - (int)rayY);
-			//Top face
-			else if (collisionAngle >= 3.14159f * 0.25f && collisionAngle < 3.14159f * 0.75f)
-				sampleX = collisionX - (int)rayX;
-			//Left face
-			else if (collisionAngle >= 3.14159f * 0.75f || collisionAngle < -3.14159f * 0.75f)
-				sampleX = collisionY - (int)rayY;
-			//Bottom face
-			else if (collisionAngle >= -3.14159f * 0.75f && collisionAngle < -3.14159f * 0.25f)
-				sampleX = 1.0f - (collisionX - (int)rayX);
-		}
-
-		//Ceiling is whatever is above the wall, and floor is the rest of the screen
-		int ceiling = (int)((float)GetScreenHeight() * 0.5f - (float)GetScreenHeight() / (float)distance);
-		int floor = GetScreenHeight() - ceiling;
-
-		//Now we may draw the column
-		for (int y = 0; y < GetScreenHeight(); y++)
-		{
-			if (y <= ceiling)
-			{
-				DrawPoint(x, y, ' ', BG_DARK_GRAY);
-			}
-			else if (y > ceiling && y <= floor)
-			{
-				depthBuffer[GetScreenWidth() * y + x] = distance;
-
-				if (distance < depth && wall != nullptr)
-				{
-					Sprite* texture = wall->texture;
-					float sampleY = ((float)y - (float)ceiling) / ((float)floor - (float)ceiling);
-					DrawPoint(x, y, texture->SampleCharacter(sampleX, sampleY), texture->SampleColor(sampleX, sampleY));
-				}
-				else
-					DrawPoint(x, y, ' ', BG_DARK_GRAY);
-			}
-			else
-			{
-				DrawPoint(x, y, ' ', BG_DARK_GRAY);
-			}
-		}
-
-	}
-
-	//Draw decorations
-	for (auto &decoration : decorations)
-	{
-		float objectAngle, distance;
-		if (ObjectWithinFoV(player->x, player->y, player->GetAngle(), decoration->x, decoration->y, objectAngle, distance))
-		{
-			DrawObject2D(decoration->texture, objectAngle, distance);
-		}
-	}
-
-	//Draw items
-	for (auto &item : items)
-	{
-		float objectAngle, distance;
-		if (item != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), item->x, item->y, objectAngle, distance))
-		{
-			DrawObject2D(item->texture, objectAngle, distance);
-		}
-	}
-
-	//Draw dynamic objects
-	for (auto &object : dynamicObjects)
-	{
-		float objectAngle, distance;
-		if (object->texture != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), object->x, object->y, objectAngle, distance))
-		{
-			DrawObject2D(object->texture, objectAngle, distance);
-		}
-	}
-
-	//Draw the weapon in the bottom-middle of the screen
-	if (player->HasWeapon())
-	{
-		for (int x = 0; x < weaponWidth; x++)
-		{
-			for (int y = 0; y < weaponHeight; y++)
-			{
-				float sampleX = (float)x / (float)weaponWidth;
-				float sampleY = (float)y / (float)weaponHeight;
-
-				short symbol = player->GetWeaponSprite()->SampleCharacter(sampleX, sampleY);
-				short color = player->GetWeaponSprite()->SampleColor(sampleX, sampleY);
-
-				if (color != BG_DARK_PINK)
-				{
-					int gunX = (int)((GetScreenWidth() * 0.5f) - (weaponWidth * 0.5f) + x);
-					int gunY = (int)(GetScreenHeight() - weaponHeight + y);
-
-					DrawPoint(gunX, gunY, symbol, color);
-				}
-			}
-		}
-	}
-
-	//Draw the map (for debug purposes mainly)
-	/*for (float i = 0.0f; i < mapWidth; i++)
-	{
-		for (float j = 0.0f; j < mapHeight; j++)
-		{
-			if (GetWall(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_YELLOW);
-			else if (GetDynamicObject(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_RED);
-			else if (GetItem(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_PINK);
-			else if (GetDecoration(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_CYAN);
-			else
-				DrawPoint((int)i, (int)j, ' ', BG_BLACK);
-		}
-	}
-	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);*/
-
-	//Get player stats
-	int hp = player->GetHealth();
-	int maxhp = player->GetMaxHealth();
-
-	int ammo = 0;
-	int capacity = 0;
-	if (player->HasWeapon())
-	{
-		ammo = player->GetWeaponAmmo();
-		capacity = Weapons::CAPACITY;
-	}
-
-	int score = player->GetScore();
-
-	//Display player stats
-	wchar_t title[256];
-	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d - Score: %d", hp, maxhp, ammo, capacity, score);
-	SetApplicationTitle(title);
+	DisplayPlayerStats();
 
 	return true;
 }
@@ -366,6 +180,247 @@ bool EngineFPS::OnDestroy()
 	}
 
 	return true;
+}
+
+void EngineFPS::UseItemUnderPlayer()
+{
+	Item* item = GetItem(player->x, player->y);
+	if (item != nullptr)
+		item->OnUse(*player);
+}
+
+void EngineFPS::CleanWalls()
+{
+	for (auto &wall : walls)
+	{
+		if (wall != nullptr && wall->IsRemoved())
+		{
+			delete wall;
+			wall = nullptr;
+		}
+	}
+}
+
+void EngineFPS::CleanDynamicObjects()
+{
+	dynamicObjects.remove_if([](const DynamicObject* object)
+	{
+		if (object->IsRemoved())
+			delete object;
+
+		return object->IsRemoved();
+	});
+}
+
+void EngineFPS::CleanItems()
+{
+	for (auto &item : items)
+	{
+		if (item != nullptr && item->IsRemoved())
+		{
+			delete item;
+			item = nullptr;
+		}
+	}
+}
+
+void EngineFPS::CleanDecorations()
+{
+
+}
+
+void EngineFPS::Render3DScene()
+{
+	//Render each column
+	for (int x = 0; x < GetScreenWidth(); x++)
+	{
+		//Calculate ray angle depending on the column we're filling in
+		float rayOffset = (float)x / (float)GetScreenWidth();
+		float rayAngle = (player->GetAngle() - FoV * 0.5f) + rayOffset * FoV;
+
+		RenderColumn(x, rayAngle);
+	}
+}
+
+void EngineFPS::RenderColumn(int col, float rayAngle)
+{
+	float rayX, rayY;
+	float distance;
+
+	//Texture information about the wall we may have hit with the ray
+	float sampleX = 0.0f;
+	Wall* wall = nullptr;
+
+	if (CastRay(player->x, player->y, rayAngle, rayX, rayY, distance, true, false))
+	{
+		wall = GetWall(rayX, rayY);
+
+		float blockMidX = rayX + 0.5f;
+		float blockMidY = rayY + 0.5f;
+
+		float collisionX = player->x + (cosf(rayAngle) * distance);
+		float collisionY = player->y + (sinf(rayAngle) * distance);
+
+		float collisionAngle = atan2f(collisionY - blockMidY, collisionX - blockMidX);
+
+		//Our collision angle is a value between -pi and pi, which allows us to determine the quadrant of the angle in a wall.
+		//However, we need to determine the face that we've hit, which we can achieve by "rotating" the quadrant by pi/4 radians.
+		//After that we can find the sample coordinate based on the decimal value of the ray's hitting point.
+
+		//Right face
+		if (collisionAngle >= -3.14159f * 0.25f && collisionAngle < 3.14159f * 0.25f)
+			sampleX = 1.0f - (collisionY - (int)rayY);
+		//Top face
+		else if (collisionAngle >= 3.14159f * 0.25f && collisionAngle < 3.14159f * 0.75f)
+			sampleX = collisionX - (int)rayX;
+		//Left face
+		else if (collisionAngle >= 3.14159f * 0.75f || collisionAngle < -3.14159f * 0.75f)
+			sampleX = collisionY - (int)rayY;
+		//Bottom face
+		else if (collisionAngle >= -3.14159f * 0.75f && collisionAngle < -3.14159f * 0.25f)
+			sampleX = 1.0f - (collisionX - (int)rayX);
+	}
+
+	//Ceiling is whatever is above the wall, and floor is the rest of the screen
+	int ceiling = (int)((float)GetScreenHeight() * 0.5f - (float)GetScreenHeight() / (float)distance);
+	int floor = GetScreenHeight() - ceiling;
+
+	//Now we may draw the column
+	for (int y = 0; y < GetScreenHeight(); y++)
+	{
+		if (y <= ceiling)
+		{
+			DrawPoint(col, y, ' ', BG_DARK_GRAY);
+		}
+		else if (y > ceiling && y <= floor)
+		{
+			depthBuffer[GetScreenWidth() * y + col] = distance;
+
+			if (distance < depth && wall != nullptr)
+			{
+				Sprite* texture = wall->texture;
+				float sampleY = ((float)y - (float)ceiling) / ((float)floor - (float)ceiling);
+				DrawPoint(col, y, texture->SampleCharacter(sampleX, sampleY), texture->SampleColor(sampleX, sampleY));
+			}
+			else
+				DrawPoint(col, y, ' ', BG_DARK_GRAY);
+		}
+		else
+		{
+			DrawPoint(col, y, ' ', BG_DARK_GRAY);
+		}
+	}
+}
+
+void EngineFPS::DrawDynamicObjects()
+{
+	for (auto &decoration : decorations)
+	{
+		float objectAngle, distance;
+		if (ObjectWithinFoV(player->x, player->y, player->GetAngle(), decoration->x, decoration->y, objectAngle, distance))
+		{
+			DrawObject2D(decoration->texture, objectAngle, distance);
+		}
+	}
+}
+
+void EngineFPS::DrawItems()
+{
+	for (auto &item : items)
+	{
+		float objectAngle, distance;
+		if (item != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), item->x, item->y, objectAngle, distance))
+		{
+			DrawObject2D(item->texture, objectAngle, distance);
+		}
+	}
+}
+
+void EngineFPS::DrawDecorations()
+{
+	for (auto &object : dynamicObjects)
+	{
+		float objectAngle, distance;
+		if (object->texture != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), object->x, object->y, objectAngle, distance))
+		{
+			DrawObject2D(object->texture, objectAngle, distance);
+		}
+	}
+}
+
+void EngineFPS::ResetDepthBuffer()
+{
+	for (int i = 0; i < GetScreenWidth() * GetScreenHeight(); i++)
+		depthBuffer[i] = FLT_MAX;
+}
+
+void EngineFPS::DrawMap()
+{
+	for (float i = 0.0f; i < mapWidth; i++)
+	{
+		for (float j = 0.0f; j < mapHeight; j++)
+		{
+			if (GetWall(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_YELLOW);
+			else if (GetDynamicObject(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_RED);
+			else if (GetItem(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_PINK);
+			else if (GetDecoration(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_CYAN);
+			else
+				DrawPoint((int)i, (int)j, ' ', BG_BLACK);
+		}
+	}
+	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);
+}
+
+void EngineFPS::DrawPlayerWeapon()
+{
+	if (player->HasWeapon())
+	{
+		for (int x = 0; x < weaponWidth; x++)
+		{
+			for (int y = 0; y < weaponHeight; y++)
+			{
+				float sampleX = (float)x / (float)weaponWidth;
+				float sampleY = (float)y / (float)weaponHeight;
+
+				short symbol = player->GetWeaponSprite()->SampleCharacter(sampleX, sampleY);
+				short color = player->GetWeaponSprite()->SampleColor(sampleX, sampleY);
+
+				if (color != BG_DARK_PINK)
+				{
+					int gunX = (int)((GetScreenWidth() * 0.5f) - (weaponWidth * 0.5f) + x);
+					int gunY = (int)(GetScreenHeight() - weaponHeight + y);
+
+					DrawPoint(gunX, gunY, symbol, color);
+				}
+			}
+		}
+	}
+}
+
+void EngineFPS::DisplayPlayerStats()
+{
+	//Get player stats
+	int hp = player->GetHealth();
+	int maxhp = player->GetMaxHealth();
+
+	int ammo = 0;
+	int capacity = 0;
+	if (player->HasWeapon())
+	{
+		ammo = player->GetWeaponAmmo();
+		capacity = Weapons::CAPACITY;
+	}
+
+	int score = player->GetScore();
+
+	//Display player stats
+	wchar_t title[256];
+	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d - Score: %d", hp, maxhp, ammo, capacity, score);
+	SetApplicationTitle(title);
 }
 
 int EngineFPS::GetMapWidth() const

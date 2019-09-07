@@ -65,3 +65,8 @@ void Mob::Damage(int amount)
 {
 	currentHealth = max(0, currentHealth - amount);
 }
+
+bool Mob::IsDead() const
+{
+	return (currentHealth <= 0);
+}

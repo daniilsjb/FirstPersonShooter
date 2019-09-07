@@ -25,6 +25,8 @@ public:
 	void Heal(int amount);
 	void Damage(int amount);
 
+	bool IsDead() const;
+
 protected:
 	Weapon* weapon = nullptr;
 

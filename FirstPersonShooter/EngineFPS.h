@@ -74,10 +74,29 @@ private:
 
 	std::wstring map;
 
-	void ParseMap();
-
 	float gameOverTimer = 0.0f;
 
 	std::map<std::string, int> audio;
+
 	void LoadAudio();
+	void ParseMap();
+
+	void UseItemUnderPlayer();
+
+	void CleanWalls();
+	void CleanDynamicObjects();
+	void CleanItems();
+	void CleanDecorations();
+
+	void Render3DScene();
+	void RenderColumn(int col, float rayAngle);
+	void DrawDynamicObjects();
+	void DrawItems();
+	void DrawDecorations();
+
+	void ResetDepthBuffer();
+
+	void DrawMap();
+	void DrawPlayerWeapon();
+	void DisplayPlayerStats();
 };
