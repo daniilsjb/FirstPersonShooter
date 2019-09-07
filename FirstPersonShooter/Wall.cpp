@@ -1,18 +1,16 @@
 #include "Wall.h"
+#include "EngineFPS.h"
 
-Wall::Wall(EngineFPS *engine, Sprite* texture) : GameObject(engine)
+Wall::Wall(EngineFPS* engine, float x, float y, Sprite* spr) : GameObject(engine, x, y)
 {
-	this->texture = texture;
+	texture = spr;
 }
 
 Wall::~Wall() {}
 
-void Wall::OnInteract() {}
-
-Door::Door(EngineFPS *engine, Sprite* texture) : Wall(engine, texture) {}
-
-void Door::OnInteract()
+bool Wall::IsRemoved() const
 {
-	engine->PlayAudio("Door");
-	removed = true;
+	return removed;
 }
+
+void Wall::OnInteract() {}

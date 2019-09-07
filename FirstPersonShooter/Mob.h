@@ -1,22 +1,35 @@
 #pragma once
 
 #include "DynamicObject.h"
-#include "Weapon.h"
 
-struct Mob : DynamicObject
+class Weapon;
+
+class Mob : public DynamicObject
 {
-	Mob(EngineFPS *engine);
+public:
+	Mob(EngineFPS* engine, float x, float y);
 	virtual ~Mob();
 
-	Weapon *weapon = nullptr;
+	bool HasWeapon() const;
+	Sprite* GetWeaponSprite() const;
 
-	int GetMaxHealth();
-	int GetHealth();
+	int GetWeaponAmmo() const;
+	bool FullAmmo() const;
+	void RestoreAmmo();
+
+	int GetMaxHealth() const;
+	int GetHealth() const;
+	bool FullHealth() const;
+	void RestoreHealth();
 
 	void Heal(int amount);
 	void Damage(int amount);
 
+	bool IsDead() const;
+
 protected:
+	Weapon* weapon = nullptr;
+
 	int maxHealth;
 	int currentHealth;
 };

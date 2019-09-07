@@ -1,8 +1,8 @@
 #include "Mob.h"
+#include "EngineFPS.h"
 #include "Weapon.h"
-#include <iostream>
 
-Mob::Mob(EngineFPS *engine) : DynamicObject(engine) {}
+Mob::Mob(EngineFPS* engine, float x, float y) : DynamicObject(engine, x, y) {}
 
 Mob::~Mob()
 {
@@ -10,14 +10,50 @@ Mob::~Mob()
 	weapon = nullptr;
 }
 
-int Mob::GetMaxHealth()
+bool Mob::HasWeapon() const
+{
+	return (weapon != nullptr);
+}
+
+Sprite* Mob::GetWeaponSprite() const
+{
+	return (weapon != nullptr) ? weapon->currentSpr : nullptr;
+}
+
+int Mob::GetWeaponAmmo() const
+{
+	return (weapon != nullptr) ? weapon->GetAmmo() : 0;
+}
+
+bool Mob::FullAmmo() const
+{
+	return (weapon != nullptr) ? (weapon->GetAmmo() >= Weapons::CAPACITY) : true;
+}
+
+void Mob::RestoreAmmo()
+{
+	if (weapon!= nullptr)
+		weapon->RestoreAmmo();
+}
+
+int Mob::GetMaxHealth() const
 {
 	return maxHealth;
 }
 
-int Mob::GetHealth()
+int Mob::GetHealth() const
 {
 	return currentHealth;
+}
+
+bool Mob::FullHealth() const
+{
+	return (currentHealth >= maxHealth);
+}
+
+void Mob::RestoreHealth()
+{
+	currentHealth = maxHealth;
 }
 
 void Mob::Heal(int amount)
@@ -28,4 +64,9 @@ void Mob::Heal(int amount)
 void Mob::Damage(int amount)
 {
 	currentHealth = max(0, currentHealth - amount);
+}
+
+bool Mob::IsDead() const
+{
+	return (currentHealth <= 0);
 }

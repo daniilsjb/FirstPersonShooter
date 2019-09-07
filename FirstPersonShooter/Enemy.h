@@ -2,35 +2,33 @@
 
 #include "Mob.h"
 
-struct Enemy : Mob
+#include <vector>
+
+class Enemy : public Mob
 {
-	Enemy(EngineFPS *engine);
+public:
+	Enemy(EngineFPS* engine, float x, float y);
+
+	void OnUpdate(float elapsedTime) override;
 
 protected:
-	enum { PATROL = 0, COMBAT, FOLLOW } state;
+	enum { PATROL = 0, COMBAT, FOLLOW, PAIN } state = PATROL;
+
+	bool playerDetected = false;
+
+	enum DIRECTION { BACK = 0, RIGHT, FRONT, LEFT, DIRECTION_COUNT };
+
+	float painTimer = 0.0f;
+	float pain = 0.14f;
 
 	bool shootingDelayed = true;
 	float shootingDelay = 0.0f;
 	float delayTimer = 0.25f;
 
-	const short DIRECTIONS_COUNT = 4;
-	
-	enum DIRECTION { BACK = 0, RIGHT, FRONT, LEFT };
-
 	std::vector<Sprite*> directionSprites;
-	Sprite *reloadingSpr;
-	Sprite *shootingSpr;
+	Sprite* aimingSpr;
+	Sprite* shootingSpr;
+	Sprite* painSpr;
 
-	Sprite* ChooseDirectionSprite(DynamicObject* relativeObject);
-};
-
-struct Guard : Enemy
-{
-	Guard(EngineFPS *engine);
-
-	void OnUpdate(float elapsedTime) override;
-	void OnHit(int damage) override;
-
-protected:
-	bool playerDetected = false;
+	Sprite* ChooseDirectionSprite(DynamicObject* relativeObject) const;
 };

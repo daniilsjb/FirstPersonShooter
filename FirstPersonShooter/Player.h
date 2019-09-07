@@ -2,19 +2,26 @@
 
 #include "Mob.h"
 
-struct Weapon;
+#include <vector>
 
-struct Player : Mob
+class Player : public Mob
 {
-	Player(EngineFPS *engine);
+public:
+	Player(EngineFPS* engine, float x, float y);
 	~Player();
 
-	bool AddWeapon(Weapon *weapon);
-	bool AddAmmoFromWeapon(Weapon *weapon);
+	bool WeaponAcquired(short weaponID) const;
+	bool AddWeapon(short weaponID);
+	bool AddAmmo(int amount);
 
 	void OnUpdate(float elapsedTime) override;
 	void OnHit(int damage) override;
 
+	void AddScore(int amount);
+	int GetScore() const;
+
 private:
 	std::vector<Weapon*> availableWeapons;
+
+	int score = 0;
 };

@@ -2,32 +2,18 @@
 
 #include "GameObject.h"
 
-struct Weapon;
+class Player;
 
-struct Item : GameObject
+class Item : public GameObject
 {
-	Item(EngineFPS *engine);
+public:
+	Item(EngineFPS* engine, float x, float y);
 	virtual ~Item();
 
+	bool IsRemoved() const;
+
+	virtual void OnUse(Player& player) = 0;
+
+protected:
 	bool removed = false;
-
-	virtual void OnUse(Player *player) = 0;
-};
-
-struct WeaponItem : Item
-{
-	WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr);
-
-	Weapon *weapon;
-
-	void OnUse(Player *player) override;
-};
-
-struct Medkit : Item
-{
-	Medkit(EngineFPS *engine, int healthBonus, Sprite *spr);
-
-	int healthBonus;
-
-	void OnUse(Player *player) override;
 };

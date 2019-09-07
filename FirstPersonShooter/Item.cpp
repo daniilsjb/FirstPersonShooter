@@ -1,45 +1,10 @@
 #include "Item.h"
-#include "Player.h"
-#include "Weapon.h"
 
-Item::Item(EngineFPS *engine) : GameObject(engine) {}
+Item::Item(EngineFPS* engine, float x, float y) : GameObject(engine, x, y) {}
 
 Item::~Item() {}
 
-WeaponItem::WeaponItem(EngineFPS *engine, Weapon *weapon, Sprite *spr) : Item(engine), weapon(weapon)
+bool Item::IsRemoved() const
 {
-	texture = spr;
-}
-
-void WeaponItem::OnUse(Player *player)
-{
-	if (!player->AddWeapon(weapon))
-	{
-		if (player->AddAmmoFromWeapon(weapon))
-		{
-			engine->PlayAudio("Ammo");
-			removed = true;
-			delete weapon;
-		}
-	}
-	else
-	{
-		engine->PlayAudio("Ammo");
-		removed = true;
-	}	
-}
-
-Medkit::Medkit(EngineFPS *engine, int healthBonus, Sprite *spr) : Item(engine), healthBonus(healthBonus)
-{
-	texture = spr;
-}
-
-void Medkit::OnUse(Player *player)
-{
-	if (player->GetHealth() < player->GetMaxHealth())
-	{
-		engine->PlayAudio("Health");
-		player->Heal(healthBonus);
-		removed = true;
-	}
+	return removed;
 }

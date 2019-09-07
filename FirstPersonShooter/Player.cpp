@@ -1,15 +1,16 @@
 #include "Player.h"
+#include "EngineFPS.h"
+#include "Weapon.h"
 #include "Wall.h"
 
-Player::Player(EngineFPS *engine) : Mob(engine)
+Player::Player(EngineFPS* engine, float x, float y) : Mob(engine, x, y)
 {
 	speed = 5.0f;
-	maxHealth = 100;
-	currentHealth = 50;
+	currentHealth = maxHealth = 100;
 
 	friendlyToPlayer = true;
 
-	availableWeapons.resize(WEAPON_COUNT, nullptr);
+	availableWeapons.resize(Weapons::COUNT, nullptr);
 }
 
 Player::~Player()
@@ -22,26 +23,28 @@ Player::~Player()
 	weapon = nullptr;
 }
 
-bool Player::AddWeapon(Weapon *weapon)
+bool Player::WeaponAcquired(short weaponID) const
 {
-	if (availableWeapons[weapon->WEAPON_INDEX] == nullptr)
-	{
-		availableWeapons[weapon->WEAPON_INDEX] = weapon;
-		this->weapon = weapon;
+	return (availableWeapons[weaponID] != nullptr);
+}
 
+bool Player::AddWeapon(short weaponID)
+{
+	if (availableWeapons[weaponID] == nullptr)
+	{
+		weapon = availableWeapons[weaponID] = engine->CreateWeapon(weaponID, this);
 		return true;
 	}
 	return false;
 }
 
-bool Player::AddAmmoFromWeapon(Weapon *weapon)
+bool Player::AddAmmo(int amount)
 {
-	Weapon *available = availableWeapons[weapon->WEAPON_INDEX];
-	if (available != nullptr)
+	if (HasWeapon())
 	{
-		if (available->GetAmmo() < available->GetCapacity())
+		if (!weapon->IsFull())
 		{
-			available->AddAmmo(weapon->GetAmmo());
+			weapon->AddAmmo(amount);
 			return true;
 		}
 	}
@@ -90,6 +93,9 @@ void Player::OnUpdate(float elapsedTime)
 		}
 	}
 
+	if (engine->GetKey('C').released)
+		OnHit(999999);
+
 	if (engine->GetKey('A').held)
 		angle -= (speed * 0.45f) * elapsedTime;
 
@@ -103,13 +109,12 @@ void Player::OnUpdate(float elapsedTime)
 		{
 			if (distance < 2.0f)
 			{
-				Wall* wall = engine->GetWall(rayX, rayY);
-				wall->OnInteract();
+				engine->GetWall(rayX, rayY)->OnInteract();
 			}
 		}
 	}
 
-	for (int i = 1; i <= WEAPON_COUNT; i++)
+	for (int i = 1; i <= Weapons::COUNT; i++)
 	{
 		if (engine->GetKey('0' + i).released)
 		{
@@ -117,10 +122,22 @@ void Player::OnUpdate(float elapsedTime)
 		}
 	}
 
+	if (engine->GetKey(' ').pressed)
+	{
+		if (weapon != nullptr)
+			weapon->OnFirePressed();
+	}
+
+	if (engine->GetKey(' ').held)
+	{
+		if (weapon != nullptr)
+			weapon->OnFireHeld();
+	}
+
 	if (engine->GetKey(' ').released)
 	{
 		if (weapon != nullptr)
-			weapon->Fire();
+			weapon->OnFireReleased();
 	}
 
 	if (weapon != nullptr)
@@ -136,4 +153,14 @@ void Player::OnHit(int damage)
 
 	if (currentHealth <= 0)
 		engine->PlayAudio("Player Death");
+}
+
+void Player::AddScore(int amount)
+{
+	score += amount;
+}
+
+int Player::GetScore() const
+{
+	return score;
 }

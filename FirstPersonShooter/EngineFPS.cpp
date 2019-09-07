@@ -1,40 +1,102 @@
 #include "EngineFPS.h"
+#include "Factory.h"
+#include "Node.h"
+
+#include "Weapon.h"
+#include "Pistol.h"
+#include "MachineGun.h"
+
+#include "GameObject.h"
+
 #include "Wall.h"
+
 #include "Decoration.h"
-#include "DynamicObject.h"
-#include "Mob.h"
+
 #include "Item.h"
+
+#include "DynamicObject.h"
 #include "Player.h"
+
 #include "Enemy.h"
 
 bool EngineFPS::OnStart()
 {
-	SetApplicationTitle(L"First Person Shooter");
-
+	assetManager.LoadSprites();
 	LoadAudio();
-	LoadSprites();
 
 	//Walls and Items, by their nature, are static. We want to be able to access them based on some arbitrary map coordinates,
 	//as it may save performance a lot in exchange for a bit of memory.
 	walls.resize(mapWidth * mapHeight, nullptr);
 	items.resize(mapWidth * mapHeight, nullptr);
 
-	map.append(L"#$@#$@#$@#$@#$@#");
-	map.append(L"#..............#");
-	map.append(L"#......P.......#");
-	map.append(L"#..............#");
-	map.append(L"#..F...........#");
-	map.append(L"#......-._..M..#");
-	map.append(L"#..............#");
-	map.append(L"#..............#");
-	map.append(L"#############H##");
-	map.append(L"#..............#");
-	map.append(L"#...GG.........#");
-	map.append(L"#..............#");
-	map.append(L"#..............#");
-	map.append(L"#..............#");
-	map.append(L"#..............#");
-	map.append(L"################");
+	//Special Characters - Walls
+	//Lowercase Letters  - Decorations
+	//Uppercase Letters  - Items
+	//Numbers            - Dynamic Objects
+	map.append(L"################################################################");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#..............................................................#");
+	map.append(L"#...........................#############......................#");
+	map.append(L"#....######.................#j.........j#......................#");
+	map.append(L"#....#AASS##.....############..y.1y..y..#####..................#");
+	map.append(L"#....#AACS##.....#..........#...........#SSU#..................#");
+	map.append(L"#....#AACC.#.....#.l....l...-.....q....1-.1S#..................#");
+	map.append(L"#....#AAC..#.....#..........#...........#UUU#..................#");
+	map.append(L"#....#####?#####.#...########...........#####..................#");
+	map.append(L"#....#.SUt.tU..#.#...#......#...........#######................#");
+	map.append(L"#....#.....S..1###...###....######-######......................#");
+	map.append(L"#....#f.1......#...1...#........#...#..........................#");
+	map.append(L"#....#....y.1..-...l...#........#.1.#..........................#");
+	map.append(L"#....#.........#.....1.#........#.l.#..........................#");
+	map.append(L"######C.1......#########........#...#..........................#");
+	map.append(L"#.Mo##CC......1#................#...#..........................#");
+	map.append(L"#.l.######-#####...........######...###........................#");
+	map.append(L"#...#...#...#..............#..?1..l..a#........................#");
+	map.append(L"##-##...#.l.#..............#A.###...###........................#");
+	map.append(L"#...#####...#..............#AM#.#...#..........................#");
+	map.append(L"#.l.#..D#...#..............#GM#.#...#..........................#");
+	map.append(L"#...-.l1#.l.#..............####.#.l.#..........................#");
+	map.append(L"#...#..U#.1.#..................##...##.........................#");
+	map.append(L"#...######-#####...............###-###...............%%%%%%%%%%#");
+	map.append(L"#.l.##1........#..........######v...v######..........%D...pooo%#");
+	map.append(L"#...##.v.....v.#..........#v.1...........v#..........%.......o%#");
+	map.append(L"#...##..w...w..#..........#...............#%%%%%%%%%%%.....1..%#");
+	map.append(L"#....#.........#..........#................%.........%........%#");
+	map.append(L"#....-.1.......#..........#..q....q...1q...-.........-........^#");
+	map.append(L"#....#.........#..........#................%.........%........%#");
+	map.append(L"#...##..w...w..#..........#...............#%%%....%%%%..yD.y.1%#");
+	map.append(L"#...##.v.....v.#..........#v.............v#..%%..%%..%........%#");
+	map.append(L"#...##.......1.#..........######.....######...%..%...%......D.%#");
+	map.append(L"#.l.######-#####...............%%%-%%%........%..%...%%%r%%e%%%#");
+	map.append(L"#...#####...#...................%...%.........%..%.....%%%%%%..#");
+	map.append(L"#...#####...#...................%.l.%.........%.1%%%%%%%%%%%...#");
+	map.append(L"#...#1..#...#...................%...%.........%..%%%.%.%.%u%%..#");
+	map.append(L"#...-...#.l.#...................%...%.........%...%.........%%.#");
+	map.append(L"#...#...#...#...................%...%.........%...-..........^.#");
+	map.append(L"#.l.#####...#...................%.l.%.........%.1.%........u%%.#");
+	map.append(L"#.1.#####.1.##############......%.1.%.........%%%%%%.%.%.%.%%..#");
+	map.append(L"#................#.....1###.....%...%.........%%%%%%%%%%%%%%...#");
+	map.append(L"#.....l.......l..-...1..&.#.....%...%..........................#");
+	map.append(L"#................#.....1###.....%.l.%..........................#");
+	map.append(L"##################?#######......%...%..........................#");
+	map.append(L"#........###..#..?.M#......%%%%%%%-%%%%%%%.....................#");
+	map.append(L"#........#.&..#..#.##......%bD..%...%....%.....................#");
+	map.append(L"#........###.....###.......%....-.l.-.s..%.....................#");
+	map.append(L"#.........###?#####........%....%...%....%.....................#");
+	map.append(L"#...........#..#...........%....%...%....%.....................#");
+	map.append(L"#...........#.O#...........%%%%%%...%%%%%%.....................#");
+	map.append(L"#...........####...........%...P%...%....%.....................#");
+	map.append(L"#..........................%.0..-.l.-D..b%.....................#");
+	map.append(L"#..........................%....%...%....%.....................#");
+	map.append(L"#..........................%%%%%%...%%%%%%.....................#");
+	map.append(L"#..........................%.............%.....................#");
+	map.append(L"#..........................%..l...l...l1A%.....................#");
+	map.append(L"#..........................%1.....D......%.....................#");
+	map.append(L"#..........................%^%%^%%^%%^%%^%.....................#");
+	map.append(L"################################################################");
 
 	ParseMap();
 
@@ -54,225 +116,45 @@ bool EngineFPS::OnStart()
 
 bool EngineFPS::OnUpdate(float elapsedTime)
 {
-	//Dynamic objects is where the entire game logic is stored; they must be updated first
+	if (player->IsDead())
+	{
+		gameOverTimer += elapsedTime;
+		if (gameOverTimer >= 3.0f)
+			return false;
+
+		return true;
+	}
+
 	for (auto &object : dynamicObjects)
 		object->OnUpdate(elapsedTime);
 
-	//Check if there is an item under player's feet
-	Item* item = GetItem(player->x, player->y);
-	if (item != nullptr)
-		item->OnUse(player);
+	UseItemUnderPlayer();
 
-	//Since everything's been updated now, we may garbage collect marked objects
-	//We don't want to remove destroyed walls from the vector, so we just deallocate memory
-	for (auto &wall : walls)
-	{
-		if (wall != nullptr && wall->removed)
-		{
-			delete wall;
-			wall = nullptr;
-		}
-	}
+	CleanWalls();
+	CleanItems();
+	CleanDynamicObjects();
+	CleanDecorations();
 
-	//Same applies to item
-	for (auto &item : items)
-	{
-		if (item != nullptr && item->removed)
-		{
-			delete item;
-			item = nullptr;
-		}
-	}
+	ResetDepthBuffer();
 
-	//Dynamic objects, however, are not that easy to control, so we want to just remove it from the list completely
-	dynamicObjects.remove_if([](const DynamicObject* object)
-	{
-		if (object->removed)
-			delete object;
-		return object->removed;
-	});
+	Render3DScene();
 
-	//Reset depth buffer
-	for (int i = 0; i < GetScreenWidth() * GetScreenHeight(); i++)
-		depthBuffer[i] = FLT_MAX;
+	DrawDynamicObjects();
+	DrawItems();
+	DrawDecorations();
 
-	//Draw the walls, floor, and ceiling
-	for (int x = 0; x < GetScreenWidth(); x++)
-	{
-		//Calculate ray angle depending on the column we're filling in
-		float rayOffset = (float)x / (float)GetScreenWidth();
-		float rayAngle = (player->angle - FoV * 0.5f) + rayOffset * FoV;
+	DrawPlayerWeapon();
 
-		float rayX, rayY;
-		float distance;
+	//Map may be drawn for the debug purposes
+	//DrawMap();
 
-		//Texture information about the wall we may have hit with the ray
-		float sampleX = 0.0f;
-		Wall* wall = nullptr;
-
-		if (CastRay(player->x, player->y, rayAngle, rayX, rayY, distance, true, false))
-		{
-			wall = GetWall(rayX, rayY);
-
-			float blockMidX = rayX + 0.5f;
-			float blockMidY = rayY + 0.5f;
-
-			float collisionX = player->x + (cosf(rayAngle) * distance);
-			float collisionY = player->y + (sinf(rayAngle) * distance);
-
-			float collisionAngle = atan2f(collisionY - blockMidY, collisionX - blockMidX);
-
-			//Our collision angle is a value between -pi and pi, which allows us to determine the quadrant of the angle in a wall.
-			//However, we need to determine the face that we've hit, which we can achieve by "rotating" the quadrant by pi/4 radians.
-			//After that we can find the sample coordinate based on the decimal value of the ray's hitting point.
-
-			//Right face
-			if (collisionAngle >= -3.14159f * 0.25f && collisionAngle < 3.14159f * 0.25f)
-				sampleX = 1.0f - (collisionY - (int)rayY);
-			//Top face
-			else if (collisionAngle >= 3.14159f * 0.25f && collisionAngle < 3.14159f * 0.75f)
-				sampleX = collisionX - (int)rayX;
-			//Left face
-			else if (collisionAngle >= 3.14159f * 0.75f || collisionAngle < -3.14159f * 0.75f)
-				sampleX = collisionY - (int)rayY;
-			//Bottom face
-			else if (collisionAngle >= -3.14159f * 0.75f && collisionAngle < -3.14159f * 0.25f)
-				sampleX = 1.0f - (collisionX - (int)rayX);
-		}
-
-		//Ceiling is whatever is above the wall, and floor is the rest of the screen
-		int ceiling = (int)((float)GetScreenHeight() * 0.5f - (float)GetScreenHeight() / (float)distance);
-		int floor = GetScreenHeight() - ceiling;
-
-		//Now we may draw the column
-		for (int y = 0; y < GetScreenHeight(); y++)
-		{
-			if (y <= ceiling)
-			{
-				DrawPoint(x, y, ' ', BG_DARK_GRAY);
-			}
-			else if (y > ceiling && y <= floor)
-			{
-				depthBuffer[GetScreenWidth() * y + x] = distance;
-
-				if (distance < depth && wall != nullptr)
-				{
-					Sprite* texture = wall->texture;
-					float sampleY = ((float)y - (float)ceiling) / ((float)floor - (float)ceiling);
-					DrawPoint(x, y, texture->SampleCharacter(sampleX, sampleY), texture->SampleColor(sampleX, sampleY));
-				}
-				else
-					DrawPoint(x, y, ' ', BG_DARK_GRAY);
-			}
-			else
-			{
-				DrawPoint(x, y, ' ', BG_DARK_GRAY);
-			}
-		}
-
-	}
-
-	//Draw decorations
-	for (auto &decoration : decorations)
-	{
-		float objectAngle, distance;
-		if (ObjectWithinFoV(player->x, player->y, player->angle, decoration->x, decoration->y, objectAngle, distance))
-		{
-			DrawObject2D(decoration->texture, objectAngle, distance);
-		}
-	}
-
-	//Draw items
-	for (auto &item : items)
-	{
-		float objectAngle, distance;
-		if (item != nullptr && ObjectWithinFoV(player->x, player->y, player->angle, item->x, item->y, objectAngle, distance))
-		{
-			DrawObject2D(item->texture, objectAngle, distance);
-		}
-	}
-
-	//Draw dynamic objects
-	for (auto &object : dynamicObjects)
-	{
-		float objectAngle, distance;
-		if (object->texture != nullptr && ObjectWithinFoV(player->x, player->y, player->angle, object->x, object->y, objectAngle, distance))
-		{
-			DrawObject2D(object->texture, objectAngle, distance);
-		}
-	}
-
-	//Draw the weapon in the bottom-middle of the screen
-	if (player->weapon != nullptr)
-	{
-		for (int x = 0; x < weaponWidth; x++)
-		{
-			for (int y = 0; y < weaponHeight; y++)
-			{
-				float sampleX = (float)x / (float)weaponWidth;
-				float sampleY = (float)y / (float)weaponHeight;
-
-				short symbol = player->weapon->currentSpr->SampleCharacter(sampleX, sampleY);
-				short color = player->weapon->currentSpr->SampleColor(sampleX, sampleY);
-
-				if (color != BG_DARK_PINK)
-				{
-					int gunX = (int)((GetScreenWidth() * 0.5f) - (weaponWidth * 0.5f) + x);
-					int gunY = (int)(GetScreenHeight() - weaponHeight + y);
-
-					DrawPoint(gunX, gunY, symbol, color);
-				}
-			}
-		}
-	}
-	
-	//Draw the map (for debug purposes mainly)
-	for (float i = 0.0f; i < mapWidth; i++)
-	{
-		for (float j = 0.0f; j < mapHeight; j++)
-		{
-			if (GetWall(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_YELLOW);
-			else if (GetDynamicObject(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_RED);
-			else if (GetItem(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_PINK);
-			else if (GetDecoration(i, j) != nullptr)
-				DrawPoint((int)i, (int)j, ' ', BG_CYAN);
-			else
-				DrawPoint((int)i, (int)j, ' ', BG_BLACK);
-		}
-	}
-	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);
-
-	//Get player stats
-	int hp = player->GetHealth();
-	int maxhp = player->GetMaxHealth();
-
-	int ammo = 0;
-	int capacity = 0;
-	if (player->weapon != nullptr)
-	{
-		ammo = player->weapon->GetAmmo();
-		capacity = player->weapon->GetCapacity();
-	}
-
-	//Display player stats
-	wchar_t title[256];
-	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d", hp, maxhp, ammo, capacity);
-	SetApplicationTitle(title);
+	DisplayPlayerStats();
 
 	return true;
 }
 
 bool EngineFPS::OnDestroy()
 {
-	for (auto &spr : sprites)
-	{
-		delete spr.second;
-		spr.second = nullptr;
-	}	
-
 	for (auto &object : dynamicObjects)
 	{
 		delete object;
@@ -300,7 +182,388 @@ bool EngineFPS::OnDestroy()
 	return true;
 }
 
-bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored)
+void EngineFPS::UseItemUnderPlayer()
+{
+	Item* item = GetItem(player->GetX(), player->GetY());
+	if (item != nullptr)
+		item->OnUse(*player);
+}
+
+void EngineFPS::CleanWalls()
+{
+	for (auto &wall : walls)
+	{
+		if (wall != nullptr && wall->IsRemoved())
+		{
+			delete wall;
+			wall = nullptr;
+		}
+	}
+}
+
+void EngineFPS::CleanDynamicObjects()
+{
+	dynamicObjects.remove_if([](const DynamicObject* object)
+	{
+		if (object->IsRemoved())
+			delete object;
+
+		return object->IsRemoved();
+	});
+}
+
+void EngineFPS::CleanItems()
+{
+	for (auto &item : items)
+	{
+		if (item != nullptr && item->IsRemoved())
+		{
+			delete item;
+			item = nullptr;
+		}
+	}
+}
+
+void EngineFPS::CleanDecorations()
+{
+
+}
+
+void EngineFPS::Render3DScene()
+{
+	//Render each column
+	for (int x = 0; x < GetScreenWidth(); x++)
+	{
+		//Calculate ray angle depending on the column we're filling in
+		float rayOffset = (float)x / (float)GetScreenWidth();
+		float rayAngle = (player->GetAngle() - FoV * 0.5f) + rayOffset * FoV;
+
+		RenderColumn(x, rayAngle);
+	}
+}
+
+void EngineFPS::RenderColumn(int col, float rayAngle)
+{
+	float rayX, rayY;
+	float distance;
+
+	//Texture information about the wall we may have hit with the ray
+	float sampleX = 0.0f;
+	Wall* wall = nullptr;
+
+	if (CastRay(player->GetX(), player->GetY(), rayAngle, rayX, rayY, distance, true, false))
+	{
+		wall = GetWall(rayX, rayY);
+
+		float blockMidX = rayX + 0.5f;
+		float blockMidY = rayY + 0.5f;
+
+		float collisionX = player->GetX() + (cosf(rayAngle) * distance);
+		float collisionY = player->GetY() + (sinf(rayAngle) * distance);
+
+		float collisionAngle = atan2f(collisionY - blockMidY, collisionX - blockMidX);
+
+		//Our collision angle is a value between -pi and pi, which allows us to determine the quadrant of the angle in a wall.
+		//However, we need to determine the face that we've hit, which we can achieve by "rotating" the quadrant by pi/4 radians.
+		//After that we can find the sample coordinate based on the decimal value of the ray's hitting point.
+
+		//Right face
+		if (collisionAngle >= -3.14159f * 0.25f && collisionAngle < 3.14159f * 0.25f)
+			sampleX = 1.0f - (collisionY - (int)rayY);
+		//Top face
+		else if (collisionAngle >= 3.14159f * 0.25f && collisionAngle < 3.14159f * 0.75f)
+			sampleX = collisionX - (int)rayX;
+		//Left face
+		else if (collisionAngle >= 3.14159f * 0.75f || collisionAngle < -3.14159f * 0.75f)
+			sampleX = collisionY - (int)rayY;
+		//Bottom face
+		else if (collisionAngle >= -3.14159f * 0.75f && collisionAngle < -3.14159f * 0.25f)
+			sampleX = 1.0f - (collisionX - (int)rayX);
+	}
+
+	//Ceiling is whatever is above the wall, and floor is the rest of the screen
+	int ceiling = (int)((float)GetScreenHeight() * 0.5f - (float)GetScreenHeight() / (float)distance);
+	int floor = GetScreenHeight() - ceiling;
+
+	//Now we may draw the column
+	for (int y = 0; y < GetScreenHeight(); y++)
+	{
+		if (y <= ceiling)
+		{
+			DrawPoint(col, y, ' ', BG_DARK_GRAY);
+		}
+		else if (y > ceiling && y <= floor)
+		{
+			depthBuffer[GetScreenWidth() * y + col] = distance;
+
+			if (distance < depth && wall != nullptr)
+			{
+				Sprite* texture = wall->texture;
+				float sampleY = ((float)y - (float)ceiling) / ((float)floor - (float)ceiling);
+				DrawPoint(col, y, texture->SampleCharacter(sampleX, sampleY), texture->SampleColor(sampleX, sampleY));
+			}
+			else
+				DrawPoint(col, y, ' ', BG_DARK_GRAY);
+		}
+		else
+		{
+			DrawPoint(col, y, ' ', BG_DARK_GRAY);
+		}
+	}
+}
+
+void EngineFPS::DrawDynamicObjects()
+{
+	for (auto &decoration : decorations)
+	{
+		float objectAngle, distance;
+		if (ObjectWithinFoV(player->GetX(), player->GetY(), player->GetAngle(), decoration->GetX(), decoration->GetY(), objectAngle, distance))
+		{
+			DrawObject2D(decoration->texture, objectAngle, distance);
+		}
+	}
+}
+
+void EngineFPS::DrawItems()
+{
+	for (auto &item : items)
+	{
+		float objectAngle, distance;
+		if (item != nullptr && ObjectWithinFoV(player->GetX(), player->GetY(), player->GetAngle(), item->GetX(), item->GetY(), objectAngle, distance))
+		{
+			DrawObject2D(item->texture, objectAngle, distance);
+		}
+	}
+}
+
+void EngineFPS::DrawDecorations()
+{
+	for (auto &object : dynamicObjects)
+	{
+		float objectAngle, distance;
+		if (object->texture != nullptr && ObjectWithinFoV(player->GetX(), player->GetY(), player->GetAngle(), object->GetX(), object->GetY(), objectAngle, distance))
+		{
+			DrawObject2D(object->texture, objectAngle, distance);
+		}
+	}
+}
+
+void EngineFPS::ResetDepthBuffer()
+{
+	for (int i = 0; i < GetScreenWidth() * GetScreenHeight(); i++)
+		depthBuffer[i] = FLT_MAX;
+}
+
+void EngineFPS::DrawMap()
+{
+	for (float i = 0.0f; i < mapWidth; i++)
+	{
+		for (float j = 0.0f; j < mapHeight; j++)
+		{
+			if (GetWall(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_YELLOW);
+			else if (GetDynamicObject(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_RED);
+			else if (GetItem(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_PINK);
+			else if (GetDecoration(i, j) != nullptr)
+				DrawPoint((int)i, (int)j, ' ', BG_CYAN);
+			else
+				DrawPoint((int)i, (int)j, ' ', BG_BLACK);
+		}
+	}
+	DrawPoint((int)player->GetX(), (int)player->GetY(), ' ', BG_GREEN);
+}
+
+void EngineFPS::DrawPlayerWeapon()
+{
+	if (player->HasWeapon())
+	{
+		for (int x = 0; x < weaponWidth; x++)
+		{
+			for (int y = 0; y < weaponHeight; y++)
+			{
+				float sampleX = (float)x / (float)weaponWidth;
+				float sampleY = (float)y / (float)weaponHeight;
+
+				short symbol = player->GetWeaponSprite()->SampleCharacter(sampleX, sampleY);
+				short color = player->GetWeaponSprite()->SampleColor(sampleX, sampleY);
+
+				if (color != BG_DARK_PINK)
+				{
+					int gunX = (int)((GetScreenWidth() * 0.5f) - (weaponWidth * 0.5f) + x);
+					int gunY = (int)(GetScreenHeight() - weaponHeight + y);
+
+					DrawPoint(gunX, gunY, symbol, color);
+				}
+			}
+		}
+	}
+}
+
+void EngineFPS::DisplayPlayerStats()
+{
+	//Get player stats
+	int hp = player->GetHealth();
+	int maxhp = player->GetMaxHealth();
+
+	int ammo = 0;
+	int capacity = 0;
+	if (player->HasWeapon())
+	{
+		ammo = player->GetWeaponAmmo();
+		capacity = Weapons::CAPACITY;
+	}
+
+	int score = player->GetScore();
+
+	//Display player stats
+	wchar_t title[256];
+	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d - Score: %d", hp, maxhp, ammo, capacity, score);
+	SetApplicationTitle(title);
+}
+
+int EngineFPS::GetMapWidth() const
+{
+	return mapWidth;
+}
+
+int EngineFPS::GetMapHeight() const
+{
+	return mapHeight;
+}
+
+Sprite* EngineFPS::GetSprite(std::string spriteName) const
+{
+	return assetManager.GetSprite(spriteName);
+}
+
+Weapon* EngineFPS::CreateWeapon(short weaponID, Mob* parent)
+{
+	return Factory::MakeWeapon(this, weaponID, parent);
+}
+
+void EngineFPS::ParseMap()
+{
+	for (int x = 0; x < mapWidth; x++)
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
+			wchar_t type = map[mapWidth * y + x];
+
+			if (type == '.')
+			{
+				continue;
+			}
+			if (isdigit(type))
+			{
+				AddDynamicObject(x, y, type);
+			}
+			else if (islower(type))
+			{
+				AddDecoration(x, y, type);
+			}
+			else if (isupper(type))
+			{
+				AddItem(x, y, type);
+			}
+			else
+			{
+				AddWall(x, y, type);
+			}
+		}
+	}
+}
+
+void EngineFPS::AddWall(int x, int y, wchar_t type)
+{
+	Wall* wall = Factory::MakeWall(this, x, y, type);
+	if (wall != nullptr)
+		walls[mapWidth * y + x] = wall;
+}
+
+void EngineFPS::AddItem(int x, int y, wchar_t type)
+{
+	Item* item = Factory::MakeItem(this, x, y, type);
+	if (item != nullptr)
+		items[mapWidth * y + x] = item;
+}
+
+void EngineFPS::AddDecoration(int x, int y, wchar_t type)
+{
+	Decoration* decor = Factory::MakeDecoration(this, x, y, type);
+	if (decor != nullptr)
+		decorations.push_back(decor);
+}
+
+void EngineFPS::AddDynamicObject(int x, int y, wchar_t type)
+{
+	DynamicObject* object = Factory::MakeDynamicObject(this, x, y, type);
+	if (object != nullptr)
+	{
+		dynamicObjects.push_back(object);
+
+		if (type == '0')
+			player = (Player*)object;
+	}
+}
+
+Wall* EngineFPS::GetWall(float x, float y) const
+{
+	return walls[mapWidth * (int)y + (int)x];
+}
+
+Item* EngineFPS::GetItem(float x, float y) const
+{
+	return items[mapWidth * (int)y + (int)x];
+}
+
+Decoration* EngineFPS::GetDecoration(float x, float y) const
+{
+	for (auto &decor : decorations)
+	{
+		if (ObjectsCollide(decor->GetX(), decor->GetY(), x, y))
+			return decor;
+	}
+	return nullptr;
+}
+
+DynamicObject* EngineFPS::GetDynamicObject(float x, float y) const
+{
+	for (auto &object : dynamicObjects)
+	{
+		if (ObjectsCollide(object->GetX(), object->GetY(), x, y))
+			return object;
+	}
+	return nullptr;
+}
+
+void EngineFPS::PlayAudio(std::string audioName, bool loop)
+{
+	PlayAudioClip(audio[audioName], loop);
+}
+
+bool EngineFPS::IsObstacle(float x, float y, GameObject* ignored) const
+{
+	Wall *wall = GetWall(x, y);
+	bool isWall = false;
+	if (wall != nullptr && wall != ignored)
+		isWall = true;
+
+	DynamicObject *object = GetDynamicObject(x, y);
+	bool isObject = false;
+	if (object != nullptr && object != ignored)
+		isObject = true;
+
+	return isWall || isObject;
+}
+
+bool EngineFPS::ObjectsCollide(float x0, float y0, float x1, float y1) const
+{
+	return ((int)x0 == (int)x1 && (int)y0 == (int)y1);
+}
+
+bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY, float &distance, bool againstWalls, bool againstDynamicObjects, GameObject *ignored) const
 {
 	float step = 0.01f;
 	float distanceSoFar = 0.0f;
@@ -351,7 +614,7 @@ bool EngineFPS::CastRay(float x, float y, float angle, float &hitX, float &hitY,
 	return false;
 }
 
-bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance)
+bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float y1, float &objectAngle, float &distance) const
 {
 	//Find direction and distance from one object to the other
 	float objDirX = x1 - x0;
@@ -376,45 +639,29 @@ bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float
 	return (withinFoV && distance >= 0.5f && distance < depth);
 }
 
-bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object)
+bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object, float &angle, float &distance) const
 {
-	for (int x = 0; x < 4; x++)
+	float objectAngle, objectDistance;
+	if (ObjectWithinFoV(eye->GetX(), eye->GetY(), eye->GetAngle(), object->GetX(), object->GetY(), objectAngle, objectDistance))
 	{
-		float rayOffset = (float)x / 4;
-		float rayAngle = (eye->angle - FoV * 0.5f) + rayOffset * FoV;
-
-		float rayX, rayY;
-		float distance;
-
-		if (CastRay(eye->x, eye->y, rayAngle, rayX, rayY, distance, false, true, eye))
+		float rayX, rayY, rayDistance;
+		if (CastRay(eye->GetX(), eye->GetY(), eye->GetAngle() + objectAngle, rayX, rayY, rayDistance, true, true, eye))
 		{
 			if (GetDynamicObject(rayX, rayY) == object)
+			{
+				angle = objectAngle;
+				distance = objectDistance;
 				return true;
+			}
 		}
 	}
-
 	return false;
 }
 
 bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float &y)
 {
-	//If start and finish are in same place, then there is no further move to make
-	if (ObjectsCollide(start->x, start->y, finish->x, finish->y))
-	{
-		x = start->x;
-		y = start->y;
-		return true;
-	}
-
-	struct Node
-	{
-		int x, y;
-		bool obstacle;
-		float heuristic = FLT_MAX;
-		std::vector<Node*> neighbors;
-	};
-
-	Node *graph = new Node[GetMapWidth() * GetMapHeight()];
+	//Build the graph
+	Node *graph = new Node[mapWidth * mapHeight];
 
 	for (int i = 0; i < GetMapWidth(); i++)
 	{
@@ -425,7 +672,7 @@ bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float 
 			node->x = i;
 			node->y = j;
 
-			if (ObjectsCollide((float)i, (float)j, start->x, start->y) || ObjectsCollide((float)i, (float)j, finish->x, finish->y))
+			if (ObjectsCollide((float)i, (float)j, start->GetX(), start->GetY()) || ObjectsCollide((float)i, (float)j, finish->GetX(), finish->GetY()))
 				node->obstacle = false;
 			else
 				node->obstacle = IsObstacle((float)i, (float)j);
@@ -444,60 +691,12 @@ bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float 
 		}
 	}
 
-	std::list<Node*> frontier;
-	std::map<Node*, Node*> cameFrom;
-
-	Node *nodeStart = &graph[GetMapWidth() * (int)start->y + (int)start->x];
-	Node *nodeFinish = &graph[GetMapWidth() * (int)finish->y + (int)finish->x];
-
-	frontier.push_back(nodeStart);
-	cameFrom[nodeStart] = nullptr;
-
-	while (!frontier.empty())
-	{
-		Node *nodeCurrent = frontier.front();
-		frontier.pop_front();
-
-		if (nodeCurrent == nodeFinish)
-			break;
-
-		for (auto &neighbor : nodeCurrent->neighbors)
-		{
-			if (!neighbor->obstacle && cameFrom.find(neighbor) == cameFrom.end())
-			{
-				neighbor->heuristic = fabs(nodeFinish->x - neighbor->x) + fabs(nodeFinish->y - neighbor->y);
-				frontier.push_back(neighbor);
-				cameFrom[neighbor] = nodeCurrent;
-			}
-		}
-
-		frontier.sort([](const Node* a, const Node* b) { return a->heuristic < b->heuristic; });
-	}
-
-	std::vector<Node*> path;
-
-	if (cameFrom[nodeFinish] != nullptr)
-	{
-		Node *nodeCurrent = nodeFinish;
-		while (nodeCurrent != nodeStart)
-		{
-			path.push_back(nodeCurrent);
-			nodeCurrent = cameFrom[nodeCurrent];
-		}
-
-	}
-	else
-	{
-		delete[] graph;
-		return false;
-	}
-
-	x = (float)path.back()->x;
-	y = (float)path.back()->y;
+	//Pass the graph to the pathfinder
+	bool result = pathfinder.FindMove(graph, mapWidth, mapHeight, start, finish, x, y);
 
 	delete[] graph;
 
-	return true;
+	return result;
 }
 
 void EngineFPS::DrawObject2D(Sprite* spr, float angle, float distance)
@@ -545,56 +744,6 @@ void EngineFPS::DrawObject2D(Sprite* spr, float angle, float distance)
 	}
 }
 
-bool EngineFPS::IsObstacle(float x, float y, GameObject* ignored)
-{
-	Wall *wall = GetWall(x, y);
-	bool isWall = false;
-	if (wall != nullptr && wall != ignored)
-		isWall = true;	
-
-	DynamicObject *object = GetDynamicObject(x, y);
-	bool isObject = false;
-	if (object != nullptr && object != ignored)
-		isObject = true;
-
-	return isWall || isObject;
-}
-
-Wall* EngineFPS::GetWall(float x, float y)
-{
-	return walls[mapWidth * (int)y + (int)x];
-}
-
-Item* EngineFPS::GetItem(float x, float y)
-{
-	return items[mapWidth * (int)y + (int)x];
-}
-
-Decoration* EngineFPS::GetDecoration(float x, float y)
-{
-	for (auto &decor : decorations)
-	{
-		if (ObjectsCollide(decor->x, decor->y, x, y))
-			return decor;
-	}
-	return nullptr;
-}
-
-DynamicObject* EngineFPS::GetDynamicObject(float x, float y)
-{
-	for (auto &object : dynamicObjects)
-	{
-		if (ObjectsCollide(object->x, object->y, x, y))
-			return object;
-	}
-	return nullptr;
-}
-
-bool EngineFPS::ObjectsCollide(float x0, float y0, float x1, float y1)
-{
-	return ((int)x0 == (int)x1 && (int)y0 == (int)y1);
-}
-
 void EngineFPS::LoadAudio()
 {
 	auto load = [&](std::string audioName, std::wstring fileName)
@@ -620,196 +769,4 @@ void EngineFPS::LoadAudio()
 	load("Player Death", L"Audio/SFX/Player Dies.wav");
 	load("Pickup", L"Audio/SFX/Pickup.wav");
 	load("Secret Entrance", L"Audio/SFX/Secret Entrance.wav");
-}
-
-void EngineFPS::LoadSprites()
-{
-	auto load = [&](std::string spriteName, std::wstring fileName)
-	{
-		Sprite *spr = new Sprite(fileName);
-		sprites[spriteName] = spr;
-	};
-
-	//Textures
-	load("brick wall", L"Sprites/brick_wall.spr");
-	load("stone wall", L"Sprites/stone_wall.spr");
-	load("stone wall eagle", L"Sprites/stone_wall_eagle.spr");
-	load("stone wall flag", L"Sprites/stone_wall_flag.spr");
-	load("metal door", L"Sprites/metal_door.spr");
-
-	//Decorations
-	load("flag", L"Sprites/flag.spr");
-	load("jug", L"Sprites/jug.spr");
-	load("tree", L"Sprites/tree.spr");
-
-	//Enemies
-	load("guard back", L"Sprites/guard_back.spr");
-	load("guard front", L"Sprites/guard_front.spr");
-	load("guard left", L"Sprites/guard_left.spr");
-	load("guard right", L"Sprites/guard_right.spr");
-	load("guard reload", L"Sprites/guard_reload.spr");
-	load("guard fire", L"Sprites/guard_fire.spr");
-
-	//Weapons
-	load("gun", L"Sprites/weapon_gun.spr");
-	load("gun fire", L"Sprites/weapon_gun_fire.spr");
-	load("machine gun", L"Sprites/weapon_machine_gun.spr");
-	load("machine gun fire", L"Sprites/weapon_machine_gun_fire.spr");
-
-	//Items
-	load("item gun", L"Sprites/item_gun.spr");
-	load("item machine gun", L"Sprites/item_machine_gun.spr");
-	load("item medpack", L"Sprites/item_medpack.spr");
-	load("item medkit", L"Sprites/item_medkit.spr");
-}
-
-void EngineFPS::ParseMap()
-{
-	for (float x = 0.0f; x < (float)mapWidth; x++)
-	{
-		for (float y = 0.0f; y < (float)mapHeight; y++)
-		{
-			wchar_t c = map[mapWidth * (int)y + (int)x];
-
-			switch (c)
-			{
-				case 'P':
-				{
-					player = new Player(this);
-					player->x = x + 0.5f;
-					player->y = y + 0.5f;
-					dynamicObjects.push_front(player);
-					break;
-				}
-
-				case '#':
-				{
-					Wall *wall = new Wall(this, sprites["stone wall"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case '$':
-				{
-					Wall *wall = new Wall(this, sprites["stone wall eagle"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case '@':
-				{
-					Wall *wall = new Wall(this, sprites["stone wall flag"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case '?':
-				{
-					Wall *wall = new Door(this, sprites["stone wall flag"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-				case 'H':
-				{
-					Wall *wall = new Door(this, sprites["metal door"]);
-					wall->x = x;
-					wall->y = y;
-					walls[mapWidth * (int)y + (int)x] = wall;
-					break;
-				}
-
-				case 'M':
-				{
-					Item *item = new Medkit(this, 10, sprites["item medpack"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case 'K':
-				{
-					Item *item = new Medkit(this, 40, sprites["item medkit"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case '-':
-				{
-					Item *item = new WeaponItem(this, new Gun(this, player), sprites["item gun"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-				case '_':
-				{
-					Item *item = new WeaponItem(this, new MachineGun(this, player), sprites["item machine gun"]);
-					item->x = x + 0.5f;
-					item->y = y + 0.5f;
-					items[mapWidth * (int)y + (int)x] = item;
-					break;
-				}
-
-				case 'G':
-				{
-					DynamicObject* enemy = new Guard(this);
-					enemy->x = x + 0.5f;
-					enemy->y = y + 0.5f;
-					dynamicObjects.push_back(enemy);
-					break;
-				}
-
-				case 'F':
-				{
-					Decoration *decor = new Decoration(this, sprites["flag"]);
-					decor->x = x + 0.5f;
-					decor->y = y + 0.5f;
-					decorations.push_back(decor);
-					break;
-				}
-				case 'J':
-				{
-					Decoration *decor = new Decoration(this, sprites["jug"]);
-					decor->x = x + 0.5f;
-					decor->y = y + 0.5f;
-					decorations.push_back(decor);
-					break;
-				}
-				case 'T':
-				{
-					Decoration *decor = new Decoration(this, sprites["tree"]);
-					decor->x = x + 0.5f;
-					decor->y = y + 0.5f;
-					decorations.push_back(decor);
-					break;
-				}
-			}
-		}
-	}
-}
-
-int EngineFPS::GetMapWidth()
-{
-	return mapWidth;
-}
-
-int EngineFPS::GetMapHeight()
-{
-	return mapHeight;
-}
-
-Sprite* EngineFPS::GetSprite(std::string spriteName)
-{
-	return sprites[spriteName];
-}
-
-void EngineFPS::PlayAudio(std::string audioName, bool loop)
-{
-	PlayAudioClip(audio[audioName], loop);
 }

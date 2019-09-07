@@ -2,55 +2,54 @@
 
 class EngineFPS;
 class Sprite;
-struct Mob;
+class Mob;
 
-struct Weapon
+namespace Weapons
 {
-	EngineFPS *engine = nullptr;
-	Mob *parent = nullptr;
+	const int CAPACITY = 99;
+	enum { PISTOL = 0, MACHINE_GUN, COUNT };
+}
 
-	Weapon(EngineFPS *engine, Mob *parent, short index);
+class Weapon
+{
+public:
+	Weapon(EngineFPS* engine, Mob* parent);
 	virtual ~Weapon();
 
-	Sprite *currentSpr = nullptr;
+	Mob* parent = nullptr;
 
-	const short WEAPON_INDEX;
+	Sprite* currentSpr = nullptr;
+
+	bool Ready() const;
+	bool IsFull() const;
+
+	int GetAmmo() const;
+	void AddAmmo(int amount);
+	void RestoreAmmo();
 
 	void OnUpdate(float elapsedTime);
+
+	virtual void OnFirePressed();
+	virtual void OnFireHeld();
+	virtual void OnFireReleased();
+
 	virtual void Fire() = 0;
 
-	bool Ready();
-
-	int GetAmmo();
-	int GetCapacity();
-
-	void AddAmmo(int amount);
-
 protected:
-	Sprite *sprIdle = nullptr;
-	Sprite *sprFire = nullptr;
+	EngineFPS* engine = nullptr;
 
 	int ammo;
-	int capacity;
 
 	int minDmg;
 	int maxDmg;
 
-	bool shooting = false;
-	float cooldown;
-	float timer = 0.0f;
-};
+	enum { READY, SHOOTING, COOLDOWN } state = READY;
 
-struct Gun : Weapon
-{
-	Gun(EngineFPS *engine, Mob *parent);
+	Sprite* readySpr = nullptr;
+	Sprite* shootingSpr = nullptr;
+	Sprite* cooldownSpr = nullptr;
 
-	void Fire() override;
-};
-
-struct MachineGun : Weapon
-{
-	MachineGun(EngineFPS *engine, Mob *parent);
-
-	void Fire() override;
+	float shooting = 0.0f;
+	float cooldown = 0.0f;
+	float stateTimer = 0.0f;
 };

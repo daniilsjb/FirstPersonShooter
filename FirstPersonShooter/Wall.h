@@ -2,19 +2,16 @@
 
 #include "GameObject.h"
 
-struct Wall : GameObject
+class Wall : public GameObject
 {
-	Wall(EngineFPS *engine, Sprite* texture);
+public:
+	Wall(EngineFPS* engine, float x, float y, Sprite* spr);
 	virtual ~Wall();
 
-	bool removed = false;
-
+	bool IsRemoved() const;
+	
 	virtual void OnInteract();
-};
 
-struct Door : Wall
-{
-	Door(EngineFPS *engine, Sprite* texture);
-
-	void OnInteract() override;
+protected:
+	bool removed = false;
 };

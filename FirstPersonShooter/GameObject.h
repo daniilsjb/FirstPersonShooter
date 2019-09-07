@@ -1,15 +1,21 @@
 #pragma once
 
-#include "EngineFPS.h"
+class EngineFPS;
+class Sprite;
 
-struct GameObject
+class GameObject
 {
+public:
+	GameObject(EngineFPS* engine, float x, float y);
 	virtual ~GameObject();
 
-	EngineFPS *engine = nullptr;
+	Sprite* texture = nullptr;
+
+	float GetX() const;
+	float GetY() const;
+
+protected:
+	EngineFPS* engine;
 
 	float x, y;
-	Sprite *texture = nullptr;
-
-	GameObject(EngineFPS *engine);
 };

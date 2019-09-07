@@ -1,97 +1,24 @@
 #include "Enemy.h"
+#include "EngineFPS.h"
 #include "Player.h"
-#include "Item.h"
+#include "Weapon.h"
 
-Enemy::Enemy(EngineFPS *engine) : Mob(engine)
+Enemy::Enemy(EngineFPS* engine, float x, float y) : Mob(engine, x, y)
 {
-	directionSprites.resize(DIRECTIONS_COUNT, nullptr);
+	directionSprites.resize(DIRECTION_COUNT, nullptr);
 }
 
-Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject)
-{
-	//Find direction vector of the enemy
-	float eyeX = cosf(angle);
-	float eyeY = sinf(angle);
-
-	//Find direction vector of the relative object
-	float objEyeX = cosf(relativeObject->angle);
-	float objEyeY = sinf(relativeObject->angle);
-
-	//Both vectors are normalized, dot product is a value between -1 to 1 that indicates the similarity between their directions
-	float dot = (eyeX * objEyeX) + (eyeY * objEyeY);
-
-	//We also need to know the side of the relative object. We can just rotate the enemy by half-pi radians and do another dot product
-	//to find the side
-	float rotatedEyeX = cosf(angle + 3.14159f * 0.5f);
-	float rotatedEyeY = sinf(angle + 3.14159f * 0.5f);
-
-	//Find vector from enemy towards relative object
-	float dirX = relativeObject->x - x;
-	float dirY = relativeObject->y - y;
-
-	//Normalize the vector
-	float magnitude = sqrtf(dirX * dirX + dirY * dirY);
-	float magInv = 1.0f / magnitude;
-
-	dirX *= magInv;
-	dirY *= magInv;
-
-	//Find the side (positive is right, negative is left)
-	float side = (rotatedEyeX * dirX) + (rotatedEyeY * dirY);
-
-	//The less the dot product is, the more both objects look towards each other
-	if (dot < -0.5f)
-		return directionSprites[FRONT];
-	else if (dot >= -0.5f && dot < 0.5f)
-	{
-		if (side >= 0.0f)
-			return directionSprites[RIGHT];
-		else
-			return directionSprites[LEFT];
-	}
-	else
-		return directionSprites[BACK];
-}
-
-Guard::Guard(EngineFPS *engine) : Enemy(engine)
-{
-	directionSprites[BACK] = engine->GetSprite("guard back");
-	directionSprites[RIGHT] = engine->GetSprite("guard right");
-	directionSprites[FRONT] = engine->GetSprite("guard front");
-	directionSprites[LEFT] = engine->GetSprite("guard left");
-
-	reloadingSpr = engine->GetSprite("guard reload");
-	shootingSpr = engine->GetSprite("guard fire");
-
-	currentHealth = maxHealth = 50;
-
-	state = PATROL;
-
-	angle = 3.14159f;
-
-	speed = 1.5f;
-
-	weapon = new MachineGun(engine, this);
-}
-
-void Guard::OnUpdate(float elapsedTime)
+void Enemy::OnUpdate(float elapsedTime)
 {
 	DynamicObject* player = engine->player;
 
 	bool playerVisible = false;
 
-	float objectAngle, distance;
-	if (engine->ObjectWithinFoV(x, y, angle, player->x, player->y, objectAngle, distance))
+	float objectAngle, objectDistance;
+	if (engine->DynamicObjectVisible(this, engine->player, objectAngle, objectDistance))
 	{
-		float rayX, rayY, rayDistance;
-		if (engine->CastRay(x, y, angle + objectAngle, rayX, rayY, rayDistance, true, true, this))
-		{
-			if (engine->GetDynamicObject(rayX, rayY) == player)
-			{
-				playerVisible = true;
-				playerDetected = true;
-			}
-		}
+		playerVisible = true;
+		playerDetected = true;
 	}
 
 	switch (state)
@@ -130,7 +57,7 @@ void Guard::OnUpdate(float elapsedTime)
 						delayTimer = 0.0f;
 						shootingDelayed = false;
 					}
-					texture = reloadingSpr;
+					texture = aimingSpr;
 				}
 				else
 				{
@@ -143,7 +70,7 @@ void Guard::OnUpdate(float elapsedTime)
 					}
 					else
 					{
-						texture = reloadingSpr;
+						texture = aimingSpr;
 					}
 				}
 			}
@@ -186,27 +113,64 @@ void Guard::OnUpdate(float elapsedTime)
 			texture = ChooseDirectionSprite(player);
 			break;
 		}
+		case PAIN:
+		{
+			painTimer += elapsedTime;
+			if (painTimer >= pain)
+			{
+				painTimer = 0.0f;
+				state = COMBAT;
+			}
+			texture = painSpr;
+			break;
+		}
 	}
 
 	weapon->OnUpdate(elapsedTime);
 }
 
-void Guard::OnHit(int damage)
+Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject) const
 {
-	Damage(damage);
-	if (currentHealth <= 0)
+	//Find direction vector of the enemy
+	float eyeX = cosf(angle);
+	float eyeY = sinf(angle);
+
+	//Find direction vector of the relative object
+	float objEyeX = cosf(relativeObject->GetAngle());
+	float objEyeY = sinf(relativeObject->GetAngle());
+
+	//Both vectors are normalized, dot product is a value between -1 to 1 that indicates the similarity between their directions
+	float dot = (eyeX * objEyeX) + (eyeY * objEyeY);
+
+	//We also need to know the side of the relative object. We can just rotate the enemy by half-pi radians and do another dot product
+	//to find the side
+	float rotatedEyeX = cosf(angle + 3.14159f * 0.5f);
+	float rotatedEyeY = sinf(angle + 3.14159f * 0.5f);
+
+	//Find vector from enemy towards relative object
+	float dirX = relativeObject->GetX() - x;
+	float dirY = relativeObject->GetY() - y;
+
+	//Normalize the vector
+	float magnitude = sqrtf(dirX * dirX + dirY * dirY);
+	float magInv = 1.0f / magnitude;
+
+	dirX *= magInv;
+	dirY *= magInv;
+
+	//Find the side (positive is right, negative is left)
+	float side = (rotatedEyeX * dirX) + (rotatedEyeY * dirY);
+
+	//The less the dot product is, the more both objects look towards each other
+	if (dot < -0.5f)
+		return directionSprites[FRONT];
+	else if (dot >= -0.5f && dot < 0.5f)
 	{
-		removed = true;
-		Item *wpn = new WeaponItem(engine, new MachineGun(engine, engine->player), engine->GetSprite("item machine gun"));
-		wpn->x = x + 0.5f;
-		wpn->y = y + 0.5f;
-		engine->items[engine->GetMapWidth() * (int)y + (int)x] = wpn;
-
-		engine->PlayAudio("Enemy Death 1");
+		if (side >= 0.0f)
+			return directionSprites[RIGHT];
+		else
+			return directionSprites[LEFT];
 	}
-
-	playerDetected = true;
-
-	if (rand() % 5 == 0)
-		engine->PlayAudio("Enemy Pain");
+	else
+		return directionSprites[BACK];
 }

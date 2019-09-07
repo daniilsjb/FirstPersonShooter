@@ -1,8 +1,9 @@
 #include "Decoration.h"
+#include "EngineFPS.h"
 
 Decoration::~Decoration() {}
 
-Decoration::Decoration(EngineFPS *engine, Sprite *texture) : GameObject(engine)
+Decoration::Decoration(EngineFPS* engine, float x, float y, Sprite* spr) : GameObject(engine, x, y)
 {
-	this->texture = texture;
+	texture = spr;
 }
