@@ -7,7 +7,7 @@ class Player;
 class Item : public GameObject
 {
 public:
-	Item(EngineFPS* engine);
+	Item(EngineFPS* engine, float x, float y);
 	virtual ~Item();
 
 	bool IsRemoved() const;

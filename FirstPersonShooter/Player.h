@@ -7,7 +7,7 @@
 class Player : public Mob
 {
 public:
-	Player(EngineFPS* engine);
+	Player(EngineFPS* engine, float x, float y);
 	~Player();
 
 	bool WeaponAcquired(short weaponID) const;

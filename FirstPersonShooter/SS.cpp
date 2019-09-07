@@ -3,7 +3,7 @@
 #include "Weapon.h"
 #include "Player.h"
 
-SS::SS(EngineFPS* engine) : Enemy(engine)
+SS::SS(EngineFPS* engine, float x, float y) : Enemy(engine, x, y)
 {
 	directionSprites[BACK] = engine->GetSprite("SS Back");
 	directionSprites[RIGHT] = engine->GetSprite("SS Right");

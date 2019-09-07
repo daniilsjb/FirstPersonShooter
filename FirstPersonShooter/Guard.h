@@ -5,7 +5,7 @@
 class Guard : public Enemy
 {
 public:
-	Guard(EngineFPS* engine);
+	Guard(EngineFPS* engine, float x, float y);
 
 	void OnHit(int damage) override;
 };

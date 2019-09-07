@@ -5,7 +5,7 @@
 class WeaponItem : public Item
 {
 public:
-	WeaponItem(EngineFPS* engine, short weaponID, short ammoWorth, Sprite* spr);
+	WeaponItem(EngineFPS* engine, float x, float y, short weaponID, short ammoWorth, Sprite* spr);
 
 	void OnUse(Player& player) override;
 

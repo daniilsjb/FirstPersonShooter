@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Player.h"
 
-OneUp::OneUp(EngineFPS* engine, Sprite* spr) : Item(engine)
+OneUp::OneUp(EngineFPS* engine, float x, float y, Sprite* spr) : Item(engine, x, y)
 {
 	texture = spr;
 }

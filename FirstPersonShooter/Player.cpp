@@ -3,7 +3,7 @@
 #include "Weapon.h"
 #include "Wall.h"
 
-Player::Player(EngineFPS* engine) : Mob(engine)
+Player::Player(EngineFPS* engine, float x, float y) : Mob(engine, x, y)
 {
 	speed = 5.0f;
 	currentHealth = maxHealth = 100;

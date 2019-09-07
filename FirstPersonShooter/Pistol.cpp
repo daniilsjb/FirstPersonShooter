@@ -32,7 +32,7 @@ void Pistol::Fire()
 	state = SHOOTING;
 
 	float rayX, rayY, distance;
-	if (engine->CastRay(parent->x, parent->y, parent->GetAngle(), rayX, rayY, distance, true, true, parent))
+	if (engine->CastRay(parent->GetX(), parent->GetY(), parent->GetAngle(), rayX, rayY, distance, true, true, parent))
 	{
 		DynamicObject* other = engine->GetDynamicObject(rayX, rayY);
 		if (other != nullptr && other->IsFriendly() != parent->IsFriendly())

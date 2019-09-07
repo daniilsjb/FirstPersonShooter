@@ -2,7 +2,7 @@
 #include "EngineFPS.h"
 #include "Player.h"
 
-AmmoItem::AmmoItem(EngineFPS* engine, int amount, Sprite* spr) : Item(engine), amount(amount)
+AmmoItem::AmmoItem(EngineFPS* engine, float x, float y, int amount, Sprite* spr) : Item(engine, x, y), amount(amount)
 {
 	texture = spr;
 }

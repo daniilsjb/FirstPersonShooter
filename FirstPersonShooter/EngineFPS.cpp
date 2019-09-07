@@ -184,7 +184,7 @@ bool EngineFPS::OnDestroy()
 
 void EngineFPS::UseItemUnderPlayer()
 {
-	Item* item = GetItem(player->x, player->y);
+	Item* item = GetItem(player->GetX(), player->GetY());
 	if (item != nullptr)
 		item->OnUse(*player);
 }
@@ -251,15 +251,15 @@ void EngineFPS::RenderColumn(int col, float rayAngle)
 	float sampleX = 0.0f;
 	Wall* wall = nullptr;
 
-	if (CastRay(player->x, player->y, rayAngle, rayX, rayY, distance, true, false))
+	if (CastRay(player->GetX(), player->GetY(), rayAngle, rayX, rayY, distance, true, false))
 	{
 		wall = GetWall(rayX, rayY);
 
 		float blockMidX = rayX + 0.5f;
 		float blockMidY = rayY + 0.5f;
 
-		float collisionX = player->x + (cosf(rayAngle) * distance);
-		float collisionY = player->y + (sinf(rayAngle) * distance);
+		float collisionX = player->GetX() + (cosf(rayAngle) * distance);
+		float collisionY = player->GetY() + (sinf(rayAngle) * distance);
 
 		float collisionAngle = atan2f(collisionY - blockMidY, collisionX - blockMidX);
 
@@ -317,7 +317,7 @@ void EngineFPS::DrawDynamicObjects()
 	for (auto &decoration : decorations)
 	{
 		float objectAngle, distance;
-		if (ObjectWithinFoV(player->x, player->y, player->GetAngle(), decoration->x, decoration->y, objectAngle, distance))
+		if (ObjectWithinFoV(player->GetX(), player->GetY(), player->GetAngle(), decoration->GetX(), decoration->GetY(), objectAngle, distance))
 		{
 			DrawObject2D(decoration->texture, objectAngle, distance);
 		}
@@ -329,7 +329,7 @@ void EngineFPS::DrawItems()
 	for (auto &item : items)
 	{
 		float objectAngle, distance;
-		if (item != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), item->x, item->y, objectAngle, distance))
+		if (item != nullptr && ObjectWithinFoV(player->GetX(), player->GetY(), player->GetAngle(), item->GetX(), item->GetY(), objectAngle, distance))
 		{
 			DrawObject2D(item->texture, objectAngle, distance);
 		}
@@ -341,7 +341,7 @@ void EngineFPS::DrawDecorations()
 	for (auto &object : dynamicObjects)
 	{
 		float objectAngle, distance;
-		if (object->texture != nullptr && ObjectWithinFoV(player->x, player->y, player->GetAngle(), object->x, object->y, objectAngle, distance))
+		if (object->texture != nullptr && ObjectWithinFoV(player->GetX(), player->GetY(), player->GetAngle(), object->GetX(), object->GetY(), objectAngle, distance))
 		{
 			DrawObject2D(object->texture, objectAngle, distance);
 		}
@@ -372,7 +372,7 @@ void EngineFPS::DrawMap()
 				DrawPoint((int)i, (int)j, ' ', BG_BLACK);
 		}
 	}
-	DrawPoint((int)player->x, (int)player->y, ' ', BG_GREEN);
+	DrawPoint((int)player->GetX(), (int)player->GetY(), ' ', BG_GREEN);
 }
 
 void EngineFPS::DrawPlayerWeapon()
@@ -522,7 +522,7 @@ Decoration* EngineFPS::GetDecoration(float x, float y) const
 {
 	for (auto &decor : decorations)
 	{
-		if (ObjectsCollide(decor->x, decor->y, x, y))
+		if (ObjectsCollide(decor->GetX(), decor->GetY(), x, y))
 			return decor;
 	}
 	return nullptr;
@@ -532,7 +532,7 @@ DynamicObject* EngineFPS::GetDynamicObject(float x, float y) const
 {
 	for (auto &object : dynamicObjects)
 	{
-		if (ObjectsCollide(object->x, object->y, x, y))
+		if (ObjectsCollide(object->GetX(), object->GetY(), x, y))
 			return object;
 	}
 	return nullptr;
@@ -642,10 +642,10 @@ bool EngineFPS::ObjectWithinFoV(float x0, float y0, float angle, float x1, float
 bool EngineFPS::DynamicObjectVisible(DynamicObject *eye, DynamicObject *object, float &angle, float &distance) const
 {
 	float objectAngle, objectDistance;
-	if (ObjectWithinFoV(eye->x, eye->y, eye->GetAngle(), object->x, object->y, objectAngle, objectDistance))
+	if (ObjectWithinFoV(eye->GetX(), eye->GetY(), eye->GetAngle(), object->GetX(), object->GetY(), objectAngle, objectDistance))
 	{
 		float rayX, rayY, rayDistance;
-		if (CastRay(eye->x, eye->y, eye->GetAngle() + objectAngle, rayX, rayY, rayDistance, true, true, eye))
+		if (CastRay(eye->GetX(), eye->GetY(), eye->GetAngle() + objectAngle, rayX, rayY, rayDistance, true, true, eye))
 		{
 			if (GetDynamicObject(rayX, rayY) == object)
 			{
@@ -672,7 +672,7 @@ bool EngineFPS::FindMove(GameObject *start, GameObject *finish, float &x, float 
 			node->x = i;
 			node->y = j;
 
-			if (ObjectsCollide((float)i, (float)j, start->x, start->y) || ObjectsCollide((float)i, (float)j, finish->x, finish->y))
+			if (ObjectsCollide((float)i, (float)j, start->GetX(), start->GetY()) || ObjectsCollide((float)i, (float)j, finish->GetX(), finish->GetY()))
 				node->obstacle = false;
 			else
 				node->obstacle = IsObstacle((float)i, (float)j);

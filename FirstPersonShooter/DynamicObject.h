@@ -5,7 +5,7 @@
 class DynamicObject : public GameObject
 {
 public:
-	DynamicObject(EngineFPS* engine);
+	DynamicObject(EngineFPS* engine, float x, float y);
 	virtual ~DynamicObject();
 
 	virtual void OnUpdate(float elapsedTime) = 0;

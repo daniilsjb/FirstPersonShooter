@@ -12,18 +12,18 @@ Pathfinder::~Pathfinder() {}
 bool Pathfinder::FindMove(Node* graph, int graphWidth, int graphHeight, GameObject *start, GameObject *finish, float &x, float &y)
 {
 	//If start and finish are in same place, then there is no further move to make
-	if ((int)start->x == (int)finish->x && (int)start->y == (int)finish->y)
+	if ((int)start->GetX() == (int)finish->GetX() && (int)start->GetY() == (int)finish->GetY())
 	{
-		x = start->x;
-		y = start->y;
+		x = start->GetX();
+		y = start->GetY();
 		return true;
 	}
 
 	std::list<Node*> frontier;
 	std::map<Node*, Node*> cameFrom;
 
-	Node *nodeStart = &graph[graphWidth * (int)start->y + (int)start->x];
-	Node *nodeFinish = &graph[graphWidth * (int)finish->y + (int)finish->x];
+	Node *nodeStart = &graph[graphWidth * (int)start->GetY() + (int)start->GetX()];
+	Node *nodeFinish = &graph[graphWidth * (int)finish->GetY() + (int)finish->GetX()];
 
 	//Set initial settings
 	frontier.push_back(nodeStart);

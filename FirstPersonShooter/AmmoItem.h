@@ -5,7 +5,7 @@
 class AmmoItem : public Item
 {
 public:
-	AmmoItem(EngineFPS* engine, int amount, Sprite* spr);
+	AmmoItem(EngineFPS* engine, float x, float y, int amount, Sprite* spr);
 
 	void OnUse(Player& player) override;
 

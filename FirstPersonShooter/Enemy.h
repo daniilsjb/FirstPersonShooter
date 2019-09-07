@@ -7,7 +7,7 @@
 class Enemy : public Mob
 {
 public:
-	Enemy(EngineFPS* engine);
+	Enemy(EngineFPS* engine, float x, float y);
 
 	void OnUpdate(float elapsedTime) override;
 

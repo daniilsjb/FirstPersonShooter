@@ -5,6 +5,6 @@
 class Decoration : public GameObject
 {
 public:
-	Decoration(EngineFPS* engine, Sprite* spr);
+	Decoration(EngineFPS* engine, float x, float y, Sprite* spr);
 	virtual ~Decoration();
 };

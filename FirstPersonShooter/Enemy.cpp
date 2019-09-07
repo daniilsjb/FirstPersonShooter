@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Weapon.h"
 
-Enemy::Enemy(EngineFPS* engine) : Mob(engine)
+Enemy::Enemy(EngineFPS* engine, float x, float y) : Mob(engine, x, y)
 {
 	directionSprites.resize(DIRECTION_COUNT, nullptr);
 }
@@ -148,8 +148,8 @@ Sprite* Enemy::ChooseDirectionSprite(DynamicObject *relativeObject) const
 	float rotatedEyeY = sinf(angle + 3.14159f * 0.5f);
 
 	//Find vector from enemy towards relative object
-	float dirX = relativeObject->x - x;
-	float dirY = relativeObject->y - y;
+	float dirX = relativeObject->GetX() - x;
+	float dirY = relativeObject->GetY() - y;
 
 	//Normalize the vector
 	float magnitude = sqrtf(dirX * dirX + dirY * dirY);

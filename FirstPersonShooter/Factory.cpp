@@ -44,55 +44,53 @@ Wall* Factory::MakeWall(EngineFPS* engine, int x, int y, wchar_t type)
 
 	Wall* wall = nullptr;
 
+	float wallX = x + 0.5f;
+	float wallY = y + 0.5f;
+
 	switch (type)
 	{
 		case '#':
 		{
-			wall = new Wall(engine, engine->GetSprite("Stone Wall"));
+			wall = new Wall(engine, wallX, wallY, engine->GetSprite("Stone Wall"));
 			break;
 		}
 		case '$':
 		{
-			wall = new Wall(engine, engine->GetSprite("Stone Wall Eagle"));
+			wall = new Wall(engine, wallX, wallY, engine->GetSprite("Stone Wall Eagle"));
 			break;
 		}
 		case '@':
 		{
-			wall = new Wall(engine, engine->GetSprite("Stone Wall Flag"));
+			wall = new Wall(engine, wallX, wallY, engine->GetSprite("Stone Wall Flag"));
 			break;
 		}
 		case '%':
 		{
-			wall = new Wall(engine, engine->GetSprite("Blue Wall"));
+			wall = new Wall(engine, wallX, wallY, engine->GetSprite("Blue Wall"));
 			break;
 		}
 		case '^':
 		{
-			wall = new Wall(engine, engine->GetSprite("Blue Wall Cage"));
+			wall = new Wall(engine, wallX, wallY, engine->GetSprite("Blue Wall Cage"));
 			break;
 		}
 		case '?':
 		{
-			wall = new Door(engine, engine->GetSprite("Stone Wall Flag"));
+			wall = new Door(engine, wallX, wallY, engine->GetSprite("Stone Wall Flag"));
 			break;
 		}
 		case '-':
 		{
-			wall = new Door(engine, engine->GetSprite("Metal Door"));
+			wall = new Door(engine, wallX, wallY, engine->GetSprite("Metal Door"));
 			break;
 		}
 		case '&':
 		{
-			wall = new Door(engine, engine->GetSprite("Next Level"));
+			wall = new Door(engine, wallX, wallY, engine->GetSprite("Next Level"));
 			break;
 		}
 	}
 
-	if (wall != nullptr)
-	{
-		wall->x = x + 0.5f;
-		wall->y = y + 0.5f;
-	}
 	return wall;
 }
 
@@ -103,79 +101,77 @@ Item* Factory::MakeItem(EngineFPS* engine, int x, int y, wchar_t type)
 
 	Item* item = nullptr;
 
+	float itemX = x + 0.5f;
+	float itemY = y + 0.5f;
+
 	switch (type)
 	{
 		//Health
 		case 'D':
 		{
-			item = new HealthItem(engine, 10, engine->GetSprite("Item Dinner"));
+			item = new HealthItem(engine, itemX, itemY, 10, engine->GetSprite("Item Dinner"));
 			break;
 		}
 		case 'M':
 		{
-			item = new HealthItem(engine, 25, engine->GetSprite("Item Medkit"));
+			item = new HealthItem(engine, itemX, itemY, 25, engine->GetSprite("Item Medkit"));
 			break;
 		}
 
 		//Weapons
 		case 'P':
 		{
-			item = new WeaponItem(engine, Weapons::PISTOL, 2, engine->GetSprite("Item Pistol"));
+			item = new WeaponItem(engine, itemX, itemY, Weapons::PISTOL, 2, engine->GetSprite("Item Pistol"));
 			break;
 		}
 		case 'G':
 		{
-			item = new WeaponItem(engine, Weapons::MACHINE_GUN, 6, engine->GetSprite("Item Machine Gun"));
+			item = new WeaponItem(engine, itemX, itemY, Weapons::MACHINE_GUN, 6, engine->GetSprite("Item Machine Gun"));
 			break;
 		}
 
 		//Ammo
 		case 'A':
 		{
-			item = new AmmoItem(engine, 8, engine->GetSprite("Item Ammo"));
+			item = new AmmoItem(engine, itemX, itemY, 8, engine->GetSprite("Item Ammo"));
 			break;
 		}
 		case 'B':
 		{
-			item = new AmmoItem(engine, 4, engine->GetSprite("Item Ammo"));
+			item = new AmmoItem(engine, itemX, itemY, 4, engine->GetSprite("Item Ammo"));
 			break;
 		}
 
 		//Score
 		case 'S':
 		{
-			item = new ScoreItem(engine, 100, engine->GetSprite("Item Cross"));
+			item = new ScoreItem(engine, itemX, itemY, 100, engine->GetSprite("Item Cross"));
 			break;
 		}
 		case 'U':
 		{
-			item = new ScoreItem(engine, 500, engine->GetSprite("Item Chalice"));
+			item = new ScoreItem(engine, itemX, itemY, 500, engine->GetSprite("Item Chalice"));
 			break;
 		}
 		case 'C':
 		{
-			item = new ScoreItem(engine, 1000, engine->GetSprite("Item Chest"));
+			item = new ScoreItem(engine, itemX, itemY, 1000, engine->GetSprite("Item Chest"));
 			break;
 		}
 		case 'R':
 		{
-			item = new ScoreItem(engine, 5000, engine->GetSprite("Item Crown"));
+			item = new ScoreItem(engine, itemX, itemY, 5000, engine->GetSprite("Item Crown"));
 			break;
 		}
 
 		//Other
 		case 'O':
 		{
-			item = new OneUp(engine, engine->GetSprite("Item One Up"));
+			item = new OneUp(engine, itemX, itemY, engine->GetSprite("Item One Up"));
 			break;
 		}
 	}
 
-	if (item != nullptr)
-	{
-		item->x = x + 0.5f;
-		item->y = y + 0.5f;
-	}
 	return item;
 }
 
@@ -186,100 +182,98 @@ Decoration* Factory::MakeDecoration(EngineFPS* engine, int x, int y, wchar_t typ
 
 	Decoration* decor = nullptr;
 
+	float decorX = x + 0.5f;
+	float decorY = y + 0.5f;
+
 	switch (type)
 	{
 		case 'a':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Armor"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Armor"));
 			break;
 		}
 		case 'b':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Bones"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Bones"));
 			break;
 		}
 		case 'p':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Puddle"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Puddle"));
 			break;
 		}
 		case 'g':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Green Barrel"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Green Barrel"));
 			break;
 		}
 		case 'e':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Empty Well"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Empty Well"));
 			break;
 		}
 		case 'r':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Filled Well"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Filled Well"));
 			break;
 		}
 		case 's':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Skeleton"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Skeleton"));
 			break;
 		}
 		case 'o':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Barrel"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Barrel"));
 			break;
 		}
 		case 'f':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Flag"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Flag"));
 			break;
 		}
 		case 'j':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Jug"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Jug"));
 			break;
 		}
 		case 't':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Tree"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Tree"));
 			break;
 		}
 		case 'v':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Tree In Blue Jug"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Tree In Blue Jug"));
 			break;
 		}
 		case 'l':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Simple Lamp"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Simple Lamp"));
 			break;
 		}
 		case 'q':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Golden Lamp"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Golden Lamp"));
 			break;
 		}
 		case 'w':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Floor Lamp"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Floor Lamp"));
 			break;
 		}
 		case 'y':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Table"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Table"));
 			break;
 		}
 		case 'u':
 		{
-			decor = new Decoration(engine, engine->GetSprite("Bowl"));
+			decor = new Decoration(engine, decorX, decorY, engine->GetSprite("Bowl"));
 			break;
 		}
 	}
 
-	if (decor != nullptr)
-	{
-		decor->x = x + 0.5f;
-		decor->y = y + 0.5f;
-	}
 	return decor;
 }
 
@@ -290,29 +284,27 @@ DynamicObject* Factory::MakeDynamicObject(EngineFPS* engine, int x, int y, wchar
 
 	DynamicObject* object = nullptr;
 
+	float objX = x + 0.5f;
+	float objY = y + 0.5f;
+
 	switch (type)
 	{
 		case '0':
 		{
-			object = new Player(engine);
+			object = new Player(engine, objX, objY);
 			break;
 		}
 		case '1':
 		{
-			object = new Guard(engine);
+			object = new Guard(engine, objX, objY);
 			break;
 		}
 		case '2':
 		{
-			object = new SS(engine);
+			object = new SS(engine, objX, objY);
 			break;
 		}
 	}
 
-	if (object != nullptr)
-	{
-		object->x = x + 0.5f;
-		object->y = y + 0.5f;
-	}
 	return object;
 }

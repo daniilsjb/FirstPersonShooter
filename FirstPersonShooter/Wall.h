@@ -5,7 +5,7 @@
 class Wall : public GameObject
 {
 public:
-	Wall(EngineFPS* engine, Sprite* spr);
+	Wall(EngineFPS* engine, float x, float y, Sprite* spr);
 	virtual ~Wall();
 
 	bool IsRemoved() const;

@@ -7,7 +7,7 @@ class Weapon;
 class Mob : public DynamicObject
 {
 public:
-	Mob(EngineFPS* engine);
+	Mob(EngineFPS* engine, float x, float y);
 	virtual ~Mob();
 
 	bool HasWeapon() const;

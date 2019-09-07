@@ -3,7 +3,7 @@
 
 Decoration::~Decoration() {}
 
-Decoration::Decoration(EngineFPS* engine, Sprite* spr) : GameObject(engine)
+Decoration::Decoration(EngineFPS* engine, float x, float y, Sprite* spr) : GameObject(engine, x, y)
 {
 	texture = spr;
 }
