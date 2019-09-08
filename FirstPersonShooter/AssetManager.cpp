@@ -71,14 +71,6 @@ void AssetManager::LoadSprites()
 	load("SS Pain", L"Sprites/Enemies/SS Pain.spr");
 	load("SS Right", L"Sprites/Enemies/SS Right.spr");
 
-	//Weapons
-	load("Pistol", L"Sprites/Weapons/Pistol.spr");
-	load("Pistol Fire", L"Sprites/Weapons/Pistol Fire.spr");
-	load("Pistol Cooldown", L"Sprites/Weapons/Pistol Cooldown.spr");
-	load("Machine Gun", L"Sprites/Weapons/Machine Gun.spr");
-	load("Machine Gun Fire", L"Sprites/Weapons/Machine Gun Fire.spr");
-	load("Machine Gun Cooldown", L"Sprites/Weapons/Machine Gun Cooldown.spr");
-
 	//Items
 	load("Item Chalice", L"Sprites/Items/Chalice.spr");
 	load("Item Chest", L"Sprites/Items/Chest.spr");
@@ -90,4 +82,15 @@ void AssetManager::LoadSprites()
 	load("Item Medkit", L"Sprites/Items/Medkit.spr");
 	load("Item One Up", L"Sprites/Items/One Up.spr");
 	load("Item Pistol", L"Sprites/Items/Pistol.spr");
+
+	//Weapons
+	load("Pistol", L"Sprites/Weapons/Pistol.spr");
+	load("Pistol Fire", L"Sprites/Weapons/Pistol Fire.spr");
+	load("Pistol Cooldown", L"Sprites/Weapons/Pistol Cooldown.spr");
+	load("Machine Gun", L"Sprites/Weapons/Machine Gun.spr");
+	load("Machine Gun Fire", L"Sprites/Weapons/Machine Gun Fire.spr");
+	load("Machine Gun Cooldown", L"Sprites/Weapons/Machine Gun Cooldown.spr");
+	load("Knife", L"Sprites/Weapons/Knife.spr");
+	load("Knife Fire", L"Sprites/Weapons/Knife Fire.spr");
+	load("Knife Cooldown", L"Sprites/Weapons/Knife Cooldown.spr");
 }

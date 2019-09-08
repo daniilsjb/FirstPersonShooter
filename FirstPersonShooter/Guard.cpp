@@ -14,7 +14,7 @@ Guard::Guard(EngineFPS* engine, float x, float y) : Enemy(engine, x, y)
 	shootingSpr = engine->GetSprite("Guard Fire");
 	painSpr = engine->GetSprite("Guard Pain");
 
-	currentHealth = maxHealth = 5;
+	currentHealth = maxHealth = 8;
 
 	speed = 1.5f;
 

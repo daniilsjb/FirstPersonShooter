@@ -11,6 +11,8 @@ Player::Player(EngineFPS* engine, float x, float y) : Mob(engine, x, y)
 	friendlyToPlayer = true;
 
 	availableWeapons.resize(Weapons::COUNT, nullptr);
+	AddWeapon(Weapons::KNIFE);
+	AddWeapon(Weapons::PISTOL);
 }
 
 Player::~Player()

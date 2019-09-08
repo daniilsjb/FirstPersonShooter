@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "Pistol.h"
 #include "MachineGun.h"
+#include "Knife.h"
 
 #include "Wall.h"
 #include "Door.h"
@@ -28,6 +29,8 @@ Weapon* Factory::MakeWeapon(EngineFPS* engine, short weaponID, Mob* parent)
 {
 	switch (weaponID)
 	{
+		case Weapons::KNIFE:
+			return new Knife(engine, parent);
 		case Weapons::PISTOL:
 			return new Pistol(engine, parent);
 		case Weapons::MACHINE_GUN:

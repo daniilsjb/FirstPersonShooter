@@ -11,6 +11,7 @@ public:
 	~Player();
 
 	bool WeaponAcquired(short weaponID) const;
+	wchar_t* GetAmmoDisplay() const;
 	bool AddWeapon(short weaponID);
 	bool AddAmmo(int amount);
 
