@@ -14,7 +14,7 @@ SS::SS(EngineFPS* engine, float x, float y) : Enemy(engine, x, y)
 	shootingSpr = engine->GetSprite("SS Fire");
 	painSpr = engine->GetSprite("SS Pain");
 
-	currentHealth = maxHealth = 12;
+	currentHealth = maxHealth = 18;
 
 	speed = 1.5f;
 

@@ -7,7 +7,7 @@ class Mob;
 namespace Weapons
 {
 	const int CAPACITY = 99;
-	enum { PISTOL = 0, MACHINE_GUN, COUNT };
+	enum { KNIFE = 0, PISTOL, MACHINE_GUN, COUNT };
 }
 
 class Weapon

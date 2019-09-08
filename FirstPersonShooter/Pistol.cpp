@@ -12,8 +12,8 @@ Pistol::Pistol(EngineFPS* engine, Mob* parent) : Weapon(engine, parent)
 
 	ammo = 8;
 
-	minDmg = 3;
-	maxDmg = 5;
+	minDmg = 4;
+	maxDmg = 8;
 
 	shooting = 0.25f;
 	cooldown = 0.05f;

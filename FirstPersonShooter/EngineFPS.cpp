@@ -88,7 +88,7 @@ bool EngineFPS::OnStart()
 	map.append(L"#.........###?#####........%....%...%....%.....................#");
 	map.append(L"#...........#..#...........%....%...%....%.....................#");
 	map.append(L"#...........#.O#...........%%%%%%...%%%%%%.....................#");
-	map.append(L"#...........####...........%...P%...%....%.....................#");
+	map.append(L"#...........####...........%....%...%....%.....................#");
 	map.append(L"#..........................%.0..-.l.-D..b%.....................#");
 	map.append(L"#..........................%....%...%....%.....................#");
 	map.append(L"#..........................%%%%%%...%%%%%%.....................#");
@@ -408,18 +408,16 @@ void EngineFPS::DisplayPlayerStats()
 	int maxhp = player->GetMaxHealth();
 
 	int ammo = 0;
-	int capacity = 0;
 	if (player->HasWeapon())
 	{
 		ammo = player->GetWeaponAmmo();
-		capacity = Weapons::CAPACITY;
 	}
 
 	int score = player->GetScore();
 
 	//Display player stats
 	wchar_t title[256];
-	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d / %d - Score: %d", hp, maxhp, ammo, capacity, score);
+	swprintf_s(title, 256, L"First Person Shooter - Health: %d / %d - Ammo: %d - Score: %d", hp, maxhp, ammo, score);
 	SetApplicationTitle(title);
 }
 
@@ -769,4 +767,5 @@ void EngineFPS::LoadAudio()
 	load("Player Death", L"Audio/SFX/Player Dies.wav");
 	load("Pickup", L"Audio/SFX/Pickup.wav");
 	load("Secret Entrance", L"Audio/SFX/Secret Entrance.wav");
+	load("Knife", L"Audio/SFX/Knife.wav");
 }

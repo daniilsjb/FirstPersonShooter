@@ -12,11 +12,11 @@ MachineGun::MachineGun(EngineFPS* engine, Mob* parent) : Weapon(engine, parent)
 
 	ammo = 25;
 
-	minDmg = 1;
-	maxDmg = 2;
+	minDmg = 3;
+	maxDmg = 8;
 
-	shooting = 0.055f;
-	cooldown = 0.015f;
+	shooting = 0.04f;
+	cooldown = 0.01f;
 }
 
 void MachineGun::OnFireHeld()

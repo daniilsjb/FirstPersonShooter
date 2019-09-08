@@ -150,6 +150,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Guard.h" />
     <ClInclude Include="Factory.h" />
+    <ClInclude Include="Knife.h" />
     <ClInclude Include="OneUp.h" />
     <ClInclude Include="SS.h" />
     <ClInclude Include="HealthItem.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Guard.cpp" />
+    <ClCompile Include="Knife.cpp" />
     <ClCompile Include="OneUp.cpp" />
     <ClCompile Include="SS.cpp" />
     <ClCompile Include="HealthItem.cpp" />

@@ -138,6 +138,9 @@
     <ClInclude Include="AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Knife.h">
+      <Filter>Header Files\Weapons</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineFPS.cpp">
@@ -214,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Knife.cpp">
+      <Filter>Source Files\Weapons</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
