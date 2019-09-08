@@ -8,6 +8,8 @@
 
 #include "Wall.h"
 #include "Door.h"
+#include "SecretEntrance.h"
+#include "ExitDoor.h"
 
 #include "Decoration.h"
 
@@ -79,7 +81,17 @@ Wall* Factory::MakeWall(EngineFPS* engine, int x, int y, wchar_t type)
 		}
 		case '?':
 		{
-			wall = new Door(engine, wallX, wallY, engine->GetSprite("Stone Wall Flag"));
+			wall = new SecretEntrance(engine, wallX, wallY, engine->GetSprite("Stone Wall Flag"));
+			break;
+		}
+		case '~':
+		{
+			wall = new SecretEntrance(engine, wallX, wallY, engine->GetSprite("Stone Wall Eagle"));
+			break;
+		}
+		case '*':
+		{
+			wall = new SecretEntrance(engine, wallX, wallY, engine->GetSprite("Stone Wall"));
 			break;
 		}
 		case '-':
@@ -89,7 +101,7 @@ Wall* Factory::MakeWall(EngineFPS* engine, int x, int y, wchar_t type)
 		}
 		case '&':
 		{
-			wall = new Door(engine, wallX, wallY, engine->GetSprite("Next Level"));
+			wall = new ExitDoor(engine, wallX, wallY, engine->GetSprite("Next Level"));
 			break;
 		}
 	}

@@ -45,7 +45,7 @@ bool EngineFPS::OnStart()
 	map.append(L"#....#AACS##.....#..........#...........#SSU#..................#");
 	map.append(L"#....#AACC.#.....#.l....l...-.....q....1-.1S#..................#");
 	map.append(L"#....#AAC..#.....#..........#...........#UUU#..................#");
-	map.append(L"#....#####?#####.#...########...........#####..................#");
+	map.append(L"#....#####~#####.#...########...........#####..................#");
 	map.append(L"#....#.SUt.tU..#.#...#......#...........#######................#");
 	map.append(L"#....#.....S..1###...###....######-######......................#");
 	map.append(L"#....#f.1......#...1...#........#...#..........................#");
@@ -81,11 +81,11 @@ bool EngineFPS::OnStart()
 	map.append(L"#................#.....1###.....%...%.........%%%%%%%%%%%%%%...#");
 	map.append(L"#.....l.......l..-...1..&.#.....%...%..........................#");
 	map.append(L"#................#.....1###.....%.l.%..........................#");
-	map.append(L"##################?#######......%...%..........................#");
-	map.append(L"#........###..#..?.M#......%%%%%%%-%%%%%%%.....................#");
+	map.append(L"##################*#######......%...%..........................#");
+	map.append(L"#........###..#..*.M#......%%%%%%%-%%%%%%%.....................#");
 	map.append(L"#........#.&..#..#.##......%bD..%...%....%.....................#");
 	map.append(L"#........###.....###.......%....-.l.-.s..%.....................#");
-	map.append(L"#.........###?#####........%....%...%....%.....................#");
+	map.append(L"#.........###*#####........%....%...%....%.....................#");
 	map.append(L"#...........#..#...........%....%...%....%.....................#");
 	map.append(L"#...........#.O#...........%%%%%%...%%%%%%.....................#");
 	map.append(L"#...........####...........%....%...%....%.....................#");
@@ -109,14 +109,14 @@ bool EngineFPS::OnStart()
 	srand(time(0));
 
 	StartAudio();
-	PlayAudioClip(audio["Get Them Before They Get You"], true);
+	PlayAudio("Get Them Before They Get You", true);
 
 	return true;
 }
 
 bool EngineFPS::OnUpdate(float elapsedTime)
 {
-	if (player->IsDead())
+	if (player->IsDead() || levelFinished)
 	{
 		gameOverTimer += elapsedTime;
 		if (gameOverTimer >= 3.0f)
@@ -429,6 +429,11 @@ int EngineFPS::GetMapWidth() const
 int EngineFPS::GetMapHeight() const
 {
 	return mapHeight;
+}
+
+void EngineFPS::FinishLevel()
+{
+	levelFinished = true;
 }
 
 Sprite* EngineFPS::GetSprite(std::string spriteName) const
@@ -768,4 +773,5 @@ void EngineFPS::LoadAudio()
 	load("Pickup", L"Audio/SFX/Pickup.wav");
 	load("Secret Entrance", L"Audio/SFX/Secret Entrance.wav");
 	load("Knife", L"Audio/SFX/Knife.wav");
+	load("Switch", L"Audio/SFX/Switch.wav");
 }

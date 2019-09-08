@@ -141,6 +141,12 @@
     <ClInclude Include="Knife.h">
       <Filter>Header Files\Weapons</Filter>
     </ClInclude>
+    <ClInclude Include="SecretEntrance.h">
+      <Filter>Header Files\GameObjects\Walls</Filter>
+    </ClInclude>
+    <ClInclude Include="ExitDoor.h">
+      <Filter>Header Files\GameObjects\Walls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineFPS.cpp">
@@ -220,6 +226,12 @@
     </ClCompile>
     <ClCompile Include="Knife.cpp">
       <Filter>Source Files\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="SecretEntrance.cpp">
+      <Filter>Source Files\GameObjects\Walls</Filter>
+    </ClCompile>
+    <ClCompile Include="ExitDoor.cpp">
+      <Filter>Source Files\GameObjects\Walls</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

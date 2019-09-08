@@ -49,6 +49,8 @@ public:
 	int GetMapWidth() const;
 	int GetMapHeight() const;
 
+	void FinishLevel();
+
 	Sprite* GetSprite(std::string spriteName) const;
 	void PlayAudio(std::string audioName, bool loop = false);
 
@@ -74,6 +76,7 @@ private:
 
 	std::wstring map;
 
+	bool levelFinished = false;
 	float gameOverTimer = 0.0f;
 
 	std::map<std::string, int> audio;
